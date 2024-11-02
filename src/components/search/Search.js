@@ -9,7 +9,7 @@ const Search = () => {
         source={images.search_job} 
         style={styles.image}
       />
-      <Text style={styles.text}>Search a job</Text>
+      <Text style={styles.text}>Search a job by location or title</Text>
     </View>
   );
 };

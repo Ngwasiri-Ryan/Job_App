@@ -3,7 +3,9 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions
 import { useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import axios from 'axios';
-import { COLORS, icons } from '../constants';
+import { COLORS, icons } from '../../constants';
+import {API_KEY} from '@env'
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,7 +30,7 @@ const JobDetailsScreen = ({ route }) => {
         radius: '100'
       },
       headers: {
-        'x-rapidapi-key': '7ebac52e5fmsh8c8e70ae21d3c45p1df713jsne91049cffb94',
+        'x-rapidapi-key': API_KEY,
         'x-rapidapi-host': 'jsearch.p.rapidapi.com'
       }
     };

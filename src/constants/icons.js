@@ -10,6 +10,9 @@ const experience = require("../../assets/icons/experience.png");
 const back = require("../../assets/icons/back.png");
 const salary = require("../../assets/icons/salary.png");
 const degree = require("../../assets/icons/degree.png");
+const resume = require("../../assets/icons/resume.png");
+const trash = require("../../assets/icons/delete.png");
+const add = require("../../assets/icons/add.png")
 
 export default {
     home,
@@ -23,4 +26,7 @@ export default {
     degree,
     salary,
     experience,
+    resume,
+    trash,
+    add,
 }

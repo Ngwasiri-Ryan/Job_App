@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { COLORS, FONTS } from '../../constants';
 
 const JobSelectionScreen = ({ navigation }) => {
   const [selectedJobs, setSelectedJobs] = useState([]);
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     marginBottom: 20,
+    ...FONTS.h1
   },
   option: {
     backgroundColor: '#f0f0f0',
@@ -67,6 +69,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: '80%',
     alignItems: 'center',
+    ...FONTS.body5
   },
   selectedOption: {
     backgroundColor: '#6a0dad', // Purple background when selected

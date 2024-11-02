@@ -4,13 +4,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import HomeScreen from './screens/HomeScreen';
-import JobSelectionScreen from './screens/jobSelectionScreen';
-import JobDetailsScreen from './screens/JobDetailsScreen';
-import FindJobScreen from './screens/FindjobScreen';
-import UserProfileScreen from './screens/UserProfileScreen';
-import ApplyHistoryScreen from './screens/ApplyHistoryScreen';
-import Loader from './components/loading/Loader';
+import HomeScreen from './screens/home/HomeScreen';
+import JobSelectionScreen from './screens/intro/jobSelectionScreen';
+import JobDetailsScreen from './screens/job/JobDetailsScreen';
+import FindJobScreen from './screens/search/FindjobScreen';
+import UserProfileScreen from './screens/profile/UserProfileScreen';
+import ApplyHistoryScreen from './screens/history/ApplyHistoryScreen';
+
+//resume builder screens
+import OnboardingScreen from './screens/resume/OnboardingScreen';
+import ResumeMakerScreen from './screens/resume/ResumeMakerScreen';
+import ResumePreviewScreen from './screens/resume/ResumePriewerScreen';
+import ResumePDFScreen from './screens/resume/ResumePDFScreen';
 
 import { icons, COLORS } from './constants';
 
@@ -100,6 +105,24 @@ const BottomTabNavigator = () => {
       />
 
 <Tab.Screen
+        name="OnboardingScreen"
+        component={OnboardingScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={icons.resume}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: focused ? COLORS.primary : COLORS.secondary,
+              }}
+            />
+          ),
+        }}
+      />
+
+<Tab.Screen
         name="UserProfileScreen"
         component={UserProfileScreen}
         options={{
@@ -117,6 +140,8 @@ const BottomTabNavigator = () => {
         }}
       />
 
+
+
     </Tab.Navigator>
   );
 };
@@ -132,6 +157,11 @@ const Navigator = () => {
       >
         <Stack.Screen name="JobSelectionScreen" component={JobSelectionScreen} />
         <Stack.Screen name="JobDetailScreen" component={JobDetailsScreen} />
+        <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+        <Stack.Screen name="ResumeMakerScreen" component={ResumeMakerScreen} />
+        <Stack.Screen name="ResumePreviewScreen" component={ResumePreviewScreen} />
+        <Stack.Screen name="pdfViewer" component={ResumePDFScreen} />
+
         <Stack.Screen name="Main" component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import JobItemHorizontal from '../components/home/jobItemHorizontal';
-import JobItem from '../components/home/jobItem';
-import Error from '../components/search/Error';
-import { COLORS } from '../constants';
-import Loader from '../components/loading/Loader';
+import JobItemHorizontal from '../../components/home/jobItemHorizontal';
+import JobItem from '../../components/home/jobItem';
+import Error from '../../components/search/Error';
+import { COLORS } from '../../constants';
+import Loader from '../../components/loading/Loader';
+import {API_KEY} from '@env'
 
 const HomeScreen = ({ route, navigation }) => {
   const { selectedJobs } = route.params || {};
@@ -27,7 +28,7 @@ const HomeScreen = ({ route, navigation }) => {
         date_posted: 'all',
       },
       headers: {
-        'x-rapidapi-key': '7ebac52e5fmsh8c8e70ae21d3c45p1df713jsne91049cffb94', // Use your API key
+        'x-rapidapi-key': API_KEY, // Use your API key
         'x-rapidapi-host': 'jsearch.p.rapidapi.com',
       },
     };

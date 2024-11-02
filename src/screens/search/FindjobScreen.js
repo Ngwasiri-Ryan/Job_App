@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import { icons, COLORS } from '../constants';
-import Search from '../components/search/Search';
+import { icons, COLORS } from '../../constants';
+import Search from '../../components/search/Search';
 import { useNavigation } from '@react-navigation/native'
-import NoResults from '../components/search/NoResults';
-import Loader from '../components/loading/Loader';
+import NoResults from '../../components/search/NoResults';
+import Loader from '../../components/loading/Loader';
+import {API_KEY} from '@env';
 
 const FindjobScreen = () => {
   const navigation = useNavigation(); 
@@ -28,7 +29,7 @@ const FindjobScreen = () => {
         date_posted: 'all'
       },
       headers: {
-        'x-rapidapi-key': '7ebac52e5fmsh8c8e70ae21d3c45p1df713jsne91049cffb94',
+        'x-rapidapi-key': API_KEY,
         'x-rapidapi-host': 'jsearch.p.rapidapi.com'
       }
     };
