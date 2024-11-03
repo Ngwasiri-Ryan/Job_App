@@ -40,7 +40,7 @@ const initialData = [
   },
   {
     title: 'Certifications',
-    items: [{ name: '', institution: '', duration: '' }],
+    items: [{ name: '', institute: '', duration: '' }],
   },
   {
     title: 'Languages',
@@ -150,7 +150,7 @@ const ResumeMakerScreen = ({navigation}) => {
               onChangeText={(value) => handleChange(sectionIndex, index, 'summary', value)}
               style={[styles.input, styles.descriptionInput]}
               multiline
-              numberOfLines={3}
+              numberOfLines={8}
             />
           </>
         ) : sections[sectionIndex].title === 'Skills' || sections[sectionIndex].title === 'Languages' || sections[sectionIndex].title === 'Interests' ? (
@@ -190,9 +190,9 @@ const ResumeMakerScreen = ({navigation}) => {
               style={styles.input}
             />
             <TextInput
-              placeholder="Institution"
-              value={item.institution || ''}
-              onChangeText={(value) => handleChange(sectionIndex, index, 'institution', value)}
+              placeholder="Institute"
+              value={item.institute || ''}
+              onChangeText={(value) => handleChange(sectionIndex, index, 'institute', value)}
               style={styles.input}
             />
             <TextInput
@@ -201,6 +201,7 @@ const ResumeMakerScreen = ({navigation}) => {
               onChangeText={(value) => handleChange(sectionIndex, index, 'duration', value)}
               style={styles.input}
             />
+            
           </>
         ) : sections[sectionIndex].title === 'Projects' ? (
           <>
@@ -231,6 +232,12 @@ const ResumeMakerScreen = ({navigation}) => {
               placeholder="Company Name"
               value={item.company || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'company', value)}
+              style={styles.input}
+            />
+             <TextInput
+              placeholder="Company Location (eg Ney York, US)"
+              value={item.company || ''}
+              onChangeText={(value) => handleChange(sectionIndex, index, 'locaion', value)}
               style={styles.input}
             />
             <TextInput

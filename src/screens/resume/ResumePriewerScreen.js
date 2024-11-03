@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform,Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform,Image , ActivityIndicator} from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { COLORS, icons, images } from '../../constants';
-
+import { useState } from 'react';
 
 const ResumePreviewScreen = ({ route, navigation }) => {
+  const [loading, setLoading] = useState(false);
   const { resumeData } = route.params;
-
+  
+  console.log(resumeData);
 
   const renderSectionContent = (section) => {
     return section.items.map((item, index) => {
@@ -34,6 +36,8 @@ const ResumePreviewScreen = ({ route, navigation }) => {
   };
 
   const generateResumeHTML = () => {
+    console.log(JSON.stringify(resumeData, null, 2)); // Debugging output
+
     return `
       <html>
         <head>
@@ -75,7 +79,7 @@ const ResumePreviewScreen = ({ route, navigation }) => {
             }
             .personal-info .name {
               font-weight: bold;
-              font-size: 24px; /* Large font size for name */
+              font-size: 24px;
               margin-bottom: 10px;
             }
             .personal-info .summary-title {
@@ -83,74 +87,102 @@ const ResumePreviewScreen = ({ route, navigation }) => {
               font-size: 18px;
               margin-top: 20px;
             }
-            .summary-item {
-              font-size: 16px;
-              color: #333;
-              margin-left: 20px;
-            }
             .education-item, .certificate-item {
               font-weight: bold;
               margin-bottom: 10px;
             }
-            .education-item-title, .certificate-item-title {
-              display: block;
+            .experience-details {
+              margin-bottom: 15px;
             }
-            .education-item-subtitle, .certificate-item-subtitle {
-              display: block;
+            .experience-title {
+              font-weight: bold;
+              font-size: 17px;
+              margin-bottom: 5px;
+            }
+            .experience-description {
+              margin-left: 20px;
+              font-size: 15px;
+              display: flex;
+              flex-direction: column;
+            }
+            .dot {
+              font-weight: bold;
+              margin-right: 5px;
             }
           </style>
         </head>
         <body>
           <div class="header">
-            <h1>Resume Preview</h1>
+            <h1>Resume</h1>
           </div>
   
-          <!-- Personal Information Section -->
           ${resumeData.map(section => `
-            ${section.title === 'Personal Information' ? `
+            ${section.title === 'Personal Details' ? `
               <div class="personal-info">
-                <div class="name">${section.items.name}</div>
-                <div>Email: ${section.items.email}</div>
-                <div>Phone: ${section.items.phone}</div>
-                <div>Location: ${section.items.location}</div>
-                <div>GitHub: <a href="${section.items.github}">${section.items.github}</a></div>
-                
+                <div class="name">${section.items[0]?.name || ''}</div>
+                <div>Email: ${section.items[0]?.email || 'N/A'}</div>
+                <div>Phone: ${section.items[0]?.phone || 'N/A'}</div>
+                <div>Location: ${section.items[0]?.city || 'N/A'}, ${section.items[0]?.country || 'N/A'}</div>
+  
                 <div class="summary-title">Summary</div>
-                <ul>
-                  ${section.items.summary.map(summaryItem => `
-                    <li class="summary-item">${summaryItem}</li>
-                  `).join('')}
-                </ul>
+                <div>${section.items[0]?.summary || 'N/A'}</div>
               </div>
             ` : `
-              <!-- Other Sections (Skills, Languages, Interests, etc.) -->
               <div class="section">
                 <div class="section-title">${section.title}</div>
-                ${
-                  section.title === 'Skills' || section.title === 'Languages' || section.title === 'Interests'
-                  ? `<div class="content-text flex-row">${section.items.join(' | ')}</div>`
-                  : section.title === 'Experience'
+                ${section.title === 'Skills' || section.title === 'Languages' || section.title === 'Interests'
+                  ? `<div class="content-text flex-row">${section.items.filter(item => item).join(' | ') || 'N/A'}</div>`
+                  : section.title === 'Work Experience'
                   ? section.items.map(item => `
                     <div class="experience-details">
                       <div class="experience-title">
-                        ${item.company} | ${item.location} - ${item.position} | ${item.date}
+                        ${item.company || 'Company Name'} <br><span>${item.jobTitle || 'Job Title'}</span> | <span>${item.date || 'Date'}</span>
                       </div>
                       <div class="experience-description">
-                        ${item.description}
+                        ${item.description.split(/\.\s*/).map(sentence => `
+                          <div class="experience-description-item">
+                            <span class="dot">•</span>
+                            <span>${sentence.trim() || 'No description available.'}</span>
+                          </div>
+                        `).join('')}
                       </div>
                     </div>
                   `).join('')
-                  : section.title === 'Education' || section.title === 'Certificates'
+                  : section.title === 'Education' || section.title === 'Certifications'
                   ? section.items.map(item => `
                     <div class="${section.title.toLowerCase()}-item">
-                      <span class="${section.title.toLowerCase()}-item-title">${item.institution || item.certificate}</span>
-                      <span class="${section.title.toLowerCase()}-item-subtitle">${item.field || item.date}</span>
+                      <span class="${section.title.toLowerCase()}-item-title">
+                        <strong>${item.institution || item.name || 'Institution'}</strong><br>
+                        <strong>${item.degree || 'Degree'}</strong> | ${item.duration || 'Duration'}
+                      </span>
+                      ${item.description ? `
+                        <div class="certificate-description">
+                          ${item.description.split(/\.\s*/).map(sentence => `
+                            <div class="certificate-description-item">
+                              <span class="dot">•</span>
+                              <span>${sentence.trim() || 'No description available.'}</span>
+                            </div>
+                          `).join('')}
+                        </div>
+                      ` : ''}
+                    </div>
+                  `).join('')
+                  : section.title === 'Projects'
+                  ? section.items.map(project => `
+                    <div class="project-description">
+                      <strong>${project.projectName || 'Project Name'}</strong><br>
+                      ${project.projectDescription.split(/\.\s*/).map(sentence => `
+                        <div class="project-description-item">
+                          <span class="dot">•</span>
+                          <span>${sentence.trim() || 'No project description available.'}</span>
+                        </div>
+                      `).join('')}
                     </div>
                   `).join('')
                   : section.items.map(item => `
                     <div class="content-text">
                       ${typeof item === 'string' ? item : Object.entries(item).map(([key, value]) => `
-                        <strong>${key.replace(/([A-Z])/g, ' $1')}: </strong> ${value}
+                        <strong>${key.replace(/([A-Z])/g, ' $1')}: </strong> ${value || 'N/A'}
                       `).join('<br>')}
                     </div>
                   `).join('')
@@ -161,7 +193,11 @@ const ResumePreviewScreen = ({ route, navigation }) => {
         </body>
       </html>
     `;
-  };
+};
+
+
+
+
   
   const handleGeneratePDF = async () => {
     try {
@@ -178,7 +214,9 @@ const ResumePreviewScreen = ({ route, navigation }) => {
     } catch (error) {
       Alert.alert('Error', 'Failed to generate PDF');
       console.error(error);
-    }
+    }finally {
+    setLoading(false); // Set loading to false when PDF generation is done
+  }
   };
 
 
@@ -207,6 +245,11 @@ const ResumePreviewScreen = ({ route, navigation }) => {
       >
         <Text style={styles.generateButtonText}  onPress={handleGeneratePDF} >Generate Resume</Text>
       </TouchableOpacity>
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      )}
     </View>
   );
 };
