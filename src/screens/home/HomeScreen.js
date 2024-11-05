@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import JobItemHorizontal from '../../components/home/jobItemHorizontal';
 import JobItem from '../../components/home/jobItem';
 import Error from '../../components/search/Error';
-import { COLORS } from '../../constants';
+import { COLORS, icons } from '../../constants';
 import Loader from '../../components/loading/Loader';
-import {API_KEY} from '@env'
+import { API_KEY } from '@env';
 
 const HomeScreen = ({ route, navigation }) => {
   const { selectedJobs } = route.params || {};
   const [jobs, setJobs] = useState([]);
-  const [filteredJobs, setFilteredJobs] = useState([]); // State for filtered jobs
+  const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all'); // State for filter type
+  const [selectedCategory, setSelectedCategory] = useState('all'); // State for selected category
+
+  const categories = [
+    { name: 'All', type: 'FULLTIME'},
+    { name: 'Full-Time', type: 'FULLTIME'},
+    { name: 'Part-Time', type: 'PARTTIME' },
+    { name: 'Contract', type: 'CONTRACT' },
+    { name: 'Internship', type: 'INTERN'},
+    { name: 'Freelance', type: 'FREELANCE' },
+  ];
 
   const fetchJobs = async (retryCount = 0, page = 1) => {
     const query = selectedJobs.join();
@@ -28,7 +38,7 @@ const HomeScreen = ({ route, navigation }) => {
         date_posted: 'all',
       },
       headers: {
-        'x-rapidapi-key': API_KEY, // Use your API key
+        'x-rapidapi-key': API_KEY,
         'x-rapidapi-host': 'jsearch.p.rapidapi.com',
       },
     };
@@ -36,7 +46,7 @@ const HomeScreen = ({ route, navigation }) => {
     try {
       const response = await axios.request(options);
       setJobs(prevJobs => [...prevJobs, ...response.data.data]);
-      setFilteredJobs(prevJobs => [...prevJobs, ...response.data.data]); // Set initial filtered jobs
+      setFilteredJobs(prevJobs => [...prevJobs, ...response.data.data]); 
 
       if (page < response.data.total_pages) {
         fetchJobs(retryCount, page + 1);
@@ -46,6 +56,7 @@ const HomeScreen = ({ route, navigation }) => {
     } catch (error) {
       if (error.response && error.response.status === 429 && retryCount < 3) {
         setTimeout(() => fetchJobs(retryCount + 1, page), 2000);
+        console.log(error)
       } else {
         setError(error.message);
         setLoading(false);
@@ -58,28 +69,32 @@ const HomeScreen = ({ route, navigation }) => {
   }, [selectedJobs]);
 
   useEffect(() => {
-    filterJobs(); // Call filterJobs whenever the jobs or filter changes
-  }, [jobs, filter]);
+    filterJobs();
+  }, [jobs, filter, selectedCategory]);
 
   const filterJobs = () => {
-    const filtered = filter === 'remote'
-      ? jobs.filter(job => job.job_is_remote) // Filter for remote jobs
-      : filter === 'onsite'
-        ? jobs.filter(job => !job.job_is_remote) // Filter for onsite jobs
-        : jobs; // Show all jobs
+    let filtered = jobs;
+    if (filter === 'remote') {
+      filtered = filtered.filter(job => job.job_is_remote);
+    } else if (filter === 'onsite') {
+      filtered = filtered.filter(job => !job.job_is_remote);
+    }
+
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(job => job.job_employment_type === selectedCategory);
+    }
 
     setFilteredJobs(filtered);
   };
 
   if (loading) {
-    return <Loader/>
+    return <Loader />;
   }
 
   if (error) {
-    // Render the SearchJob component when there is an error
     return (
       <View style={styles.errorContainer}>
-        <Error/>
+        <Error />
       </View>
     );
   }
@@ -89,17 +104,28 @@ const HomeScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Jobs Based on Your Selection</Text>
+     
 
-      {/* Filter Buttons */}
+      <View style={styles.header}>
+      <Text style={styles.heading}>Available Jobs</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('FindjobScreen')}>
+          <Image source={icons.search} style={styles.icon} />
+        </TouchableOpacity>
+      </View>
+
+      
+
+
+       {/* Filter Buttons */}
+       <Text style={styles.smallheading}>Based on time</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
         {['all', 'remote', 'onsite'].map(type => (
-          <TouchableOpacity 
-            key={type} 
-            onPress={() => setFilter(type)} 
+          <TouchableOpacity
+            key={type}
+            onPress={() => setFilter(type)}
             style={[
-              styles.filterButton, 
-              filter === type && styles.selectedFilterButton // Apply selected button styles
+              styles.filterButton,
+              filter === type && styles.selectedFilterButton,
             ]}
           >
             <Text style={filter === type ? styles.selectedFilterText : styles.filterText}>
@@ -109,18 +135,47 @@ const HomeScreen = ({ route, navigation }) => {
         ))}
       </ScrollView>
 
+
+
+
+
+
+
+      {/* Category Scroll Horizontal */}
+      <Text style={styles.smallheading}>Job Type</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
+        {categories.map(category => (
+          <TouchableOpacity
+            key={category.type}
+            onPress={() => setSelectedCategory(category.type)}
+            style={[
+              styles.categoryButton,
+              selectedCategory === category.type && styles.selectedCategoryButton,
+            ]}
+          >
+            <Text
+              style={selectedCategory === category.type ? styles.selectedCategoryText : styles.categoryText}
+            >
+              {category.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+     
+
       {/* Horizontal Scroll for Job Items */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
         {firstFiveJobs.map((item, index) => (
-          <JobItemHorizontal key={`${item.job_id}-${index}`} item={item} /> // Use a combination of job_id and index
+          <JobItemHorizontal key={`${item.job_id}-${index}`} item={item} />
         ))}
       </ScrollView>
 
       {/* FlatList for Remaining Jobs */}
       <FlatList
         data={remainingJobs}
-        keyExtractor={(item) => item.job_id || item.id || Math.random().toString(36).substr(2, 9)} // Ensure unique keys
-        renderItem={({ item }) => <JobItem item={item} />} // Use the JobItem component
+        keyExtractor={(item) => item.job_id || item.id || Math.random().toString(36).substr(2, 9)}
+        renderItem={({ item }) => <JobItem item={item} />}
       />
     </View>
   );
@@ -130,13 +185,63 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor:COLORS.white,
+    backgroundColor: COLORS.white,
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    color:COLORS.black,
+    color: COLORS.black,
+  },
+  smallheading: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: COLORS.black,
+    paddingHorizontal: 10,
+  },
+  header: {
+    padding: 5,
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  icon: {
+    height: 20,
+    width: 20,
+  },
+  categoryScroll: {
+    paddingVertical: 5,
+    height: 100,
+    marginHorizontal: 10,
+    flexDirection: 'row',
+  },
+  categoryButton: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    backgroundColor: COLORS.white,
+    marginRight: 10,
+    borderColor: '#000',
+    borderWidth: 1,
+  },
+  selectedCategoryButton: {
+    backgroundColor: COLORS.primary,
+    borderColor: 'transparent',
+  },
+  categoryIcon: {
+    width: 30,
+    height: 30,
+    marginBottom: 5,
+  },
+  categoryText: {
+    fontSize: 14,
+    color: '#000',
+  },
+  selectedCategoryText: {
+    fontSize: 14,
+    color: 'white',
   },
   filterScroll: {
     paddingVertical: 5,
@@ -152,13 +257,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderColor: '#000',
     borderWidth: 1,
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center'
   },
   selectedFilterButton: {
-    backgroundColor: COLORS.primary, // Background color for selected filter
-    borderColor: 'transparent', // Transparent border for selected filter
+    backgroundColor: COLORS.primary,
+    borderColor: 'transparent',
   },
   filterText: {
     fontSize: 16,
@@ -166,15 +268,10 @@ const styles = StyleSheet.create({
   },
   selectedFilterText: {
     fontSize: 16,
-    color: 'white', // White text for selected filter
+    color: 'white',
   },
   horizontalScroll: {
     paddingVertical: 10,
-  },
-  loading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   errorContainer: {
     flex: 1,

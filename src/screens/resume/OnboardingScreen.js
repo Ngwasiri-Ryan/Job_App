@@ -3,27 +3,61 @@ import React, { useRef, useState } from 'react';
 import { COLORS, images,FONTS } from '../../constants'; // Ensure you have your image paths set correctly
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, Dimensions, Platform } from 'react-native';
 
-const slides = [
-    {
-      id: '1',
-      image: images.resume,
-      title: 'Create a Standout Resume',
-      description: 'Highlight your skills and experiences effectively.',
-    },
-    {
-      id: '2',
-      image: images.edit_resume,
-      title: 'Tailor Your Content',
-      description: 'Customize your resume job applications to stand out.',
-    },
-    {
-      id: '3',
-      image: images.resume_template,
-      title: 'Use our Professional Format',
-      description: 'Our fomat has clear headings and consistent fonts.',
-    },
+// const slides = [
+//     {
+//       id: '1',
+//       image: images.resume,
+//       title: 'Create a Standout Resume',
+//       description: 'Highlight your skills and experiences effectively.',
+//     },
+//     {
+//       id: '2',
+//       image: images.edit_resume,
+//       title: 'Tailor Your Content',
+//       description: 'Customize your resume job applications to stand out.',
+//     },
+//     {
+//       id: '3',
+//       image: images.resume_template,
+//       title: 'Use our Professional Format',
+//       description: 'Our fomat has clear headings and consistent fonts.',
+//     },
     
-  ];
+//   ];
+
+const slides = [
+  {
+    id: '1',
+    image: images.resume,
+    title: 'Welcome to Your Resume Builder',
+    description: 'Ready to create a standout resume? Let’s walk through each step to build a resume that impresses.',
+  },
+  {
+    id: '2',
+    image: images.resume_template,
+    title: 'Start with Personal Information',
+    description: 'Add your name, phone number, email, and LinkedIn profile at the top. Make sure your contact details are up to date.',
+  },
+  {
+    id: '3',
+    image: images.edit_resume,
+    title: 'Craft a Professional Summary',
+    description: 'Write a brief summary that highlights your career goals, key skills, and achievements. Keep it concise and impactful.',
+  },
+  {
+    id: '4',
+    image: images.resume_folder,
+    title: 'Showcase Your Skills and Experience',
+    description: 'Focus on relevant skills and past experiences that match the job description. Use bullet points for clarity.',
+  },
+  {
+    id: '5',
+    image: images.resume_format,
+    title: 'Finalize and Format',
+    description: 'Review your resume for errors. Ensure clear headings, consistent fonts, and professional spacing to make it stand out.',
+  },
+];
+
   
 
 const { width, height } = Dimensions.get('window');
@@ -89,7 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop:20,
+    backgroundColor:COLORS.white
   },
   slide: {
     width: width,
@@ -133,25 +167,14 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: 'center',
-    height: height / 3.4,
+    height: height / 3.7,
     width:width,
     borderTopLeftRadius:50,
     borderTopRightRadius:50,
     justifyContent: 'center',
     marginTop: 10,
     paddingBottom: 60,
-    backgroundColor: '#fff', // Set a background color
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-      },
-      android: {
-        elevation: 5, // Control the shadow elevation on Android
-      },
-    }),
+    backgroundColor: '#fff', 
   },
   footerText: {
     marginBottom: 15,

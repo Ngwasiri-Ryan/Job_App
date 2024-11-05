@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/home/HomeScreen';
 import JobSelectionScreen from './screens/intro/jobSelectionScreen';
 import JobDetailsScreen from './screens/job/JobDetailsScreen';
-import FindJobScreen from './screens/search/FindjobScreen';
+import FindjobScreen from './screens/search/FindjobScreen';
 import UserProfileScreen from './screens/profile/UserProfileScreen';
 import ApplyHistoryScreen from './screens/history/ApplyHistoryScreen';
 
@@ -16,6 +16,7 @@ import OnboardingScreen from './screens/resume/OnboardingScreen';
 import ResumeMakerScreen from './screens/resume/ResumeMakerScreen';
 import ResumePreviewScreen from './screens/resume/ResumePriewerScreen';
 import ResumePDFScreen from './screens/resume/ResumePDFScreen';
+import JobWebViewScreen from './components/home/jobWebViewScreen';
 
 import { icons, COLORS } from './constants';
 
@@ -61,30 +62,13 @@ const BottomTabNavigator = () => {
               style={{
                 width: 25,
                 height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
+                tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
           ),
         }}
       />
       
-      <Tab.Screen
-        name="FindJobScreen"
-        component={FindJobScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={icons.search}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
-              }}
-            />
-          ),
-        }}
-      />
 
 <Tab.Screen
         name="ApplyHistoryScreen"
@@ -97,7 +81,7 @@ const BottomTabNavigator = () => {
               style={{
                 width: 25,
                 height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
+                tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
           ),
@@ -115,7 +99,7 @@ const BottomTabNavigator = () => {
               style={{
                 width: 25,
                 height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
+                tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
           ),
@@ -133,7 +117,7 @@ const BottomTabNavigator = () => {
               style={{
                 width: 25,
                 height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
+                tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
           ),
@@ -156,6 +140,8 @@ const Navigator = () => {
         }}
       >
         <Stack.Screen name="JobSelectionScreen" component={JobSelectionScreen} />
+        <Stack.Screen name="FindjobScreen" component={FindjobScreen} />
+        <Stack.Screen name="jobWebViewScreen" component={JobWebViewScreen} />
         <Stack.Screen name="JobDetailScreen" component={JobDetailsScreen} />
         <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         <Stack.Screen name="ResumeMakerScreen" component={ResumeMakerScreen} />

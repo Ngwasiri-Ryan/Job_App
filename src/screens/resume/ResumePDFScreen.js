@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import Pdf from 'react-native-pdf';
 import { COLORS } from '../../constants';
 
 const ResumePDFScreen = ({ route }) => {
   const { filePath } = route.params;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Set a timeout to stop the loading indicator after 3 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 6000);
+
+    // Clear the timeout if the component is unmounted
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <View style={styles.container}>
-      {filePath ? (
+      {isLoading ? (
+        <ActivityIndicator size={50} color={COLORS.primary} />
+      ) : (
         <Pdf
           source={{ uri: filePath, cache: true }}
           onLoadComplete={(numberOfPages) => {
@@ -19,8 +32,6 @@ const ResumePDFScreen = ({ route }) => {
           }}
           style={styles.pdf}
         />
-      ) : (
-        <ActivityIndicator size="large" color={COLORS.primary} />
       )}
     </View>
   );
@@ -30,6 +41,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   pdf: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform,Image , ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform,Image } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { COLORS, icons, images } from '../../constants';
 import { useState } from 'react';
@@ -214,9 +214,7 @@ const ResumePreviewScreen = ({ route, navigation }) => {
     } catch (error) {
       Alert.alert('Error', 'Failed to generate PDF');
       console.error(error);
-    }finally {
-    setLoading(false); // Set loading to false when PDF generation is done
-  }
+    }
   };
 
 
@@ -245,11 +243,7 @@ const ResumePreviewScreen = ({ route, navigation }) => {
       >
         <Text style={styles.generateButtonText}  onPress={handleGeneratePDF} >Generate Resume</Text>
       </TouchableOpacity>
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      )}
+     
     </View>
   );
 };

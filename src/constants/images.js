@@ -5,14 +5,16 @@ const error = require('../../assets/images/error.png');
 const resume = require('../../assets/images/resume.png');
 const edit_resume = require('../../assets/images/edit_resume.png');
 const resume_template = require('../../assets/images/resume_template.png');
-const banner = require('../../assets/images/banner.jpg')
+const resume_folder = require('../../assets/images/resume_folder.png');
+const resume_format = require('../../assets/images/resume_format.png');
 
 export default {
     no_result,
     search_job,
     error,
     resume,
+    resume_folder,
     edit_resume,
     resume_template,
-    banner
+    resume_format,
 }

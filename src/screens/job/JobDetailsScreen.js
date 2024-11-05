@@ -30,7 +30,7 @@ const JobDetailsScreen = ({ route }) => {
         radius: '100'
       },
       headers: {
-        'x-rapidapi-key': API_KEY,
+        'x-rapidapi-key':'bb287f85abmsh1dfc2a7576241a5p1955b5jsnb747869a2e81',
         'x-rapidapi-host': 'jsearch.p.rapidapi.com'
       }
     };
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     top: 0,
     left: 0,
-    right: 0,
+    right: 0, 
     gap: 5,
     shadowColor: '#000',
     shadowOffset: {
