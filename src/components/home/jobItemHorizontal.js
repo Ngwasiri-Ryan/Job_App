@@ -3,9 +3,12 @@ import { View, Text, Image, StyleSheet, TouchableOpacity,Dimensions } from 'reac
 import { useNavigation } from '@react-navigation/native'
 const { width, height } = Dimensions.get('window');
 
+
+
 const JobItemHorizontal = ({ item }) => {
     const navigation = useNavigation(); 
   return (
+    <View style={{marginTop:10}}>
     <TouchableOpacity style={styles.jobItemHorizontal}
     onPress={() => 
         navigation.navigate('JobDetailScreen', { job: item } )
@@ -35,6 +38,7 @@ const JobItemHorizontal = ({ item }) => {
         </View>
       </View>
     </TouchableOpacity>
+    </View>
   );
 };
 
@@ -47,7 +51,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 10,
     paddingHorizontal:20,
-    paddingVertical:50,
+    paddingVertical:30,
+    top:-20,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },

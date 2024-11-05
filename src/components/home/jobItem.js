@@ -1,6 +1,6 @@
 // JobItem.js
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions ,Linking} from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { icons, COLORS } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 

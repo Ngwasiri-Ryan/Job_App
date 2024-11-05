@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Image ,Dimensions} from 'react-native';
 import axios from 'axios';
 import JobItemHorizontal from '../../components/home/jobItemHorizontal';
 import JobItem from '../../components/home/jobItem';
 import Error from '../../components/search/Error';
-import { COLORS, icons } from '../../constants';
+import { COLORS, FONTS, icons } from '../../constants';
 import Loader from '../../components/loading/Loader';
+import Greetings from '../../components/home/Greetings';
 import { API_KEY } from '@env';
+
+const { width, height } = Dimensions.get('window');
 
 const HomeScreen = ({ route, navigation }) => {
   const { selectedJobs } = route.params || {};
@@ -105,10 +108,20 @@ const HomeScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
      
+     <View  style={styles.header} >
+      {/*profile pic */}
+      <View style={styles.profile}>
+        <Text style={styles.profileText}>N</Text>
+      </View>
+      {/**greetings and date */}
+      <View>
+         <Greetings/>
+      </View>
+     </View>
 
       <View style={styles.header}>
       <Text style={styles.heading}>Available Jobs</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('FindjobScreen')}>
+        <TouchableOpacity style={styles.search} onPress={() => navigation.navigate('FindjobScreen')}>
           <Image source={icons.search} style={styles.icon} />
         </TouchableOpacity>
       </View>
@@ -149,7 +162,7 @@ const HomeScreen = ({ route, navigation }) => {
             key={category.type}
             onPress={() => setSelectedCategory(category.type)}
             style={[
-              styles.categoryButton,
+              styles.filterButton,
               selectedCategory === category.type && styles.selectedCategoryButton,
             ]}
           >
@@ -194,11 +207,15 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   smallheading: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 10,
     color: COLORS.black,
     paddingHorizontal: 10,
+  },
+  profileText:{
+    color:COLORS.white,
+     ...FONTS.h2
   },
   header: {
     padding: 5,
@@ -206,9 +223,18 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent:'space-between'
   },
+  search:{
+    backgroundColor:COLORS.primary,
+    padding:10,
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:10,
+    
+  },
   icon: {
     height: 20,
     width: 20,
+    tintColor:COLORS.white
   },
   categoryScroll: {
     paddingVertical: 5,
@@ -261,6 +287,15 @@ const styles = StyleSheet.create({
   selectedFilterButton: {
     backgroundColor: COLORS.primary,
     borderColor: 'transparent',
+  },
+  profile:{
+    height:40,
+    width:40,
+    backgroundColor:COLORS.primary,
+    justifyContent:'center',
+    display:'flex',
+    alignItems:'center',
+    borderRadius:5,
   },
   filterText: {
     fontSize: 16,
