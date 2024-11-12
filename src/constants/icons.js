@@ -13,6 +13,7 @@ const degree = require("../../assets/icons/degree.png");
 const resume = require("../../assets/icons/resume.png");
 const trash = require("../../assets/icons/delete.png");
 const add = require("../../assets/icons/add.png");
+const upload = require("../../assets/icons/upload.png");
 
 const developer = require("../../assets/icons/developer.png");
 const design = require("../../assets/icons/design.png");
@@ -36,6 +37,28 @@ const research = require("../../assets/icons/research.png");
 const green_clock = require("../../assets/icons/green_clock.png");
 const red_clock = require("../../assets/icons/red_clock.png");
 const google = require("../../assets/icons/google.png");
+const share = require("../../assets/icons/share.png");
+const logo = require("../../assets/icons/logo.png");
+
+
+const name = require("../../assets/icons/name.png");
+const phone = require("../../assets/icons/phone-call.png");
+const mail = require("../../assets/icons/mail.png");
+const job = require("../../assets/icons/job.png");
+const skills = require("../../assets/icons/skills.png");
+const levels = require("../../assets/icons/levels.png");
+const industry = require("../../assets/icons/industry.png");
+const eye = require("../../assets/icons/eye.png");
+const eyeOff = require("../../assets/icons/eyeOff.png");
+const lock = require("../../assets/icons/lock.png");
+
+const language = require("../../assets/icons/language.png");
+const skill = require("../../assets/icons/skill.png");
+const certification = require('../../assets/icons/education.png');
+const education = require('../../assets/icons/cetificate.png')
+const briefcase= require("../../assets/icons/briefcase.png");
+const identity = require("../../assets/icons/identity.png");
+const id_card = require("../../assets/icons/id-card.png");
 
 export default {
     home,
@@ -45,8 +68,10 @@ export default {
     location,
     publisher,
     suitcase,
+    skills,
     add,
     back,
+    logo,
     degree,
     sales,
     nurse,
@@ -68,9 +93,27 @@ export default {
     data_science,
     teacher,
     tutor,
+    share,
     professor,
     research,
     green_clock,
     red_clock,
     google,
+    name,
+    phone,
+    mail,
+    job, 
+    levels, 
+    upload,
+    industry,
+    eye,
+    eyeOff,
+    lock,
+    language, 
+    briefcase,
+    skill,
+    certification,
+    education,
+    identity,
+    id_card
 }

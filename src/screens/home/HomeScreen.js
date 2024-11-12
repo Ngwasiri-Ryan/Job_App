@@ -207,9 +207,9 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   smallheading: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
     color: COLORS.black,
     paddingHorizontal: 10,
   },
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     justifyContent:'space-between'
   },
   search:{
-    backgroundColor:COLORS.primary,
+    backgroundColor:COLORS.secondary,
     padding:10,
     justifyContent:'center',
     alignItems:'center',
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   selectedCategoryButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary,
     borderColor: 'transparent',
   },
   categoryIcon: {
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   selectedFilterButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.secondary,
     borderColor: 'transparent',
   },
   profile:{

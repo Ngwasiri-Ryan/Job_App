@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions
 import { useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import axios from 'axios';
-import { COLORS, icons } from '../../constants';
+import { COLORS, FONTS, icons } from '../../constants';
 import {API_KEY} from '@env'
 
 
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   icon: {
     height: 30,
     width: 30,
-    tintColor: COLORS.primary,
+    tintColor: COLORS.secondary,
   },
   employerName: {
     fontSize: 15,
@@ -214,11 +214,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     padding: 10,
     textAlign: 'center',
-    marginTop:40,
+    marginTop:30,
+    color:COLORS.black,
   },
   title: {
     fontSize: 18,
@@ -354,6 +355,10 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 18,
   },
+  boldText:{
+    color:COLORS.black,
+    ...FONTS.body5
+  }
 });
 
 export default JobDetailsScreen;

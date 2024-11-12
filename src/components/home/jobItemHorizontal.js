@@ -27,14 +27,9 @@ const JobItemHorizontal = ({ item }) => {
 
         <View style={styles.boxHorizontal}>
           <View style={styles.border}>
-            <Text style={styles.location}>{item.job_city  ?item.job_city : 'Online'}</Text>
+            <Text style={styles.location}>{item.job_city  ?item.job_city : 'Online'} . {item.job_is_remote ? 'Remote' : 'Onsite'} . {item.job_employment_type === 'FULLTIME' ? 'Full-Time' : 'Part-Time'}</Text>
           </View>
-          <View style={styles.border}>
-            <Text style={styles.publisher}>{item.job_is_remote ? 'Remote' : 'Onsite'}</Text>
-          </View>
-          <View style={styles.border}>
-            <Text style={styles.jobType}>{item.job_employment_type === 'FULLTIME' ? 'Full-Time' : 'Part-Time'}</Text>
-          </View>
+  
         </View>
       </View>
     </TouchableOpacity>
@@ -86,18 +81,15 @@ const styles = StyleSheet.create({
   jobTitle: {
     fontSize: 14,
     color: '#555',
-    marginBottom: 10,
   },
   boxHorizontal: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
     height:'30%',
+    left:-15,
   },
   border: {
-    borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 14,
     alignItems: 'center',

@@ -8,6 +8,13 @@ const resume_template = require('../../assets/images/resume_template.png');
 const resume_folder = require('../../assets/images/resume_folder.png');
 const resume_format = require('../../assets/images/resume_format.png');
 
+const browse = require('../../assets/images/browse.png');
+const work = require("../../assets/images/work.png");
+const start = require("../../assets/images/start.png");
+const track = require("../../assets/images/track.png");
+const pic = require("../../assets/images/pic.jpg");
+
+
 export default {
     no_result,
     search_job,
@@ -17,4 +24,10 @@ export default {
     edit_resume,
     resume_template,
     resume_format,
+    pic,
+    browse,
+    work,
+    track,
+    work,
+    start
 }

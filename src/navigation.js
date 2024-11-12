@@ -1,8 +1,24 @@
-import React from 'react';
+import React , { useState } from 'react';
 import { Image } from 'react-native'; // Import Image component
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import SplashScreen from './screens/intro/SplashScreen';
+import WelcomeScreen from './screens/intro/WelcomeScreen';
+
+
+//auth screens
+import SignUpScreen from './screens/auth/SignUpScreen';
+import LoginScreen from './screens/auth/LoginScreen';
+import ForgotPasswordScreen from './screens/auth/ForgotPassword';
+
+
+//stepper screen
+import Step1 from './screens/stepper/Step1Screen';
+import Step2 from './screens/stepper/Step2Screen';
+import Step3 from './screens/stepper/Step3Screen';
+
 
 import HomeScreen from './screens/home/HomeScreen';
 import JobSelectionScreen from './screens/intro/jobSelectionScreen';
@@ -88,7 +104,7 @@ const BottomTabNavigator = () => {
         }}
       />
 
-<Tab.Screen
+{/* <Tab.Screen
         name="OnboardingScreen"
         component={OnboardingScreen}
         options={{
@@ -104,7 +120,7 @@ const BottomTabNavigator = () => {
             />
           ),
         }}
-      />
+      /> */}
 
 <Tab.Screen
         name="UserProfileScreen"
@@ -132,13 +148,25 @@ const BottomTabNavigator = () => {
 
 // Main App with the BottomTabNavigator inside a Stack Navigator
 const Navigator = () => {
+
+  const [progress, setProgress] = useState(0);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false, // Hide header for all stack screens
         }}
-      >
+      > 
+
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+        <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
+        <Stack.Screen name="Step1" component={Step1} />
+        <Stack.Screen name="Step2" component={Step2} />
+        <Stack.Screen name="Step3" component={Step3} />
         <Stack.Screen name="JobSelectionScreen" component={JobSelectionScreen} />
         <Stack.Screen name="FindjobScreen" component={FindjobScreen} />
         <Stack.Screen name="jobWebViewScreen" component={JobWebViewScreen} />

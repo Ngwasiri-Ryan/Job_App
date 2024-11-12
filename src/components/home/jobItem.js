@@ -23,11 +23,11 @@ const JobItem = ({ item }) => {
     >
        
       {item.employer_logo ? (
-        <View style={{ height: 70, width: 70, top:5 }}>
+        <View style={{ height: 50, width: 50, top:5 }}>
           <Image source={{ uri: item.employer_logo }} style={styles.logo} />
         </View>
       ) : (
-        <View style={{ height: 70, width: 70 }}>
+        <View style={{ height: 50, width: 50 }}>
           <Image source={require('../../../assets/icons/suitcase.png')} style={styles.logo} />
         </View>
       )}
@@ -88,16 +88,15 @@ const JobItem = ({ item }) => {
 
 const styles = StyleSheet.create({
   jobItem: {
-    padding: 5,
     paddingLeft:20,
-    borderBottomWidth: 1,
+    borderBottomWidth:1,
     borderBottomColor: COLORS.darkgray,
     display: 'flex',
     flexDirection: 'row',
     justifyContent:'center',
     backgroundColor:COLORS.white,
     gap: 20,
-    height:130,
+    height:100,
   },
   row: {
     flexDirection: 'row',
@@ -108,10 +107,10 @@ const styles = StyleSheet.create({
     height: height * 0.09,
     width: '80%',
     gap: 4,
-    top: '30%',
+    top: '14%',
   },
   employerNameList: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#000',
   },
@@ -119,6 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: COLORS.darkgray,
+  
   },
   logo: {
     width: '100%',
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     top: '60%',
   },
   icon:{
-    height:20,
-    width:20,
+    height:15,
+    width:15,
   },
   detailsContainer:{
     flexDirection:'row',
@@ -137,9 +137,10 @@ const styles = StyleSheet.create({
   },
   detailText:{
     color:COLORS.black,
+    fontSize:12,
   },
   google:{
-    top:-35,
+    top:-10,
     position:'absolute',
     left:'80%',
   },
