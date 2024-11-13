@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Image, Share, Alert } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Image, Alert } from 'react-native';
 import Pdf from 'react-native-pdf';
 import RNFS from 'react-native-fs';
 import { COLORS, icons } from '../../constants';
+import Share from 'react-native-share';
+
+
 
 const ResumePDFScreen = ({ route }) => {
   const { filePath } = route.params; // Assuming filePath points to the newly created PDF file
@@ -17,26 +20,31 @@ const ResumePDFScreen = ({ route }) => {
 
   const sharePDF = async () => {
     try {
-      // Use the path of the newly created PDF file
       const pdfPath = filePath.startsWith('file://') ? filePath : `file://${filePath}`;
-
+  
       // Check if the file exists before sharing
       const fileExists = await RNFS.exists(pdfPath);
       if (!fileExists) {
         Alert.alert('Error', 'PDF file not found');
         return;
       }
-
-      // Share the actual PDF file
-      await Share.share({
-        url: pdfPath,
+  
+      // Configure share options
+      const options = {
         title: 'Share PDF',
-      });
+        url: pdfPath,  // Path to the PDF file
+        type: 'application/pdf',  // Specify the MIME type for PDF files
+        message: 'Here’s my resume in PDF format.',
+      };
+  
+      // Use react-native-share to open the share dialog with the file
+      await Share.open(options);
     } catch (error) {
       Alert.alert('Error', 'Failed to share the PDF');
       console.error('Share error:', error);
     }
   };
+  
 
   return (
     <View style={styles.container}>

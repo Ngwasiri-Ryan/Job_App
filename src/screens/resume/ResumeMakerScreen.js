@@ -32,7 +32,7 @@ const initialData = [
   },
   {
     title: 'Work Experience',
-    items: [{ jobTitle: '', company: '', date: '', description: '' }],
+    items: [{ jobTitle: '', company: '', location: '', date: '', description: '' }],
   },
   {
     title: 'Skills',
@@ -112,42 +112,49 @@ const ResumeMakerScreen = ({navigation}) => {
               placeholder="Name"
               value={item.name}
               onChangeText={(value) => handleChange(sectionIndex, index, 'name', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Phone"
               value={item.phone}
               onChangeText={(value) => handleChange(sectionIndex, index, 'phone', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Email"
               value={item.email}
               onChangeText={(value) => handleChange(sectionIndex, index, 'email', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Country"
               value={item.country}
               onChangeText={(value) => handleChange(sectionIndex, index, 'country', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="City"
               value={item.city}
               onChangeText={(value) => handleChange(sectionIndex, index, 'city', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Town"
               value={item.town}
-              onChangeText={(value) => handleChange(sectionIndex, index, 'town', value)}
+              onChangeText={(value) => handleChange(sectionIndex, index, 'town', value)} 
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Summary"
               value={item.summary || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'summary', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={[styles.input, styles.descriptionInput]}
               multiline
               numberOfLines={8}
@@ -158,6 +165,7 @@ const ResumeMakerScreen = ({navigation}) => {
             placeholder={sections[sectionIndex].title}
             value={item}
             onChangeText={(value) => handleChange(sectionIndex, index, null, value)}
+            placeholderTextColor={COLORS.darkgray}
             style={styles.inputSkill}
           />
         ) : sections[sectionIndex].title === 'Education' ? (
@@ -166,18 +174,21 @@ const ResumeMakerScreen = ({navigation}) => {
               placeholder="Institution"
               value={item.institution || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'institution', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Degree"
               value={item.degree || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'degree', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Duration"
               value={item.duration || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'duration', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
           </>
@@ -187,18 +198,21 @@ const ResumeMakerScreen = ({navigation}) => {
               placeholder="Certification Name"
               value={item.name || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'name', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Institute"
               value={item.institute || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'institute', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Duration"
               value={item.duration || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'duration', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             
@@ -209,12 +223,14 @@ const ResumeMakerScreen = ({navigation}) => {
               placeholder="Project Name"
               value={item.projectName || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'projectName', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Project Description"
               value={item.projectDescription || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'projectDescription', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={[styles.input, styles.descriptionInput]}
               multiline
               numberOfLines={3}
@@ -226,30 +242,35 @@ const ResumeMakerScreen = ({navigation}) => {
               placeholder="Job Title"
               value={item.jobTitle || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'jobTitle', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Company Name"
               value={item.company || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'company', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
              <TextInput
               placeholder="Company Location (eg Ney York, US)"
-              value={item.company || ''}
-              onChangeText={(value) => handleChange(sectionIndex, index, 'locaion', value)}
+              value={item.location || ''}
+              onChangeText={(value) => handleChange(sectionIndex, index, 'location', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Dates (e.g. Jan 2020 - Present)"
               value={item.date || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'date', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={styles.input}
             />
             <TextInput
               placeholder="Description"
               value={item.description || ''}
               onChangeText={(value) => handleChange(sectionIndex, index, 'description', value)}
+              placeholderTextColor={COLORS.darkgray}
               style={[styles.input, styles.descriptionInput]}
               multiline
               numberOfLines={3}
@@ -405,6 +426,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     backgroundColor: '#fff',
+    color:COLORS.black
   },
   descriptionInput: {
     height: 60,
