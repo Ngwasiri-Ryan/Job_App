@@ -136,23 +136,17 @@ const ResumeMakerScreen = ({ navigation }) => {
       projects: sections[6].items,
       interests: sections[7].items,
     };
-  
-    // Display a confirmation dialog
-    const isConfirmed = window.confirm("Are you sure you are okay with the resume data?");
-    if (!isConfirmed) {
-      // If the user clicks "Cancel", exit the function
-      return;
-    }
-  
+
     try {
+     
       await saveIndependentCollections(username, resumeData);
       alert("Resume saved successfully!");
+      navigation.navigate('ResumePreviewScreen',{resumeData:sections})
     } catch (error) {
       console.error("Error saving resume: ", error);
       alert("Failed to save the resume. Please try again.");
     }
   };
-  
 
   const renderSectionItem = ({ item, index, sectionIndex }) => {
     return (

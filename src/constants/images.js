@@ -13,6 +13,7 @@ const work = require("../../assets/images/work.png");
 const start = require("../../assets/images/start.png");
 const track = require("../../assets/images/track.png");
 const pic = require("../../assets/images/pic.jpg");
+const error_429 = require("../../assets/images/429_error.png");
 
 
 export default {
@@ -29,5 +30,6 @@ export default {
     work,
     track,
     work,
-    start
+    start,
+    error_429
 }

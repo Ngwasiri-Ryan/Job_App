@@ -59,6 +59,7 @@ const education = require('../../assets/icons/cetificate.png')
 const briefcase= require("../../assets/icons/briefcase.png");
 const identity = require("../../assets/icons/identity.png");
 const id_card = require("../../assets/icons/id-card.png");
+const download = require("../../assets/icons/download.png");
 
 export default {
     home,
@@ -73,6 +74,7 @@ export default {
     back,
     logo,
     degree,
+    download,
     sales,
     nurse,
     calculator,
