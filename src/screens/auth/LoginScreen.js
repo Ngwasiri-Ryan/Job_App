@@ -1,14 +1,44 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { COLORS, icons } from '../../constants'; // Customize COLORS and icons for your project
+import { loginUser } from '../../backend/auth/login'; 
+import { useUserContext } from '../../hooks/UserContext';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { setUserData } = useUserContext();
+
+  const handleLogin = async () => {
+    setLoading(true);
+    setError(''); 
+  
+    try {
+      const result = await loginUser(email, password);
+      setLoading(false);
+  
+      if (result.success) {
+        const { user, username } = result; // Correct variable from result
+        setUserData({ email: user.email, username });
+        console.log(`Username set in context: ${username}`);
+        navigation.navigate('Step1');
+      } else {
+        setError(result.error); 
+      }
+    } catch (error) {
+      setLoading(false);
+      setError("An unexpected error occurred. Please try again."); 
+      console.error(error);
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
+    <Image source={icons.logo} style={styles.logo}/>
       <Text style={styles.title}>Welcome Back</Text>
       <Text style={styles.subtitle}>Please login to continue</Text>
 
@@ -47,9 +77,16 @@ const LoginScreen = ({ navigation }) => {
       </View>
 
       {/* Login Button */}
-      <TouchableOpacity style={styles.loginButton}>
-        <Text style={styles.loginButtonText}>Log In</Text>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={loading}>
+        {loading ? (
+          <ActivityIndicator size="small" color={COLORS.white} />
+        ) : (
+          <Text style={styles.loginButtonText}>Log In</Text>
+        )}
       </TouchableOpacity>
+
+      {/* Error message */}
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
       {/* Forgot Password */}
       <TouchableOpacity onPress={() => navigation.navigate('ForgotPasswordScreen')}>
@@ -59,7 +96,7 @@ const LoginScreen = ({ navigation }) => {
       {/* Register Redirect */}
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Don’t have an account?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SignUpScreen')}>
           <Text style={styles.registerLink}> Sign Up</Text>
         </TouchableOpacity>
       </View>
@@ -73,6 +110,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     padding: 20,
     justifyContent: 'center',
+    alignItems:'center'
+  },
+  logo:{
+   height:200,
+   width:300,
+   top:-60,
   },
   title: {
     fontSize: 28,
@@ -98,7 +141,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGrayBackground, // Set a lighter background if desired
     borderBottomColor: COLORS.black, // Adds a defined bottom border color
     borderBottomWidth: 2, // Increases the width of the bottom border for emphasis
-    
   },
   icon: {
     width: 20,
@@ -128,11 +170,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     marginTop:30,
+    width:'80%'
   },
   loginButtonText: {
     color: COLORS.white,
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   forgotPassword: {
     color: COLORS.primary,

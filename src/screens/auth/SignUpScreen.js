@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { COLORS, icons } from '../../constants'; // Assuming icons and colors are defined in your constants file
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image , Alert , ActivityIndicator} from 'react-native';
+import { COLORS, icons } from '../../constants'; 
+import { signUpUser } from '../../backend/auth/signup';
+
 
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   // Toggles password visibility
@@ -13,8 +16,27 @@ const SignUpScreen = ({ navigation }) => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const handleSignUp = async () => {
+    if (username && email && password) {
+      const result = await signUpUser(username, email, password);
+      setLoading(false);
+      if (result.success) {
+        // Alert and navigate to login screen on success
+        Alert.alert("Success", "Account created successfully!", [
+          { text: "OK", onPress: () => navigation.navigate('LoginScreen') }
+        ]);
+      } else {
+        // Show error message in case of failure
+        Alert.alert("Error", result.error || "Something went wrong!");
+      }
+    } else {
+      Alert.alert("Error", "Please fill in all fields.");
+    }
+  };
+
   return (
     <View style={styles.container}>
+      <Image source={icons.logo} style={styles.logo}/>
       <Text style={styles.title}>Create Account</Text>
       <Text style={styles.subtitle}>Sign up to get started</Text>
 
@@ -59,8 +81,14 @@ const SignUpScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate('Step1')}>
-        <Text style={styles.signUpButtonText}>Sign Up</Text>
+      <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
+        <Text style={styles.signUpButtonText}>
+        {loading ? (
+          <ActivityIndicator size="small" color={COLORS.white} />
+        ) : (
+          <Text style={styles.loginButtonText}>Sign Up</Text>
+        )}
+        </Text>
       </TouchableOpacity>
 
       <Text style={styles.alreadyMemberText}>
@@ -78,8 +106,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
     padding: 20,
-    justifyContent: 'center',
+    alignItems:'center'
   },
+  logo:{
+    height:200,
+    width:300,
+    top:-40,
+   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -131,6 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 20,
+    width:'80%'
   },
   signUpButtonText: {
     color: COLORS.white,

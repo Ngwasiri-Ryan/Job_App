@@ -77,3 +77,36 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+
+
+
+Here is the structure of the database 
+
+
+personalDetails (collection)
+  └── docId1
+      └── { username: "johndoe", name: "John Doe", phone: "123-456-7890", ... }
+education (collection)
+  └── docId1
+      └── { username: "johndoe", institution: "XYZ University", degree: "Bachelors", ... }
+  └── docId2
+      └── { username: "johndoe", institution: "ABC College", degree: "Masters", ... }
+workExperience (collection)
+  └── docId1
+      └── { username: "johndoe", jobTitle: "Software Engineer", company: "Tech Corp", ... }
+skills (collection)
+  └── docId1
+      └── { username: "johndoe", skills: ["JavaScript", "React", "Node.js"] }
+certifications (collection)
+  └── docId1
+      └── { username: "johndoe", name: "Certified React Developer", ... }
+languages (collection)
+  └── docId1
+      └── { username: "johndoe", languages: ["English", "Spanish"] }
+projects (collection)
+  └── docId1
+      └── { username: "johndoe", projectName: "Personal Website", ... }
+interests (collection)
+  └── docId1
+      └── { username: "johndoe", interests: ["Traveling", "Gaming", "Photography"] }

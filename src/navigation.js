@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { UserProvider } from './hooks/UserContext';
+
 import SplashScreen from './screens/intro/SplashScreen';
 import WelcomeScreen from './screens/intro/WelcomeScreen';
 
@@ -152,6 +154,7 @@ const Navigator = () => {
   const [progress, setProgress] = useState(0);
 
   return (
+    <UserProvider>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
@@ -179,6 +182,7 @@ const Navigator = () => {
         <Stack.Screen name="Main" component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
+    </UserProvider>
   );
 };
 

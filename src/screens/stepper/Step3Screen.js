@@ -1,83 +1,39 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   Image,
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
-import {COLORS, icons, images} from '../../constants'; // Ensure you have your COLORS constant defined
-import ProgressBar from '../../components/ProgressBar'; // Assuming ProgressBar is already implemented
+import {COLORS, images} from '../../constants'; 
+import ProgressBar from '../../components/ProgressBar'; 
 
 const Step3 = ({navigation}) => {
-  const [resume, setResume] = useState(null);
-
-  // Function to handle file upload
-  const handleUpload = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [
-          DocumentPicker.types.pdf,
-          DocumentPicker.types.doc,
-          DocumentPicker.types.docx,
-        ],
-      });
-      setResume(result);
-      Alert.alert('Success', 'Resume uploaded successfully!');
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        Alert.alert('Canceled', 'Resume upload canceled.');
-      } else {
-        Alert.alert('Error', 'An error occurred while uploading the resume.');
-      }
-    }
-  };
-
-  const handleSkip = () => {
-    navigation.navigate('JobSelectionScreen'); // Replace 'NextStep' with the actual next screen name
-  };
-
-  const handleNext = () => {
-    navigation.navigate('JobSelectionScreen'); // Replace 'NextStep' with the actual next screen name
-  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.stepText}>Step 3/4</Text>
       <ProgressBar progress={75} />
 
-      <Text style={styles.header}>Upload Your Resume</Text>
-      <Text style={styles.subHeader}>
-        Let employers see your skills by uploading your resume.
-      </Text>
+      <Text style={styles.header}>Create Your Resume 📃</Text>
+      
 
       <View style={styles.buttonContainer}>
-        <View style={styles.imageHolder} onPress={handleUpload}>
-          <Image source={icons.upload} style={styles.image} />
+        <View style={styles.imageHolder} >
+          <Image source={images.resume} style={styles.image} />
         </View>
       </View>
 
-      {resume && (
-        <View style={styles.resumeInfo}>
-          <Text style={styles.resumeText}>Uploaded: {resume.name}</Text>
-        </View>
-      )}
-
-      <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-        <Text style={styles.skipText}>Skip, I'll upload later</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.skipButton} onPress={()=> navigation.navigate('OnboardingScreen')}>
-        <Text style={styles.skipText}>
-          I don't have a resume. I want one.
+     
+      <Text style={styles.descriptionText}>
+          You'll have to create your resume to continue with us for your profile.
         </Text>
-      </TouchableOpacity>
+      
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('JobSelectionScreen')}>
+        onPress={() => navigation.navigate('OnboardingScreen')}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
     </View>
@@ -91,6 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    justifyContent:'center'
   },
 
   header: {
@@ -100,12 +57,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 15,
     marginTop: 50,
-  },
-  subHeader: {
-    fontSize: 16,
-    color: COLORS.gray,
-    textAlign: 'center',
-    marginBottom: 30,
   },
   buttonContainer: {
     width: '100%',
@@ -138,38 +89,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  imageHolder: {
-    height: 100,
-    width: 100,
-    backgroundColor: 'red',
-  },
-  resumeText: {
-    fontSize: 14,
-    color: COLORS.darkGray,
-    fontStyle: 'italic',
-  },
-  skipButton: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  skipText: {
-    color: COLORS.primary,
+  descriptionText: {
     fontSize: 16,
+    color: COLORS.darkgray,
+    textAlign: 'center',
+    marginHorizontal: 20,
+    lineHeight: 22,
   },
-  imageHolder: {
-    width: 200, // adjust as needed
-    height: 200, // adjust as needed
-    borderRadius: 12,
-    backgroundColor: COLORS.lightGray, // light background color for the placeholder
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
+  
   image: {
-    width: 100, // adjust based on your icon size
-    height: 100, // adjust based on your icon size
-    resizeMode: 'contain',
-    tintColor: COLORS.black, // add this if you want the icon to match primary color
+    width: 300, 
+    height: 400, 
+    marginTop:20,
   },
   button: {
     backgroundColor: COLORS.primary,

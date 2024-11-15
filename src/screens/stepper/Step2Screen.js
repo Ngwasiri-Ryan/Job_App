@@ -1,26 +1,59 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet , Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { COLORS, icons } from '../../constants';
 import ProgressBar from '../../components/ProgressBar';
+import { useUserContext } from '../../hooks/UserContext';  
+import { saveCurrentUserInfo } from '../../backend/current/current'; 
 
 const Step2 = ({ navigation }) => {
+  const { userData } = useUserContext(); // Get username from context
+  const username = userData.username;
   const [jobTitle, setJobTitle] = useState('');
   const [industry, setIndustry] = useState('');
   const [experienceLevel, setExperienceLevel] = useState('');
   const [skills, setSkills] = useState([]);
 
+  const handleSaveData = async () => {
+    
+    if (!jobTitle || !industry || !experienceLevel || skills.length === 0) {
+      alert('Please fill out all fields!');
+      return;
+    }
+
+    // Create the current user data object
+    const currentUserData = {
+      username,
+      jobTitle,
+      industry,
+      experienceLevel,
+      skills,
+    };
+
+    // Save data to Firestore
+    const result = await saveCurrentUserInfo(currentUserData);
+
+    if (result.success) {
+      // If successful, navigate to the next step
+      navigation.navigate('Step3');
+    } else {
+      // Handle failure to save data
+      alert(`Error: ${result.message}`);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={{color:COLORS.black}}>Step 2/4</Text>
+      <Text style={{ color: COLORS.black }}>Step 2/4</Text>
       <ProgressBar progress={50} />
       <Text style={styles.header}>Career Details</Text>
       <Text style={styles.subHeader}>Tell us about your professional background.</Text>
 
+      {/* Job Title */}
       <View style={styles.inputContainer}>
-        <View style={{display:'flex', flexDirection:'row', gap:10}}>
-          <Image source={icons.job} style={styles.icon}/>
-        <Text style={styles.label}>Current Job Title</Text>
+        <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+          <Image source={icons.job} style={styles.icon} />
+          <Text style={styles.label}>Current Job Title</Text>
         </View>
         <TextInput
           style={styles.input}
@@ -31,10 +64,11 @@ const Step2 = ({ navigation }) => {
         />
       </View>
 
+      {/* Industry */}
       <View style={styles.inputContainer}>
-      <View style={{display:'flex', flexDirection:'row', gap:10}}>
-          <Image source={icons.industry} style={styles.icon}/>
-        <Text style={styles.label}>Industry</Text>
+        <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+          <Image source={icons.industry} style={styles.icon} />
+          <Text style={styles.label}>Industry</Text>
         </View>
         <Picker
           selectedValue={industry}
@@ -48,10 +82,11 @@ const Step2 = ({ navigation }) => {
         </Picker>
       </View>
 
+      {/* Experience Level */}
       <View style={styles.inputContainer}>
-      <View style={{display:'flex', flexDirection:'row', gap:10}}>
-          <Image source={icons.levels} style={styles.icon}/>
-        <Text style={styles.label}>Experience Level</Text>
+        <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+          <Image source={icons.levels} style={styles.icon} />
+          <Text style={styles.label}>Experience Level</Text>
         </View>
         <Picker
           selectedValue={experienceLevel}
@@ -64,21 +99,23 @@ const Step2 = ({ navigation }) => {
         </Picker>
       </View>
 
+      {/* Skills */}
       <View style={styles.inputContainer}>
-      <View style={{display:'flex', flexDirection:'row', gap:10}}>
-          <Image source={icons.skills} style={styles.icon}/>
-        <Text style={styles.label}>Skills</Text>
+        <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+          <Image source={icons.skills} style={styles.icon} />
+          <Text style={styles.label}>Skills</Text>
         </View>
         <TextInput
           style={styles.input}
           placeholder="Add skills (e.g., React, SQL)"
           placeholderTextColor={COLORS.darkgray}
-          value={skills}
-          onChangeText={(text) => setSkills([...skills, text])}
+          value={skills.join(', ')}
+          onChangeText={(text) => setSkills(text.split(', '))}
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Step3')}>
+      {/* Continue Button */}
+      <TouchableOpacity style={styles.button} onPress={handleSaveData}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
     </View>
@@ -88,6 +125,8 @@ const Step2 = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center', // Center vertically
+    alignItems: 'center', // Center horizontally
     padding: 20,
     backgroundColor: COLORS.white,
   },
@@ -109,6 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightGray,
     borderRadius: 8,
     padding: 10,
+    width: '100%', // Ensure inputs stretch to full width
   },
   label: {
     fontSize: 14,
@@ -124,10 +164,10 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
   },
-  icon:{
-    height:20,
-    width:20,
-    tintColor:COLORS.primary
+  icon: {
+    height: 20,
+    width: 20,
+    tintColor: COLORS.primary,
   },
   button: {
     backgroundColor: COLORS.primary,
@@ -135,6 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
+    width: '100%', // Ensure button stretches to full width
   },
   buttonText: {
     color: COLORS.white,

@@ -1,23 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Image } from 'react-native';
 import ProgressBar from '../../components/ProgressBar';
-import { COLORS, icons } from '../../constants';
+import { COLORS, FONTS, icons } from '../../constants';
+import { savePersonalInfo } from '../../backend/personal/personal';  // Import the function
+import { useUserContext } from '../../hooks/UserContext';  // Import the custom hook
 
 const Step1 = ({ navigation, setProgress }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  
+
   const [isNameFocused, setNameFocused] = useState(false);
   const [isEmailFocused, setEmailFocused] = useState(false);
   const [isPhoneFocused, setPhoneFocused] = useState(false);
 
+  // Get user data from the context
+  const { userData } = useUserContext();
+  
+  // Extract username from userData
+  const username = userData?.username; // Use optional chaining to avoid errors if userData is null
+
+  const handleNext = async () => {
+    if (!username) {
+      console.error("Username is not available");
+      return;
+    }
+
+    // Save personal info to Firestore with the username from context
+    const result = await savePersonalInfo({ name, email, phone, username });
+    
+    if (result.success) {
+      // Navigate to the next step if the data is saved successfully
+      navigation.navigate('Step2');
+    } else {
+      // Handle error, e.g., show a message to the user
+      console.error('Error saving personal info:', result.message);
+    }
+  };
+
   return (
     <View style={styles.screenContainer}>
-    
-      <Text style={{color:COLORS.black}}>Step 1/4</Text>
+      <View style={styles.banner}>
+        <Text style={styles.bannerText}>Let's make your professional profile 🖋️</Text>
+      </View>
+
+      <Text style={{ color: COLORS.black }}>Step 1/4</Text>
       <ProgressBar progress={25} />
-  
+
       <Text style={styles.title}>Tell Us About Yourself</Text>
       <Text style={styles.description}>Fill in your basic details to get started.</Text>
 
@@ -64,7 +93,7 @@ const Step1 = ({ navigation, setProgress }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Step2')}
+        onPress={handleNext} // Use the handleNext function
       >
         <Text style={styles.buttonText}>Next</Text>
       </TouchableOpacity>
@@ -81,11 +110,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
     color: COLORS.black,
     marginBottom: 10,
-    marginTop:20,
+    marginTop: 20,
   },
   description: {
     fontSize: 16,
@@ -99,7 +128,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.darkgray,
     paddingHorizontal: 20,
-    paddingVertical:5,
+    paddingVertical: 5,
     borderRadius: 50,
     width: 330,
     marginBottom: 20,
@@ -116,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     fontSize: 16,
-    color:COLORS.black
+    color: COLORS.black,
   },
   button: {
     backgroundColor: COLORS.primary,
@@ -131,6 +160,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 19,
+  },
+  bannerText: {
+    color: COLORS.black,
+    ...FONTS.h1,
+    marginBottom: 50,
   },
 });
 

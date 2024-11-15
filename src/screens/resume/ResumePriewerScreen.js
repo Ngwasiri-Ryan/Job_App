@@ -10,6 +10,16 @@ const ResumePreviewScreen = ({ route, navigation }) => {
   
   console.log(resumeData);
 
+  const handleSaveResume = async () => {
+    try {
+      await saveResumeData(resumeData); // Save the resume data in separate collections
+      Alert.alert('Success', 'Resume saved successfully!');
+      navigation.goBack(); // Optionally navigate back or show a confirmation screen
+    } catch (error) {
+      Alert.alert('Error', 'Failed to save resume');
+    }
+  };
+
   const renderSectionContent = (section) => {
     return section.items.map((item, index) => {
       if (typeof item === 'string') {

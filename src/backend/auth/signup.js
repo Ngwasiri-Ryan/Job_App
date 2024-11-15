@@ -1,5 +1,4 @@
-// signup.js
-import {auth,db} from '../Firebase'
+import { auth, db } from '../Firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 
@@ -17,13 +16,16 @@ export const signUpUser = async (username, email, password) => {
     const user = userCredential.user;
 
     // Save user data to Firestore in the "users" collection
-    await addDoc(collection(db, "users"), {
+    const usersCollection = collection(db, "users");  // Reference to "users" collection
+    await addDoc(usersCollection, {
       uid: user.uid,
       username,
       email,
-      password, // Note: Consider hashing the password or handling sensitive data securely.
       createdAt: new Date().toISOString(),
     });
+
+    // Log to the console upon successful sign-up
+    console.log('User signed up successfully:', user);
 
     return { success: true, user };
   } catch (error) {

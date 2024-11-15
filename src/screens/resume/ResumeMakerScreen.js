@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,74 +7,95 @@ import {
   StyleSheet,
   Image,
   FlatList,
-} from 'react-native';
-import { COLORS, FONTS, icons } from '../../constants';
+} from "react-native";
+import { COLORS, FONTS, icons } from "../../constants";
+import { saveIndependentCollections } from "../../backend/resume/resume";
+import { useUserContext } from "../../hooks/UserContext";
 
-// Define the initial data with essential resume sections
+
 const initialData = [
   {
-    title: 'Personal Details',
+    title: "Personal Details",
     items: [
       {
-        name: '',
-        phone: '',
-        email: '',
-        country: '',
-        city: '',
-        town: '',
-        summary:''
+        name: "",
+        phone: "",
+        email: "",
+        country: "",
+        city: "",
+        town: "",
+        summary: "",
       },
     ],
   },
   {
-    title: 'Education',
-    items: [{ institution: '', degree: '', duration: '' }],
+    title: "Education",
+    items: [{ institution: "", degree: "", duration: "" }],
   },
   {
-    title: 'Work Experience',
-    items: [{ jobTitle: '', company: '', location: '', date: '', description: '' }],
+    title: "Work Experience",
+    items: [
+      {
+        jobTitle: "",
+        company: "",
+        location: "",
+        date: "",
+        description: "",
+      },
+    ],
   },
   {
-    title: 'Skills',
-    items: [''],
+    title: "Skills",
+    items: [""],
   },
   {
-    title: 'Certifications',
-    items: [{ name: '', institute: '', duration: '' }],
+    title: "Certifications",
+    items: [{ name: "", institute: "", duration: "" }],
   },
   {
-    title: 'Languages',
-    items: [''],
+    title: "Languages",
+    items: [""],
   },
   {
-    title: 'Projects',
-    items: [{ projectName: '', projectDescription: '' }],
+    title: "Projects",
+    items: [{ projectName: "", projectDescription: "" }],
   },
   {
-    title: 'Interests',
-    items: [''],
+    title: "Interests",
+    items: [""],
   },
 ];
 
-const ResumeMakerScreen = ({navigation}) => {
+const ResumeMakerScreen = ({ navigation }) => {
+  const { userData } = useUserContext();
+  const username = userData.username;
   const [sections, setSections] = useState(initialData);
 
   const addItem = (sectionIndex) => {
     const newSections = [...sections];
     const currentSection = newSections[sectionIndex];
-
-    // Create an empty item based on the section type
     let newItem;
-    if (currentSection.title === 'Skills' || currentSection.title === 'Languages' || currentSection.title === 'Interests') {
-      newItem = '';
-    } else if (currentSection.title === 'Projects') {
-      newItem = { projectName: '', projectDescription: '' };
-    } else if (currentSection.title === 'Education') {
-      newItem = { institution: '', degree: '', duration: '' };
-    } else if (currentSection.title === 'Certifications') {
-      newItem = { name: '', institution: '', duration: '' };
+
+    if (
+      currentSection.title === "Skills" ||
+      currentSection.title === "Languages" ||
+      currentSection.title === "Interests"
+    ) {
+      newItem = "";
+    } else if (currentSection.title === "Projects") {
+      newItem = { projectName: "", projectDescription: "" };
+    } else if (currentSection.title === "Education") {
+      newItem = { institution: "", degree: "", duration: "" };
+    } else if (currentSection.title === "Certifications") {
+      newItem = { name: "", institution: "", duration: "" };
     } else {
-      newItem = { jobTitle: '', company: '', date: '', description: '' };
+      newItem = {
+        jobTitle: "",
+        company: "",
+        location: "",
+        date: "",
+        description: "",
+      };
     }
 
     currentSection.items.push(newItem);
@@ -85,10 +106,12 @@ const ResumeMakerScreen = ({navigation}) => {
     const newSections = [...sections];
     const currentItem = newSections[sectionIndex].items[itemIndex];
 
-    if (newSections[sectionIndex].title === 'Skills' || newSections[sectionIndex].title === 'Languages' || newSections[sectionIndex].title === 'Interests') {
+    if (
+      newSections[sectionIndex].title === "Skills" ||
+      newSections[sectionIndex].title === "Languages" ||
+      newSections[sectionIndex].title === "Interests"
+    ) {
       newSections[sectionIndex].items[itemIndex] = value;
-    } else if (newSections[sectionIndex].title === 'Projects') {
-      currentItem[field] = value;
     } else {
       currentItem[field] = value;
     }
@@ -101,6 +124,35 @@ const ResumeMakerScreen = ({navigation}) => {
     newSections[sectionIndex].items.splice(itemIndex, 1);
     setSections(newSections);
   };
+
+  const handleSaveResume = async () => {
+    const resumeData = {
+      personalDetails: sections[0].items[0],
+      education: sections[1].items,
+      workExperience: sections[2].items,
+      skills: sections[3].items,
+      certifications: sections[4].items,
+      languages: sections[5].items,
+      projects: sections[6].items,
+      interests: sections[7].items,
+    };
+  
+    // Display a confirmation dialog
+    const isConfirmed = window.confirm("Are you sure you are okay with the resume data?");
+    if (!isConfirmed) {
+      // If the user clicks "Cancel", exit the function
+      return;
+    }
+  
+    try {
+      await saveIndependentCollections(username, resumeData);
+      alert("Resume saved successfully!");
+    } catch (error) {
+      console.error("Error saving resume: ", error);
+      alert("Failed to save the resume. Please try again.");
+    }
+  };
+  
 
   const renderSectionItem = ({ item, index, sectionIndex }) => {
     return (
@@ -284,6 +336,7 @@ const ResumeMakerScreen = ({navigation}) => {
     );
   };
 
+
   const renderSection = ({ item, index }) => {
     return (
       <View style={styles.section}>
@@ -292,43 +345,39 @@ const ResumeMakerScreen = ({navigation}) => {
         </View>
         <FlatList
           data={item.items}
-          renderItem={(item) => renderSectionItem({ ...item, sectionIndex: index })}
+          renderItem={(item) =>
+            renderSectionItem({ ...item, sectionIndex: index })
+          }
           keyExtractor={(item, idx) => idx.toString()}
         />
-        <TouchableOpacity onPress={() => addItem(index)} style={styles.add} >
-        <Image style={styles.icon} source={icons.add} />
+        <TouchableOpacity onPress={() => addItem(index)} style={styles.add}>
+          <Image style={styles.icon} source={icons.add} />
         </TouchableOpacity>
       </View>
     );
   };
 
   return (
-    <View style={{flex:1}}>
-<View style={styles.header}>
+    <View style={{ flex: 1 }}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={icons.back} style={styles.backButton} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Resume Builder</Text>
       </View>
       <View style={styles.container}>
-    
-    {/* <Text style={styles.introText}>
-      Fill in your information in every section to create your resume beginning
-       your job seeking journey.
-    </Text> */}
-   
-      <FlatList
-        data={sections}
-        renderItem={renderSection}
-        keyExtractor={(item, index) => index.toString()}
-      />
-
-<TouchableOpacity  style={styles.makeResumeButton}
- onPress={ () => navigation.navigate('ResumePreviewScreen',{resumeData:sections})}
->
-        <Text style={styles.makeResumeButtonText}>Make Resume</Text>
-      </TouchableOpacity>
-    </View>
+        <FlatList
+          data={sections}
+          renderItem={renderSection}
+          keyExtractor={(item, index) => index.toString()}
+        />
+        <TouchableOpacity
+          onPress={handleSaveResume}
+          style={styles.saveButton}
+        >
+          <Text style={styles.saveButtonText}>Save Resume</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -457,6 +506,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.primary,
   },
+  saveButton:{
+    backgroundColor:COLORS.primary,
+    padding:20,
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:10,
+  },
+  saveButtonText:{
+    color:COLORS.white,
+    ...FONTS.h3
+  }
 });
+
+
 
 export default ResumeMakerScreen;
