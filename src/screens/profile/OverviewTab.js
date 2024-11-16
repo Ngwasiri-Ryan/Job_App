@@ -1,9 +1,45 @@
-// OverviewTab.js
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
-import { COLORS , FONTS, icons, images } from '../../constants';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
+import { COLORS, FONTS, icons } from '../../constants';
+import { fetchUserData } from '../../backend/profile/overview';
 
 const OverviewTab = () => {
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const username = "Ryan";
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetchUserData(username);
+        setUserData(data);
+      } catch (error) {
+        console.error("Error loading user data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!userData) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Failed to load user data.</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Personal Info */}
@@ -13,96 +49,123 @@ const OverviewTab = () => {
           <Text style={styles.sectionTitle}>Personal Info</Text>
         </View>
         <View style={styles.row}>
-           <Image source={icons.identity} style={styles.smallIcon} />
-           <Text style={styles.infoText}>John Doe</Text>
+          <Image source={icons.identity} style={styles.smallIcon} />
+          <Text style={styles.infoText}>{userData.personalDetails.name}</Text>
         </View>
-        
         <View style={styles.row}>
-        <Image source={icons.mail} style={styles.smallIcon} />
-        <Text style={styles.infoText}>johndoe@gmail.com</Text>
+          <Image source={icons.mail} style={styles.smallIcon} />
+          <Text style={styles.infoText}>{userData.personalDetails.email}</Text>
         </View>
-
         <View style={styles.row}>
-        <Image source={icons.phone} style={styles.smallIcon} />
-        <Text style={styles.infoText}>+123 456 7890</Text>
+          <Image source={icons.phone} style={styles.smallIcon} />
+          <Text style={styles.infoText}>{userData.personalDetails.phone}</Text>
         </View>
-
         <View style={styles.row}>
-        <Image source={icons.location} style={styles.smallIcon} />
-        <Text style={styles.infoText}>New York, USA</Text>
+          <Image source={icons.location} style={styles.smallIcon} />
+          <Text style={styles.infoText}>{userData.personalDetails.city},{userData.personalDetails.town},{userData.personalDetails.country}, </Text>
         </View>
-
       </View>
 
       {/* Experience */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-        <Image source={icons.briefcase} style={styles.icon} />
+          <Image source={icons.briefcase} style={styles.icon} />
           <Text style={styles.sectionTitle}>Experience</Text>
         </View>
-        <Text style={styles.subheading}>Software Engineer at ABC Corp</Text>
-        <Text style={styles.detailText}>Jan 2020 - Present</Text>
-        <Text style={styles.description}>Worked on mobile and web applications with a focus on creating a seamless user experience.</Text>
-        
-        <Text style={styles.subheading}>Frontend Developer at XYZ Solutions</Text>
-        <Text style={styles.detailText}>May 2018 - Dec 2019</Text>
-        <Text style={styles.description}>Developed responsive UIs for clients in the technology and e-commerce industries.</Text>
+        {userData.workExperience.map((job, index) => (
+          <View key={index}>
+            <Text style={styles.subheading}>{job.jobTitle} at {job.company}</Text>
+            <Text style={styles.detailText}>{job.startDate} - {job.endDate || "Present"}</Text>
+            <Text style={styles.description}>{job.description}</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Projects */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Image source={icons.project} style={styles.icon} />
+          <Text style={styles.sectionTitle}>Projects</Text>
+        </View>
+        {userData.projects.map((project, index) => (
+          <View key={index}>
+            <Text style={styles.subheading}>{project.projectName}</Text>
+            <Text style={styles.detailText}>{project.projectDescription}</Text>
+            {project.link && (
+              <Text style={styles.linkText}>Link: {project.link}</Text>
+            )}
+          </View>
+        ))}
       </View>
 
       {/* Certifications */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-        <Image source={icons.certification} style={styles.icon} />
+          <Image source={icons.certification} style={styles.icon} />
           <Text style={styles.sectionTitle}>Certifications</Text>
         </View>
-        <Text style={styles.subheading}>Certified React Developer</Text>
-        <Text style={styles.detailText}>Issued by: CodeAcademy - 2021</Text>
-        
-        <Text style={styles.subheading}>AWS Cloud Practitioner</Text>
-        <Text style={styles.detailText}>Issued by: Amazon Web Services - 2020</Text>
+        {userData.certifications.map((cert, index) => (
+          <View key={index}>
+            <Text style={styles.subheading}>{cert.name}</Text>
+            <Text style={styles.detailText}>Issued by: {cert.issuer}</Text>
+          </View>
+        ))}
       </View>
 
       {/* Education */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-        <Image source={icons.education} style={styles.icon} />
+          <Image source={icons.education} style={styles.icon} />
           <Text style={styles.sectionTitle}>Education</Text>
         </View>
-        <Text style={styles.subheading}>BSc in Computer Science</Text>
-        <Text style={styles.detailText}>University of Example - Graduated 2018</Text>
+        {userData.education.map((edu, index) => (
+          <View key={index}>
+            <Text style={styles.subheading}>{edu.degree}</Text>
+            <Text style={styles.detailText}>{edu.institution} - {edu.year}</Text>
+          </View>
+        ))}
       </View>
 
-        {/* Languages */}
+      {/* Skills */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-        <Image source={icons.skill} style={styles.icon} />
+          <Image source={icons.skill} style={styles.icon} />
           <Text style={styles.sectionTitle}>Skills</Text>
         </View>
-        <Text style={styles.infoText}>React</Text>
-        <Text style={styles.infoText}>Nodejs</Text>
-        <Text style={styles.infoText}>MongoDB</Text>
+        {userData.skills.map((skill, index) => (
+          <Text key={index} style={styles.infoText}>{skill}</Text>
+        ))}
       </View>
-
-
 
       {/* Languages */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-        <Image source={icons.language} style={styles.icon} />
+          <Image source={icons.language} style={styles.icon} />
           <Text style={styles.sectionTitle}>Languages</Text>
         </View>
-        <Text style={styles.infoText}>English - Fluent</Text>
-        <Text style={styles.infoText}>Spanish - Intermediate</Text>
-        <Text style={styles.infoText}>French - Beginner</Text>
+        {userData.languages.map((language, index) => (
+          <Text key={index} style={styles.infoText}>{language}</Text>
+        ))}
+      </View>
+
+      {/* Interests */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Image source={icons.interest} style={styles.icon} />
+          <Text style={styles.sectionTitle}>Interests</Text>
+        </View>
+        {userData.interests.map((interest, index) => (
+          <Text key={index} style={styles.infoText}>{interest}</Text>
+        ))}
       </View>
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     padding: 5,
     backgroundColor: COLORS.white,
+    marginBottom:60,
   },
   section: {
     backgroundColor: '#F2F8FF',
@@ -163,5 +226,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+
 
 export default OverviewTab;

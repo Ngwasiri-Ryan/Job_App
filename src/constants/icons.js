@@ -60,6 +60,8 @@ const briefcase= require("../../assets/icons/briefcase.png");
 const identity = require("../../assets/icons/identity.png");
 const id_card = require("../../assets/icons/id-card.png");
 const download = require("../../assets/icons/download.png");
+const interest = require("../../assets/icons/interest.png");
+const project = require("../../assets/icons/projects.png");
 
 export default {
     home,
@@ -116,6 +118,8 @@ export default {
     skill,
     certification,
     education,
+    id_card,
     identity,
-    id_card
+    interest,
+    project
 }
