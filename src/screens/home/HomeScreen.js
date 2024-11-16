@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Image ,Dimensions} from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import axios from 'axios';
 import JobItemHorizontal from '../../components/home/jobItemHorizontal';
 import JobItem from '../../components/home/jobItem';
 import Error from '../../components/search/Error';
+import RequestError from '../../components/search/429_error';// Import the RequestError component
 import { COLORS, FONTS, icons } from '../../constants';
 import Loader from '../../components/loading/Loader';
 import Greetings from '../../components/home/Greetings';
@@ -17,15 +18,16 @@ const HomeScreen = ({ route, navigation }) => {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all'); // State for filter type
-  const [selectedCategory, setSelectedCategory] = useState('all'); // State for selected category
+  const [filter, setFilter] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [is429Error, setIs429Error] = useState(false); 
 
   const categories = [
-    { name: 'All', type: 'FULLTIME'},
-    { name: 'Full-Time', type: 'FULLTIME'},
+    { name: 'All', type: 'FULLTIME' },
+    { name: 'Full-Time', type: 'FULLTIME' },
     { name: 'Part-Time', type: 'PARTTIME' },
     { name: 'Contract', type: 'CONTRACT' },
-    { name: 'Internship', type: 'INTERN'},
+    { name: 'Internship', type: 'INTERN' },
     { name: 'Freelance', type: 'FREELANCE' },
   ];
 
@@ -48,8 +50,8 @@ const HomeScreen = ({ route, navigation }) => {
 
     try {
       const response = await axios.request(options);
-      setJobs(prevJobs => [...prevJobs, ...response.data.data]);
-      setFilteredJobs(prevJobs => [...prevJobs, ...response.data.data]); 
+      setJobs((prevJobs) => [...prevJobs, ...response.data.data]);
+      setFilteredJobs((prevJobs) => [...prevJobs, ...response.data.data]);
 
       if (page < response.data.total_pages) {
         fetchJobs(retryCount, page + 1);
@@ -59,7 +61,9 @@ const HomeScreen = ({ route, navigation }) => {
     } catch (error) {
       if (error.response && error.response.status === 429 && retryCount < 3) {
         setTimeout(() => fetchJobs(retryCount + 1, page), 2000);
-        console.log(error)
+      } else if (error.response && error.response.status === 429) {
+        setIs429Error(true);
+        setLoading(false);
       } else {
         setError(error.message);
         setLoading(false);
@@ -78,13 +82,13 @@ const HomeScreen = ({ route, navigation }) => {
   const filterJobs = () => {
     let filtered = jobs;
     if (filter === 'remote') {
-      filtered = filtered.filter(job => job.job_is_remote);
+      filtered = filtered.filter((job) => job.job_is_remote);
     } else if (filter === 'onsite') {
-      filtered = filtered.filter(job => !job.job_is_remote);
+      filtered = filtered.filter((job) => !job.job_is_remote);
     }
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(job => job.job_employment_type === selectedCategory);
+      filtered = filtered.filter((job) => job.job_employment_type === selectedCategory);
     }
 
     setFilteredJobs(filtered);
@@ -92,6 +96,10 @@ const HomeScreen = ({ route, navigation }) => {
 
   if (loading) {
     return <Loader />;
+  }
+
+  if (is429Error) {
+    return <RequestError/>;
   }
 
   if (error) {
@@ -107,39 +115,29 @@ const HomeScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-     
-     <View  style={styles.header} >
-      {/*profile pic */}
-      <View style={styles.profile}>
-        <Text style={styles.profileText}>N</Text>
+      <View style={styles.header}>
+        <View style={styles.profile}>
+          <Text style={styles.profileText}>N</Text>
+        </View>
+        <View>
+          <Greetings />
+        </View>
       </View>
-      {/**greetings and date */}
-      <View>
-         <Greetings/>
-      </View>
-     </View>
 
       <View style={styles.header}>
-      <Text style={styles.heading}>Available Jobs</Text>
+        <Text style={styles.heading}>Available Jobs</Text>
         <TouchableOpacity style={styles.search} onPress={() => navigation.navigate('FindjobScreen')}>
           <Image source={icons.search} style={styles.icon} />
         </TouchableOpacity>
       </View>
 
-      
-
-
-       {/* Filter Buttons */}
-       <Text style={styles.smallheading}>Based on time</Text>
+      <Text style={styles.smallheading}>Based on time</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
-        {['all', 'remote', 'onsite'].map(type => (
+        {['all', 'remote', 'onsite'].map((type) => (
           <TouchableOpacity
             key={type}
             onPress={() => setFilter(type)}
-            style={[
-              styles.filterButton,
-              filter === type && styles.selectedFilterButton,
-            ]}
+            style={[styles.filterButton, filter === type && styles.selectedFilterButton]}
           >
             <Text style={filter === type ? styles.selectedFilterText : styles.filterText}>
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -148,43 +146,27 @@ const HomeScreen = ({ route, navigation }) => {
         ))}
       </ScrollView>
 
-
-
-
-
-
-
-      {/* Category Scroll Horizontal */}
       <Text style={styles.smallheading}>Job Type</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-        {categories.map(category => (
+        {categories.map((category) => (
           <TouchableOpacity
             key={category.type}
             onPress={() => setSelectedCategory(category.type)}
-            style={[
-              styles.filterButton,
-              selectedCategory === category.type && styles.selectedCategoryButton,
-            ]}
+            style={[styles.filterButton, selectedCategory === category.type && styles.selectedCategoryButton]}
           >
-            <Text
-              style={selectedCategory === category.type ? styles.selectedCategoryText : styles.categoryText}
-            >
+            <Text style={selectedCategory === category.type ? styles.selectedCategoryText : styles.categoryText}>
               {category.name}
             </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
-     
-
-      {/* Horizontal Scroll for Job Items */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
         {firstFiveJobs.map((item, index) => (
           <JobItemHorizontal key={`${item.job_id}-${index}`} item={item} />
         ))}
       </ScrollView>
 
-      {/* FlatList for Remaining Jobs */}
       <FlatList
         data={remainingJobs}
         keyExtractor={(item) => item.job_id || item.id || Math.random().toString(36).substr(2, 9)}
@@ -213,28 +195,27 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     paddingHorizontal: 10,
   },
-  profileText:{
-    color:COLORS.white,
-     ...FONTS.h2
+  profileText: {
+    color: COLORS.white,
+    ...FONTS.h2,
   },
   header: {
     padding: 5,
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'space-between'
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  search:{
-    backgroundColor:COLORS.secondary,
-    padding:10,
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:10,
-    
+  search: {
+    backgroundColor: COLORS.secondary,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
   },
   icon: {
     height: 20,
     width: 20,
-    tintColor:COLORS.white
+    tintColor: COLORS.white,
   },
   categoryScroll: {
     paddingVertical: 5,
@@ -242,28 +223,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     flexDirection: 'row',
   },
-  categoryButton: {
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    backgroundColor: COLORS.white,
-    marginRight: 10,
-    borderColor: '#000',
-    borderWidth: 1,
-  },
   selectedCategoryButton: {
     backgroundColor: COLORS.secondary,
     borderColor: 'transparent',
-  },
-  categoryIcon: {
-    width: 30,
-    height: 30,
-    marginBottom: 5,
-  },
-  categoryText: {
-    fontSize: 14,
-    color: '#000',
   },
   selectedCategoryText: {
     fontSize: 14,
@@ -288,14 +250,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     borderColor: 'transparent',
   },
-  profile:{
-    height:40,
-    width:40,
-    backgroundColor:COLORS.primary,
-    justifyContent:'center',
-    display:'flex',
-    alignItems:'center',
-    borderRadius:5,
+  profile: {
+    height: 40,
+    width: 40,
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 5,
   },
   filterText: {
     fontSize: 16,

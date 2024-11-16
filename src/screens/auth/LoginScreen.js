@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation }) => {
         const { user, username } = result; // Correct variable from result
         setUserData({ email: user.email, username });
         console.log(`Username set in context: ${username}`);
-        navigation.navigate('Step1');
+        navigation.navigate('JobSelectionScreen');
       } else {
         setError(result.error); 
       }
