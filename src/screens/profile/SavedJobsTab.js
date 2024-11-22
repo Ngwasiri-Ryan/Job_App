@@ -1,24 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {COLORS, FONTS} from '../../constants';
-import {useUserContext} from '../../hooks/UserContext';
-import {fetchSavedJobs} from '../../backend/profile/fetchSavedJobs';
-import {icons} from '../../constants';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { COLORS, FONTS } from '../../constants';
+import { useUserContext } from '../../hooks/UserContext';
+import { fetchSavedJobs } from '../../backend/profile/fetchSavedJobs';
+import { deleteSavedJob } from '../../backend/profile/deleteSavedJob'; // Import the delete function
+import { icons } from '../../constants';
+import { timeAgo } from '../../hooks/TimeSaved';
 
-const SavedJobsTab = ({navigation}) => {
-  const {userData} = useUserContext();
+const SavedJobsTab = ({ navigation }) => {
+  const { userData } = useUserContext();
   const username = userData?.username;
 
   const [savedJobs, setSavedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false); // Manage modal visibility
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     const loadSavedJobs = async () => {
@@ -34,6 +30,23 @@ const SavedJobsTab = ({navigation}) => {
 
     loadSavedJobs();
   }, [username]);
+
+  const handleDeleteJob = async jobId => {
+    try {
+      await deleteSavedJob(jobId, username); // Call the delete function
+      setModalMessage('Saved job removed');
+      setModalVisible(true);
+
+      // Update the saved jobs state to remove the deleted job
+      setSavedJobs(prevJobs => prevJobs.filter(job => job.id !== jobId));
+    } catch (error) {
+      console.error('Error deleting job:', error.message);
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   if (loading) {
     return (
@@ -58,80 +71,59 @@ const SavedJobsTab = ({navigation}) => {
       <FlatList
         data={savedJobs}
         keyExtractor={item => item.id}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <View style={styles.jobItem}>
-            {/**compny logo */}
+            {/* Company logo */}
             {item.employer_logo ? (
-              <View style={{height: 50, width: 50}}>
-                <Image source={{uri: item.employer_logo}} style={styles.logo} />
+              <View style={{ height: 50, width: 50 }}>
+                <Image source={{ uri: item.employer_logo }} style={styles.logo} />
               </View>
             ) : (
-              <View style={{height: 50, width: 50}}>
+              <View style={{ height: 50, width: 50 }}>
                 <Image
                   source={require('../../../assets/icons/suitcase.png')}
                   style={styles.logo}
                 />
               </View>
             )}
-            <View>
-              {/* Job title */}
-              <Text style={styles.jobTitle}>
-                {item.job_title.length > 35
-                  ? `${item.job_title.slice(0, 30)}...`
-                  : item.job_title}
-              </Text>
+            <View style={{ width: '80%' }}>
+              <View style={styles.justify}>
+                <Text style={styles.jobTitle}>
+                  {item.job_title.length > 35
+                    ? `${item.job_title.slice(0, 30)}...`
+                    : item.job_title}
+                </Text>
+                {/* Delete icon */}
+                <TouchableOpacity
+                  onPress={() => handleDeleteJob(item.id)} // Handle delete on click
+                  style={styles.deleteIcon}>
+                  <Image source={icons.trash} style={styles.trash} />
+                </TouchableOpacity>
+              </View>
 
-              {/**employer name */}
               <Text style={styles.employerNameList}>
                 {item.employer_name.length > 30
                   ? `${item.employer_name.slice(0, 25)}...`
                   : item.employer_name}
               </Text>
 
-              {/* Job Link */}
-              {item.job_google_link && (
-                <View style={styles.google}>
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() =>
-                      navigation.navigate('jobWebViewScreen', {
-                        url: item.job_apply_link,
-                      })
-                    }>
-                    <Image source={icons.google} style={styles.icon} />
-                  </TouchableOpacity>
-                </View>
-              )}
-
-              {/* Job details */}
-              <View style={styles.detailsContainer}>
-                <View style={{flexDirection: 'row', gap: 2}}>
-                  <Image source={icons.earth} style={styles.icon} />
-                  <Text style={styles.detailText}>
-                    {item.job_city ? item.job_city : 'Online'}
-                  </Text>
-                </View>
-
-                <View style={{flexDirection: 'row', gap: 2}}>
-                  <Image source={icons.marker} style={styles.icon} />
-                  <Text style={styles.detailText}>
-                    {item.job_is_remote ? 'Remote' : 'Onsite'}
-                  </Text>
-                </View>
-
-                <View style={{flexDirection: 'row', gap: 2}}>
-                  <Image source={icons.duration} style={styles.icon} />
-                  <Text style={styles.detailText}>
-                    {item.job_employment_type === 'FULLTIME'
-                      ? 'Full-Time'
-                      : 'Part-Time'}
-                  </Text>
-                </View>
-              </View>
+              {/* Display saved time */}
+              <Text style={styles.timeSaved}>
+                {timeAgo(item.savedAt)} {/* Format the savedAt time */}
+              </Text>
             </View>
           </View>
         )}
       />
+      {/* Modal for confirmation */}
+      {modalVisible && (
+        <View style={styles.modal}>
+          <Text style={styles.modalText}>{modalMessage}</Text>
+          <TouchableOpacity onPress={closeModal} style={styles.modalButton}>
+            <Text style={styles.modalButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -157,6 +149,13 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
+  justify: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
   noJobsText: {
     fontSize: 16,
     color: COLORS.darkGray,
@@ -171,35 +170,66 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 20,
-    borderBottomColor:COLORS.black,
-    borderBottomWidth:1,
+    borderBottomColor: COLORS.black,
+    borderBottomWidth: 1,
   },
   jobTitle: {
     ...FONTS.h5,
     color: COLORS.black,
     fontWeight: 'bold',
   },
-  google: {
-    height: 10,
-    width: 10,
+  employerNameList: {
+    fontSize: 14,
+    color: COLORS.darkGray,
+  },
+  timeSaved: {
+    fontSize: 12,
+    color: COLORS.darkGray,
+    marginTop: 5,
   },
   icon: {
     height: 15,
     width: 15,
   },
-  employerName: {
-    fontSize: 14,
-    color: COLORS.darkGray,
+  trash: {
+    height: 20,
+    width: 15,
+    tintColor: 'red',
   },
-  location: {
-    fontSize: 12,
-    color: COLORS.darkGray,
-    marginTop: 5,
+  deleteIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 5,
   },
-  detailsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 10,
+  modal: {
+    position: 'absolute',
+    bottom: 50,
+    left: 0,
+    right: 0,
+    backgroundColor: COLORS.white,
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.black,
+    marginBottom: 10,
+  },
+  modalButton: {
+    backgroundColor: COLORS.primary,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: COLORS.white,
+    fontWeight: 'bold',
   },
 });
 

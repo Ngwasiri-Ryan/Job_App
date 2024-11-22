@@ -1,11 +1,45 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity,Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
+import { icons, COLORS } from '../../constants';
 const { width, height } = Dimensions.get('window');
 
 const JobItemHorizontal = ({ item }) => {
   
   const navigation = useNavigation(); 
+  const [logoUrl, setLogoUrl] = useState(null);
+
+
+  // Fetch logo from Clearbit API
+  useEffect(() => {
+    const fetchLogo = async () => {
+      if (!item.employer_logo) {
+        try {
+          const domain = `${item.employer_name.replace(/\s+/g, '').toLowerCase()}.com`;
+          const clearbitLogoUrl = `https://logo.clearbit.com/${domain}`;
+          const response = await fetch(clearbitLogoUrl);
+  
+          if (response.ok) {
+            setLogoUrl(clearbitLogoUrl); // Logo found
+            console.log(`Logo loaded successfully from Clearbit: ${clearbitLogoUrl}`);
+          } else {
+            setLogoUrl(null); // Clearbit logo not found
+            console.log(`Clearbit logo not found for domain: ${domain}`);
+          }
+        } catch (error) {
+          console.error('Error fetching logo:', error);
+          setLogoUrl(null);
+        }
+      } else {
+        setLogoUrl(item.employer_logo); // Use provided employer logo
+        console.log(`Using provided employer logo: ${item.employer_logo}`);
+      }
+    };
+  
+    fetchLogo();
+  }, [item.employer_logo, item.employer_name]);
+  
+
 
   return (
     <View style={{marginTop:10}}>
@@ -15,11 +49,15 @@ const JobItemHorizontal = ({ item }) => {
       }
     >
       <View style={styles.logoContainer}>
-        {item.employer_logo ? (
-          <Image source={{ uri: item.employer_logo }} style={styles.logo} />
-        ) : (
-          <Image source={require('../../../assets/icons/suitcase.png')} style={styles.logo} />
-        )}
+   
+        <Image
+          source={
+            logoUrl
+              ? { uri: logoUrl } // Use fetched or provided logo
+              : icons.suitcase // Fallback to suitcase icon
+          }
+          style={styles.logo}
+        />
       </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.employerName}>{item.employer_name}</Text>

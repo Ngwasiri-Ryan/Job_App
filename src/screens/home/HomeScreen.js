@@ -21,6 +21,7 @@ const HomeScreen = ({ route, navigation }) => {
   const [filter, setFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [is429Error, setIs429Error] = useState(false); 
+  
 
   const categories = [
     { name: 'All', type: 'FULLTIME' },

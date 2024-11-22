@@ -4,8 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import axios from 'axios';
 import { COLORS, FONTS, icons } from '../../constants';
-import {API_KEY} from '@env'
-
+import { API_KEY } from '@env';
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,7 +18,22 @@ const JobDetailsScreen = ({ route }) => {
   // State to store the estimated salary
   const [salaryEstimate, setSalaryEstimate] = useState(null);
 
-  // Function to fetch salary estimate based on job title and location
+  // State to store fetched employer logo
+  const [employerLogo, setEmployerLogo] = useState(job.employer_logo);
+
+  // Fetch employer logo if not provided
+  const fetchEmployerLogo = async () => {
+    if (!job.employer_logo && job.employer_name) {
+      try {
+        const response = await axios.get(`https://logo.clearbit.com/${job.employer_name.split(' ').join('').toLowerCase()}.com`);
+        setEmployerLogo(response.config.url);
+      } catch (error) {
+        console.error('Error fetching employer logo:', error);
+      }
+    }
+  };
+
+  // Fetch salary estimate
   const fetchSalaryEstimate = async () => {
     const options = {
       method: 'GET',
@@ -27,25 +41,26 @@ const JobDetailsScreen = ({ route }) => {
       params: {
         job_title: job.job_title,
         location: `${job.job_city}, ${job.job_state}`,
-        radius: '100'
+        radius: '100',
       },
       headers: {
-        'x-rapidapi-key':'6ad3207de2msh3e62d0537d5a1b0p1f7c0ejsn75521868e83a',
-        'x-rapidapi-host': 'jsearch.p.rapidapi.com'
-      }
+        'x-rapidapi-key': '6ad3207de2msh3e62d0537d5a1b0p1f7c0ejsn75521868e83a',
+        'x-rapidapi-host': 'jsearch.p.rapidapi.com',
+      },
     };
 
     try {
       const response = await axios.request(options);
-      const salaryData = response.data.data; 
+      const salaryData = response.data.data;
       setSalaryEstimate(salaryData);
     } catch (error) {
       console.error('Error fetching salary estimate:', error);
     }
   };
 
-  // Fetch salary estimate on component mount
+  // Fetch logo and salary estimate on mount
   useEffect(() => {
+    fetchEmployerLogo();
     fetchSalaryEstimate();
   }, []);
 
@@ -58,8 +73,8 @@ const JobDetailsScreen = ({ route }) => {
         </TouchableOpacity>
         <View style={styles.logoContainer}>
           <View style={styles.imageWrapper}>
-            {job.employer_logo ? (
-              <Image source={{ uri: job.employer_logo }} style={styles.logo} />
+            {employerLogo ? (
+              <Image source={{ uri: employerLogo }} style={styles.logo} />
             ) : (
               <Image source={icons.suitcase} style={styles.logo} />
             )}
@@ -92,7 +107,9 @@ const JobDetailsScreen = ({ route }) => {
             <Image source={icons.experience} style={styles.icon} />
             <Text style={styles.requirementLabel}>Experience</Text>
             <Text style={styles.requirementValue}>
-              {job.job_required_experience.experience_mentioned ? `${job.job_required_experience.required_experience_in_months / 12 || 0} years` : 'No experience required'}
+              {job.job_required_experience.experience_mentioned
+                ? `${job.job_required_experience.required_experience_in_months / 12 || 0} years`
+                : 'No experience required'}
             </Text>
           </View>
           <View style={[styles.requirementsSection]}>
@@ -120,36 +137,26 @@ const JobDetailsScreen = ({ route }) => {
 
       {/* Scrollable content */}
       <ScrollView style={styles.content}>
-
-       {/* Job Highlights Section */}
-  <Text style={styles.heading}>Job Highlights</Text>
-  
-  {/* Benefits Section */}
-  <Text style={styles.subHeading}>Benefits</Text>
-  {job.job_highlights.Benefits.map((benefit, index) => (
-    <Text key={`benefit-${index}`} style={styles.listItem}>• {benefit}</Text>
-  ))}
-
-  {/* Qualifications Section */}
-  <Text style={styles.subHeading}>Qualifications</Text>
-  {job.job_highlights.Qualifications.map((qualification, index) => (
-    <Text key={`qualification-${index}`} style={styles.listItem}>• {qualification}</Text>
-  ))}
-
-  {/* Responsibilities Section */}
-  <Text style={styles.subHeading}>Responsibilities</Text>
-  {job.job_highlights.Responsibilities.map((responsibility, index) => (
-    <Text key={`responsibility-${index}`} style={styles.listItem}>• {responsibility}</Text>
-  ))}
-
-
+        <Text style={styles.heading}>Job Highlights</Text>
+        <Text style={styles.subHeading}>Benefits</Text>
+        {job.job_highlights.Benefits.map((benefit, index) => (
+          <Text key={`benefit-${index}`} style={styles.listItem}>• {benefit}</Text>
+        ))}
+        <Text style={styles.subHeading}>Qualifications</Text>
+        {job.job_highlights.Qualifications.map((qualification, index) => (
+          <Text key={`qualification-${index}`} style={styles.listItem}>• {qualification}</Text>
+        ))}
+        <Text style={styles.subHeading}>Responsibilities</Text>
+        {job.job_highlights.Responsibilities.map((responsibility, index) => (
+          <Text key={`responsibility-${index}`} style={styles.listItem}>• {responsibility}</Text>
+        ))}
         <Text style={styles.heading}>About Job</Text>
         <Text style={styles.description}>{job.job_description}</Text>
       </ScrollView>
 
       {/* Apply Button */}
-      <TouchableOpacity 
-        style={styles.applyButton} 
+      <TouchableOpacity
+        style={styles.applyButton}
         onPress={() => setModalVisible(true)} // Open modal when button is pressed
       >
         <Text style={styles.applyButtonText}>Apply Now</Text>
@@ -158,8 +165,8 @@ const JobDetailsScreen = ({ route }) => {
       {/* Modal for WebView */}
       <Modal visible={modalVisible} animationType="slide">
         <WebView source={{ uri: job.job_apply_link }} />
-        <TouchableOpacity 
-          style={styles.closeButton} 
+        <TouchableOpacity
+          style={styles.closeButton}
           onPress={() => setModalVisible(false)} // Close modal
         >
           <Text style={styles.closeButtonText}>Close</Text>
@@ -361,8 +368,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     right: 20,
-    bottom: 20,  // Position at the bottom of the screen
-    zIndex: 10,  // Ensure it's always on top of other elements
+    bottom: 20,  
+    zIndex: 10, 
   },
   applyButtonText: {
     color: COLORS.white,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,37 @@ const JobItem = ({ item }) => {
   const navigation = useNavigation();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(null);
+
+  // Fetch logo from Clearbit API
+  useEffect(() => {
+    const fetchLogo = async () => {
+      if (!item.employer_logo) {
+        try {
+          const domain = `${item.employer_name.replace(/\s+/g, '').toLowerCase()}.com`;
+          const clearbitLogoUrl = `https://logo.clearbit.com/${domain}`;
+          const response = await fetch(clearbitLogoUrl);
+  
+          if (response.ok) {
+            setLogoUrl(clearbitLogoUrl); // Logo found
+            console.log(`Logo loaded successfully from Clearbit: ${clearbitLogoUrl}`);
+          } else {
+            setLogoUrl(null); // Clearbit logo not found
+            console.log(`Clearbit logo not found for domain: ${domain}`);
+          }
+        } catch (error) {
+          console.error('Error fetching logo:', error);
+          setLogoUrl(null);
+        }
+      } else {
+        setLogoUrl(item.employer_logo); // Use provided employer logo
+        console.log(`Using provided employer logo: ${item.employer_logo}`);
+      }
+    };
+  
+    fetchLogo();
+  }, [item.employer_logo, item.employer_name]);
+  
 
   const handleBookmark = () => {
     if (!isBookmarked) {
@@ -39,18 +70,16 @@ const JobItem = ({ item }) => {
       style={styles.jobItem}
       onPress={() => navigation.navigate('JobDetailScreen', { job: item })}
     >
-      {item.employer_logo ? (
-        <View style={{ height: 50, width: 50, top: 5 }}>
-          <Image source={{ uri: item.employer_logo }} style={styles.logo} />
-        </View>
-      ) : (
-        <View style={{ height: 50, width: 50 }}>
-          <Image
-            source={require('../../../assets/icons/suitcase.png')}
-            style={styles.logo}
-          />
-        </View>
-      )}
+      <View style={{ height: 50, width: 50, top: 5 }}>
+        <Image
+          source={
+            logoUrl
+              ? { uri: logoUrl } // Use fetched or provided logo
+              : require('../../../assets/icons/suitcase.png') // Fallback to suitcase icon
+          }
+          style={styles.logo}
+        />
+      </View>
 
       <View style={styles.box}>
         {/* Employer name */}
