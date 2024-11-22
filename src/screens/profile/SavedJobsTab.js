@@ -3,14 +3,15 @@ import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOp
 import { COLORS, FONTS } from '../../constants';
 import { useUserContext } from '../../hooks/UserContext';
 import { fetchSavedJobs } from '../../backend/profile/fetchSavedJobs';
-import { deleteSavedJob } from '../../backend/profile/deleteSavedJob'; // Import the delete function
+import { deleteSavedJob } from '../../backend/profile/deleteSavedJob'; 
+import { useNavigation } from '@react-navigation/native';
 import { icons } from '../../constants';
 import { timeAgo } from '../../hooks/TimeSaved';
 
-const SavedJobsTab = ({ navigation }) => {
+const SavedJobsTab = () => {
   const { userData } = useUserContext();
   const username = userData?.username;
-
+  const navigation = useNavigation();
   const [savedJobs, setSavedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false); // Manage modal visibility
@@ -44,10 +45,6 @@ const SavedJobsTab = ({ navigation }) => {
     }
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -72,58 +69,51 @@ const SavedJobsTab = ({ navigation }) => {
         data={savedJobs}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <View style={styles.jobItem}>
-            {/* Company logo */}
-            {item.employer_logo ? (
-              <View style={{ height: 50, width: 50 }}>
-                <Image source={{ uri: item.employer_logo }} style={styles.logo} />
-              </View>
-            ) : (
-              <View style={{ height: 50, width: 50 }}>
-                <Image
-                  source={require('../../../assets/icons/suitcase.png')}
-                  style={styles.logo}
-                />
-              </View>
-            )}
-            <View style={{ width: '80%' }}>
-              <View style={styles.justify}>
-                <Text style={styles.jobTitle}>
-                  {item.job_title.length > 35
-                    ? `${item.job_title.slice(0, 30)}...`
-                    : item.job_title}
+          <TouchableOpacity onPress={() => navigation.navigate('JobDetailScreen', { job: item })}>
+            <View style={styles.jobItem}>
+              {/* Company logo */}
+              {item.employer_logo ? (
+                <View style={{ height: 50, width: 50 }}>
+                  <Image source={{ uri: item.employer_logo }} style={styles.logo} />
+                </View>
+              ) : (
+                <View style={{ height: 50, width: 50 }}>
+                  <Image
+                    source={require('../../../assets/icons/suitcase.png')}
+                    style={styles.logo}
+                  />
+                </View>
+              )}
+              <View style={{ width: '80%' }}>
+                <View style={styles.justify}>
+                  <Text style={styles.jobTitle}>
+                    {item.job_title.length > 35
+                      ? `${item.job_title.slice(0, 30)}...`
+                      : item.job_title}
+                  </Text>
+                  {/* Delete icon */}
+                  <TouchableOpacity
+                    onPress={() => handleDeleteJob(item.id)} // Handle delete on click
+                    style={styles.deleteIcon}>
+                    <Image source={icons.trash} style={styles.trash} />
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.employerNameList}>
+                  {item.employer_name.length > 30
+                    ? `${item.employer_name.slice(0, 25)}...`
+                    : item.employer_name}
                 </Text>
-                {/* Delete icon */}
-                <TouchableOpacity
-                  onPress={() => handleDeleteJob(item.id)} // Handle delete on click
-                  style={styles.deleteIcon}>
-                  <Image source={icons.trash} style={styles.trash} />
-                </TouchableOpacity>
+
+                {/* Display saved time */}
+                <Text style={styles.timeSaved}>
+                  {timeAgo(item.savedAt)} {/* Format the savedAt time */}
+                </Text>
               </View>
-
-              <Text style={styles.employerNameList}>
-                {item.employer_name.length > 30
-                  ? `${item.employer_name.slice(0, 25)}...`
-                  : item.employer_name}
-              </Text>
-
-              {/* Display saved time */}
-              <Text style={styles.timeSaved}>
-                {timeAgo(item.savedAt)} {/* Format the savedAt time */}
-              </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
-      {/* Modal for confirmation */}
-      {modalVisible && (
-        <View style={styles.modal}>
-          <Text style={styles.modalText}>{modalMessage}</Text>
-          <TouchableOpacity onPress={closeModal} style={styles.modalButton}>
-            <Text style={styles.modalButtonText}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 };

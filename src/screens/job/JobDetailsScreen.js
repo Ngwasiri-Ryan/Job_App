@@ -21,6 +21,15 @@ const JobDetailsScreen = ({ route }) => {
   // State to store fetched employer logo
   const [employerLogo, setEmployerLogo] = useState(job.employer_logo);
 
+
+
+
+  //fall back data for job highlights
+  const jobHighights = job.job_highlights || {};
+  const benefits = jobHighights.Benefits || [];
+  const qualifications = jobHighights.Qualifications || [];
+  const responsibilities = jobHighights.Responsibilities || [];
+
   // Fetch employer logo if not provided
   const fetchEmployerLogo = async () => {
     if (!job.employer_logo && job.employer_name) {
@@ -139,17 +148,31 @@ const JobDetailsScreen = ({ route }) => {
       <ScrollView style={styles.content}>
         <Text style={styles.heading}>Job Highlights</Text>
         <Text style={styles.subHeading}>Benefits</Text>
-        {job.job_highlights.Benefits.map((benefit, index) => (
-          <Text key={`benefit-${index}`} style={styles.listItem}>• {benefit}</Text>
-        ))}
-        <Text style={styles.subHeading}>Qualifications</Text>
-        {job.job_highlights.Qualifications.map((qualification, index) => (
-          <Text key={`qualification-${index}`} style={styles.listItem}>• {qualification}</Text>
-        ))}
-        <Text style={styles.subHeading}>Responsibilities</Text>
-        {job.job_highlights.Responsibilities.map((responsibility, index) => (
-          <Text key={`responsibility-${index}`} style={styles.listItem}>• {responsibility}</Text>
-        ))}
+        {benefits.length > 0 ? (
+      benefits.map((benefit, index) => (
+        <Text key={`benefit-${index}`} style={styles.listItem}>• {benefit}</Text>
+      ))
+    ) : (
+      <Text>No benefits available</Text>
+    )}
+
+    <Text style={styles.subHeading}>Qualifications</Text>
+    {qualifications.length > 0 ? (
+      qualifications.map((qualification, index) => (
+        <Text key={`qualification-${index}`} style={styles.listItem}>• {qualification}</Text>
+      ))
+    ) : (
+      <Text>No qualifications available</Text>
+    )}
+
+    <Text style={styles.subHeading}>Responsibilities</Text>
+    {responsibilities.length > 0 ? (
+      responsibilities.map((responsibility, index) => (
+        <Text key={`responsibility-${index}`} style={styles.listItem}>• {responsibility}</Text>
+      ))
+    ) : (
+      <Text>No responsibilities available</Text>
+    )}
         <Text style={styles.heading}>About Job</Text>
         <Text style={styles.description}>{job.job_description}</Text>
       </ScrollView>
