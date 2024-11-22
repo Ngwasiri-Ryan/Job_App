@@ -49,6 +49,7 @@ const SavedJobsTab = () => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={COLORS.primary} />
+        <Text style={styles.smallText}>Loading...</Text>
       </View>
     );
   }
@@ -64,7 +65,11 @@ const SavedJobsTab = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.justify}>
       <Text style={styles.heading}>Saved Jobs</Text>
+      <Text style={styles.smallText}>{savedJobs.length} Jobs saved</Text>
+      </View>
+      
       <FlatList
         data={savedJobs}
         keyExtractor={item => item.id}
@@ -123,11 +128,13 @@ const styles = StyleSheet.create({
     padding: 0,
     backgroundColor: COLORS.white,
     flex: 1,
+    marginBottom:70
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    top:'100%',
   },
   heading: {
     fontSize: 20,
@@ -151,6 +158,10 @@ const styles = StyleSheet.create({
     color: COLORS.darkGray,
     textAlign: 'center',
     marginTop: 20,
+  },
+  smallText: {
+    color: COLORS.darkGray,
+    ...FONTS.body4,
   },
   jobItem: {
     backgroundColor: COLORS.white,

@@ -61,6 +61,7 @@ const JobDetailsScreen = ({ route }) => {
     try {
       const response = await axios.request(options);
       const salaryData = response.data.data;
+      console.log(salaryData)
       setSalaryEstimate(salaryData);
     } catch (error) {
       console.error('Error fetching salary estimate:', error);
@@ -131,16 +132,16 @@ const JobDetailsScreen = ({ route }) => {
 
           {/* Display salary estimate if available */}
           {salaryEstimate && (
-            <View style={styles.requirementsSection}>
-              <Image source={icons.salary} style={styles.icon} />
-              <Text style={styles.requirementLabel}>Salary</Text>
-              <Text style={styles.requirementValue}>
-                {salaryEstimate && salaryEstimate.min_salary && salaryEstimate.max_salary
-                  ? `${salaryEstimate.min_salary.toFixed(2)}${salaryEstimate.salary_currency} - ${salaryEstimate.max_salary.toFixed(2)}${salaryEstimate.salary_currency} / ${salaryEstimate.salary_period.toLowerCase()}`
-                  : 'Unavailable'}
-              </Text>
-            </View>
-          )}
+  <View style={styles.requirementsSection}>
+    <Image source={icons.salary} style={styles.icon} />
+    <Text style={styles.requirementLabel}>Salary</Text>
+    <Text style={styles.requirementValue}>
+      {salaryEstimate && salaryEstimate.min_salary && salaryEstimate.max_salary
+        ? `${salaryEstimate.min_salary.toFixed(2)}${salaryEstimate.salary_currency} - ${salaryEstimate.max_salary.toFixed(2)}${salaryEstimate.salary_currency} / ${salaryEstimate.salary_period.toLowerCase()}`
+        : 'Unavailable'}
+    </Text>
+  </View>
+)}
         </View>
       </View>
 

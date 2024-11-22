@@ -9,14 +9,19 @@ import { COLORS, FONTS, icons } from '../../constants';
 import Loader from '../../components/loading/Loader';
 import Greetings from '../../components/home/Greetings';
 import { API_KEY } from '@env';
+import { useUserContext } from '../../hooks/UserContext';
 
 const { width, height } = Dimensions.get('window');
 
 const HomeScreen = ({ route, navigation }) => {
+  const { userData } = useUserContext();
+  const username = userData?.username;
+  const firstLetter = username?.charAt(0).toUpperCase() || '?';
   const { selectedJobs } = route.params || {};
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [savedJobs, setSavedJobs] = useState([]);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -118,7 +123,7 @@ const HomeScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.profile}>
-          <Text style={styles.profileText}>N</Text>
+          <Text style={styles.profileText}>{firstLetter}</Text>
         </View>
         <View>
           <Greetings />
