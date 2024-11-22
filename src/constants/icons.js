@@ -62,12 +62,21 @@ const id_card = require("../../assets/icons/id-card.png");
 const download = require("../../assets/icons/download.png");
 const interest = require("../../assets/icons/interest.png");
 const project = require("../../assets/icons/projects.png");
+const bookmark = require("../../assets/icons/bookmark.png");
+const marker = require("../../assets/icons/marker.png");
+const duration = require("../../assets/icons/duration.png");
+const earth = require("../../assets/icons/earth.png");
+
+
 
 export default {
     home,
     user,
     history, 
     search,
+    marker,
+    earth,
+    duration,
     location,
     publisher,
     suitcase,
@@ -80,6 +89,7 @@ export default {
     sales,
     nurse,
     calculator,
+    bookmark,
     salary,
     experience,
     resume,Illustrator,

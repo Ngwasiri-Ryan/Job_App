@@ -3,10 +3,10 @@ import { View, Text, Image, StyleSheet, TouchableOpacity,Dimensions } from 'reac
 import { useNavigation } from '@react-navigation/native'
 const { width, height } = Dimensions.get('window');
 
-
-
 const JobItemHorizontal = ({ item }) => {
-    const navigation = useNavigation(); 
+  
+  const navigation = useNavigation(); 
+
   return (
     <View style={{marginTop:10}}>
     <TouchableOpacity style={styles.jobItemHorizontal}
@@ -43,11 +43,10 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     backgroundColor: '#fff',
-    marginVertical: 5,
     marginHorizontal: 10,
     paddingHorizontal:20,
     paddingVertical:30,
-    top:-20,
+    top:2,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },

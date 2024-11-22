@@ -1,102 +1,154 @@
-// JobItem.js
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Modal,
+} from 'react-native';
 import { icons, COLORS } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
-
+import { useUserContext } from '../../hooks/UserContext';
+import { saveJob } from '../../backend/profile/savedJob';
 
 const { width, height } = Dimensions.get('window');
 
 const JobItem = ({ item }) => {
-  const navigation = useNavigation();
+  const { userData } = useUserContext();
+  const username = userData.username;
 
-  const formatDate = (timestamp) => {
-    return new Date(timestamp * 1000).toLocaleDateString(); // Multiplied by 1000 to convert to milliseconds
+  const navigation = useNavigation();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleBookmark = () => {
+    if (!isBookmarked) {
+      setIsBookmarked(true); // Update the state to bookmarked
+      saveJob(item, username); // Save the job
+      setModalVisible(true); // Show the modal
+      setTimeout(() => {
+        setModalVisible(false); // Hide the modal after 2 seconds
+      }, 2000);
+    }
   };
-  
+
   return (
     <TouchableOpacity
       style={styles.jobItem}
-      onPress={() =>
-        navigation.navigate('JobDetailScreen', { job: item })
-      }
+      onPress={() => navigation.navigate('JobDetailScreen', { job: item })}
     >
-       
       {item.employer_logo ? (
-        <View style={{ height: 50, width: 50, top:5 }}>
+        <View style={{ height: 50, width: 50, top: 5 }}>
           <Image source={{ uri: item.employer_logo }} style={styles.logo} />
         </View>
       ) : (
         <View style={{ height: 50, width: 50 }}>
-          <Image source={require('../../../assets/icons/suitcase.png')} style={styles.logo} />
+          <Image
+            source={require('../../../assets/icons/suitcase.png')}
+            style={styles.logo}
+          />
         </View>
       )}
-      
+
       <View style={styles.box}>
         {/* Employer name */}
         <Text style={styles.employerNameList}>
-          {item.employer_name.length > 30 ? `${item.employer_name.slice(0, 25)}...` : item.employer_name}
+          {item.employer_name.length > 30
+            ? `${item.employer_name.slice(0, 25)}...`
+            : item.employer_name}
         </Text>
 
         {/* Job title */}
         <Text style={styles.jobTitle}>
-          {item.job_title.length > 35 ? `${item.job_title.slice(0, 30)}...` : item.job_title}
+          {item.job_title.length > 35
+            ? `${item.job_title.slice(0, 30)}...`
+            : item.job_title}
         </Text>
 
-         {/* Job Link */}
-         {item.job_google_link && (
+        {/* Job Link */}
+        {item.job_google_link && (
           <View style={styles.google}>
-           <TouchableOpacity style={styles.button} 
-            onPress={() => navigation.navigate('jobWebViewScreen', { url: item.job_apply_link })}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                navigation.navigate('jobWebViewScreen', {
+                  url: item.job_apply_link,
+                })
+              }
             >
-              <Image source={icons.google} style={styles.icon}/>
+              <Image source={icons.google} style={styles.icon} />
             </TouchableOpacity>
           </View>
-            
-          )}
-         
-         {/**job apply link, date posted and job offer expiration date */}
-         <View style={styles.detailsContainer}>
+        )}
 
-          {/* Job Posted Date */}
-          {item.job_posted_at_timestamp && (
-            <View style={{flexDirection:'row', gap:10}}>
-               <Image source={icons.green_clock} style={styles.icon}/>
-               <Text style={styles.detailText}>
-               {formatDate(item.job_posted_at_timestamp)}
-               </Text>
-           </View>
-            
-          )}
+        {/* Job details */}
+        <View style={styles.detailsContainer}>
+          <View style={{ flexDirection: 'row', gap: 2 }}>
+            <Image source={icons.earth} style={styles.icon} />
+            <Text style={styles.detailText}>
+              {item.job_city ? item.job_city : 'Online'}
+            </Text>
+          </View>
 
-          {/* Job Posted Date in UTC */}
-          {item.job_posted_at_datetime_utc && (
-           <View style={{flexDirection:'row', gap:10}}>
-           <Image source={icons.red_clock} style={styles.icon}/>
-           <Text style={styles.detailText}>
-           {formatDate(item.job_offer_expiration_timestamp)}
-           </Text>
-       </View>
-          )}
+          <View style={{ flexDirection: 'row', gap: 2 }}>
+            <Image source={icons.marker} style={styles.icon} />
+            <Text style={styles.detailText}>
+              {item.job_is_remote ? 'Remote' : 'Onsite'}
+            </Text>
+          </View>
+
+          <View style={{ flexDirection: 'row', gap: 2 }}>
+            <Image source={icons.duration} style={styles.icon} />
+            <Text style={styles.detailText}>
+              {item.job_employment_type === 'FULLTIME'
+                ? 'Full-Time'
+                : 'Part-Time'}
+            </Text>
+          </View>
+
+          {/* Bookmark Icon */}
+          <TouchableOpacity onPress={handleBookmark} disabled={isBookmarked}>
+            <Image
+              style={[
+                styles.save,
+                { tintColor: isBookmarked ? COLORS.secondary : COLORS.darkgray },
+              ]}
+              source={icons.bookmark}
+            />
+          </TouchableOpacity>
         </View>
-     
       </View>
-     
+
+      {/* Bottom Modal */}
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Bookmarked!</Text>
+          </View>
+        </View>
+      </Modal>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   jobItem: {
-    paddingLeft:20,
-    borderBottomWidth:1,
+    paddingLeft: 20,
+    borderBottomWidth: 1,
     borderBottomColor: COLORS.darkgray,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent:'center',
-    backgroundColor:COLORS.white,
+    justifyContent: 'center',
+    backgroundColor: COLORS.white,
     gap: 20,
-    height:100,
+    height: 100,
   },
   row: {
     flexDirection: 'row',
@@ -118,7 +170,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: COLORS.darkgray,
-  
   },
   logo: {
     width: '100%',
@@ -126,29 +177,53 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     top: '60%',
   },
-  icon:{
-    height:15,
-    width:15,
+  icon: {
+    height: 15,
+    width: 15,
   },
-  detailsContainer:{
-    flexDirection:'row',
-    gap:10,
-    marginTop:10,
+  save: {
+    height: 15,
+    width: 15,
+    left: 35,
   },
-  detailText:{
-    color:COLORS.black,
-    fontSize:12,
+  detailsContainer: {
+    flexDirection: 'row',
+    gap: 20,
+    marginTop: 10,
   },
-  google:{
-    top:-10,
-    position:'absolute',
-    left:'80%',
+  detailText: {
+    color: COLORS.black,
+    fontSize: 12,
   },
-  button:{
-    padding:10,
-    borderRadius:10,
-    backgroundColor:COLORS.lightGray4,
-  }
+  google: {
+    top: -10,
+    position: 'absolute',
+    left: '80%',
+  },
+  button: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: COLORS.lightGray4,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  modalContent: {
+    width: '100%',
+    backgroundColor: COLORS.white,
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: 'center',
+  },
+  modalText: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default JobItem;

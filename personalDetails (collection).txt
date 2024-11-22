@@ -1,0 +1,26 @@
+personalDetails (collection)
+  └── docId1
+      └── { username: "johndoe", name: "John Doe", phone: "123-456-7890", ... }
+education (collection)
+  └── docId1
+      └── { username: "johndoe", institution: "XYZ University", degree: "Bachelors", ... }
+  └── docId2
+      └── { username: "johndoe", institution: "ABC College", degree: "Masters", ... }
+workExperience (collection)
+  └── docId1
+      └── { username: "johndoe", jobTitle: "Software Engineer", company: "Tech Corp", ... }
+skills (collection)
+  └── docId1
+      └── { username: "johndoe", skills: ["JavaScript", "React", "Node.js"] }
+certifications (collection)
+  └── docId1
+      └── { username: "johndoe", name: "Certified React Developer", ... }
+languages (collection)
+  └── docId1
+      └── { username: "johndoe", languages: ["English", "Spanish"] }
+projects (collection)
+  └── docId1
+      └── { username: "johndoe", projectName: "Personal Website", ... }
+interests (collection)
+  └── docId1
+      └── { username: "johndoe", interests: ["Traveling", "Gaming", "Photography"] }

@@ -1,7 +1,7 @@
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../Firebase"; // Adjust the path to your firebase configuration
 
-export const fetchUserData = async (username) => {
+export const fetchuserDetails = async (username) => {
   const data = {};
 
   try {
@@ -71,6 +71,24 @@ export const fetchUserData = async (username) => {
   } catch (error) {
     console.error("Error fetching user data:", error);
   }
+
+  // Fetch personal
+  const personalQuery = query(
+    collection(db, "personal"),
+    where("username", "==", username)
+  );
+  const personalSnapshot = await getDocs(personalQuery);
+  data.personal = personalSnapshot.docs.map((doc) => doc.data())[0];
+
+  
+  // Fetch current
+  const currentQuery = query(
+    collection(db, "current"),
+    where("username", "==", username)
+  );
+  const currentSnapshot = await getDocs(currentQuery);
+  data.current = currentSnapshot.docs.map((doc) => doc.data())[0];
+
 
   return data;
 };

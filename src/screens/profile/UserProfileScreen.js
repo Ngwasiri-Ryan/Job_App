@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { COLORS, icons, images } from '../../constants';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView , ActivityIndicator} from 'react-native';
+import { COLORS, images } from '../../constants';
 import OverviewTab from './OverviewTab';
 import SavedJobsTab from './SavedJobsTab';
 import ActivityTab from './Activityab';
+import Loader from '../../components/loading/Loader';
+import { fetchuserDetails } from '../../backend/profile/overview';
+import { useUserContext } from '../../hooks/UserContext';
+
+
 
 const UserProfileScreen = ({ navigation }) => {
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Overview');
+  const [userDetails, setuserDetails] = useState(null);
+  const {userData} = useUserContext();
+  const username = userData.username;
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -21,6 +30,39 @@ const UserProfileScreen = ({ navigation }) => {
     }
   };
 
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        // Fetch user details using the username from context
+       
+        const data = await fetchuserDetails(username);
+        setuserDetails(data);
+      } catch (error) {
+        console.error("Error loading user data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []); 
+
+  
+  if (loading) {
+    return (
+      <Loader/>
+    );
+  }
+
+  if (!userDetails) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Failed to load user data.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {/* Profile Picture & Basic Info */}
@@ -29,9 +71,9 @@ const UserProfileScreen = ({ navigation }) => {
           <Image source={images.pic} style={styles.profilePicture} />
         </View>
         <View style={styles.userInfo}>
-          <Text style={styles.name}>John Doe <Text style={styles.verifiedBadge}></Text></Text>
-          <Text style={styles.username}>Software Engineer</Text>
-          <Text style={styles.bio}>Passionate Software Engineer with a love for technology and innovation.</Text>
+          <Text style={styles.name}>{userDetails.personal.name } <Text style={styles.verifiedBadge}></Text></Text>
+          <Text style={styles.username}>{userDetails.current.jobTitle }</Text>
+          <Text style={styles.bio}>{userDetails.personalDetails.summary}</Text>
         </View>
       </View>
 

@@ -130,7 +130,7 @@ const HomeScreen = ({ route, navigation }) => {
           <Image source={icons.search} style={styles.icon} />
         </TouchableOpacity>
       </View>
-
+{/* 
       <Text style={styles.smallheading}>Based on time</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
         {['all', 'remote', 'onsite'].map((type) => (
@@ -144,7 +144,7 @@ const HomeScreen = ({ route, navigation }) => {
             </Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </ScrollView> */}
 
       <Text style={styles.smallheading}>Job Type</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
@@ -226,6 +226,10 @@ const styles = StyleSheet.create({
   selectedCategoryButton: {
     backgroundColor: COLORS.secondary,
     borderColor: 'transparent',
+  },
+  categoryText:{
+     color: COLORS.black,
+     top:8,
   },
   selectedCategoryText: {
     fontSize: 14,

@@ -30,7 +30,7 @@ const JobDetailsScreen = ({ route }) => {
         radius: '100'
       },
       headers: {
-        'x-rapidapi-key':'bb287f85abmsh1dfc2a7576241a5p1955b5jsnb747869a2e81',
+        'x-rapidapi-key':'6ad3207de2msh3e62d0537d5a1b0p1f7c0ejsn75521868e83a',
         'x-rapidapi-host': 'jsearch.p.rapidapi.com'
       }
     };
@@ -120,6 +120,29 @@ const JobDetailsScreen = ({ route }) => {
 
       {/* Scrollable content */}
       <ScrollView style={styles.content}>
+
+       {/* Job Highlights Section */}
+  <Text style={styles.heading}>Job Highlights</Text>
+  
+  {/* Benefits Section */}
+  <Text style={styles.subHeading}>Benefits</Text>
+  {job.job_highlights.Benefits.map((benefit, index) => (
+    <Text key={`benefit-${index}`} style={styles.listItem}>• {benefit}</Text>
+  ))}
+
+  {/* Qualifications Section */}
+  <Text style={styles.subHeading}>Qualifications</Text>
+  {job.job_highlights.Qualifications.map((qualification, index) => (
+    <Text key={`qualification-${index}`} style={styles.listItem}>• {qualification}</Text>
+  ))}
+
+  {/* Responsibilities Section */}
+  <Text style={styles.subHeading}>Responsibilities</Text>
+  {job.job_highlights.Responsibilities.map((responsibility, index) => (
+    <Text key={`responsibility-${index}`} style={styles.listItem}>• {responsibility}</Text>
+  ))}
+
+
         <Text style={styles.heading}>About Job</Text>
         <Text style={styles.description}>{job.job_description}</Text>
       </ScrollView>
@@ -156,7 +179,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomEndRadius: 25,
     borderBottomLeftRadius: 25,
-    height: height / 1.9,
+    height: height / 2,
     position: 'absolute', 
     top: 0,
     left: 0,
@@ -358,6 +381,15 @@ const styles = StyleSheet.create({
   boldText:{
     color:COLORS.black,
     ...FONTS.body5
+  },
+  subHeading:{
+     ...FONTS.h4,
+     marginBottom:20,
+     marginTop:10,
+  },
+  listItem:{
+    ...COLORS.black,
+    marginBottom:10,
   }
 });
 
