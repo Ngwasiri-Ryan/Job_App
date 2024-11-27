@@ -117,7 +117,7 @@ const JobItem = ({ item }) => {
           <View style={{ flexDirection: 'row', gap: 2 }}>
             <Image source={icons.earth} style={styles.icon} />
             <Text style={styles.detailText}>
-              {item.job_city ? item.job_city : 'Online'}
+              {item.job_city ? item.job_city : 'Online'},{item.job_country}
             </Text>
           </View>
 
@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
   save: {
     height: 15,
     width: 15,
-    left: 35,
+    left: '80%',
+    position:'absolute'
   },
   detailsContainer: {
     flexDirection: 'row',

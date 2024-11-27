@@ -6,11 +6,11 @@ import Search from '../../components/search/Search';
 import { useNavigation } from '@react-navigation/native'
 import NoResults from '../../components/search/NoResults';
 import Loader from '../../components/loading/Loader';
-import {API_KEY} from '@env';
 
 const FindjobScreen = () => {
   const navigation = useNavigation(); 
   const [query, setQuery] = useState('');
+  const [location, setLocation] = useState('');
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false); // Track if search was performed
@@ -26,10 +26,11 @@ const FindjobScreen = () => {
         query: query,
         page: 1,
         num_pages: '15',
-        date_posted: 'all'
+        date_posted: 'all',
+        country:location,
       },
       headers: {
-        'x-rapidapi-key': API_KEY,
+        'x-rapidapi-key':'af6483481cmshc6c5f362b888facp174bc3jsn0aea1c091026',
         'x-rapidapi-host': 'jsearch.p.rapidapi.com'
       }
     };
@@ -44,17 +45,28 @@ const FindjobScreen = () => {
   };
 
   const renderJobItem = ({ item }) => {
+
+      const defaultLogo = icons.suitcase; // Your default fallback logo
+      const clearbitLogoUrl = item.employer_name 
+    ? `https://logo.clearbit.com/${item.employer_name.replace(/\s+/g, '').toLowerCase()}.com`
+    : null;
     return (
       <TouchableOpacity style={styles.jobCard}
       onPress={() => 
         navigation.navigate('JobDetailScreen', { job: item } )
       }
       >
-        {item.employer_logo ? (
-          <Image source={{ uri: item.employer_logo }} style={styles.logo} />
-        ) : (
-          <Image source={icons.suitcase} style={styles.logo} />
-        )}
+       <Image
+        source={
+          item.employer_logo
+            ? { uri: item.employer_logo }
+            : clearbitLogoUrl
+            ? { uri: clearbitLogoUrl }
+            : defaultLogo
+        }
+        style={styles.logo}
+        onError={(e) => (e.target.src = defaultLogo)} // Handle Clearbit logo failure
+      />
        
         <View style={styles.jobDetails}>
           <Text style={styles.employerName}>{item.employer_name}</Text>
@@ -78,14 +90,24 @@ const FindjobScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Job Search</Text>
-      <View style={styles.inputHolder}>
+      <View style={styles.inputHolders}>
+      <View style={{display:'flex' , flex:1, gap: 5}}> 
         <TextInput
-          style={styles.searchInput}
+         style={[styles.searchInput, styles.inputHolder ]}
           placeholder="Enter job title or keyword..."
           value={query}
           onChangeText={setQuery}
           onSubmitEditing={searchJobs}
         />
+        <TextInput
+          style={[styles.searchInput, styles.inputHolder ]}
+          placeholder="Enter job location..."
+          value={location}
+          onChangeText={setLocation}
+          onSubmitEditing={searchJobs}
+        />
+      </View>
+        
         <TouchableOpacity style={styles.searchButton} onPress={searchJobs}>
           <Image source={icons.search} style={styles.icon} />
         </TouchableOpacity>
@@ -121,9 +143,9 @@ const styles = StyleSheet.create({
     color:COLORS.darkgray,
   },
   searchInput: {
-    height: 40,
+    height: 50,
     borderWidth: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     marginTop: 10,
     width: '85%',
     marginBottom: 5,
@@ -133,7 +155,7 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     backgroundColor: COLORS.primary,
-    padding: 10,
+    padding: 20,
     borderRadius: 50,
     top: 10,
     alignItems: 'center',
@@ -147,8 +169,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#333',
-    paddingHorizontal: 5,
+     paddingHorizontal: 20,
     borderRadius: 50,
+  },
+  inputHolders: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   jobCard: {
     flexDirection: 'row',

@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Modal } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { WebView } from 'react-native-webview';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  Modal,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {WebView} from 'react-native-webview';
 import axios from 'axios';
-import { COLORS, FONTS, icons } from '../../constants';
-import { API_KEY } from '@env';
+import {COLORS, FONTS, icons} from '../../constants';
+import {API_KEY} from '@env';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-const JobDetailsScreen = ({ route }) => {
-  const { job } = route.params;
+const JobDetailsScreen = ({route}) => {
+  const {job} = route.params;
+
   const navigation = useNavigation();
 
   // State to control the modal visibility
@@ -21,9 +31,6 @@ const JobDetailsScreen = ({ route }) => {
   // State to store fetched employer logo
   const [employerLogo, setEmployerLogo] = useState(job.employer_logo);
 
-
-
-
   //fall back data for job highlights
   const jobHighights = job.job_highlights || {};
   const benefits = jobHighights.Benefits || [];
@@ -34,7 +41,12 @@ const JobDetailsScreen = ({ route }) => {
   const fetchEmployerLogo = async () => {
     if (!job.employer_logo && job.employer_name) {
       try {
-        const response = await axios.get(`https://logo.clearbit.com/${job.employer_name.split(' ').join('').toLowerCase()}.com`);
+        const response = await axios.get(
+          `https://logo.clearbit.com/${job.employer_name
+            .split(' ')
+            .join('')
+            .toLowerCase()}.com`,
+        );
         setEmployerLogo(response.config.url);
       } catch (error) {
         console.error('Error fetching employer logo:', error);
@@ -53,7 +65,7 @@ const JobDetailsScreen = ({ route }) => {
         radius: '100',
       },
       headers: {
-        'x-rapidapi-key': '6ad3207de2msh3e62d0537d5a1b0p1f7c0ejsn75521868e83a',
+        'x-rapidapi-key': API_KEY,
         'x-rapidapi-host': 'jsearch.p.rapidapi.com',
       },
     };
@@ -61,7 +73,7 @@ const JobDetailsScreen = ({ route }) => {
     try {
       const response = await axios.request(options);
       const salaryData = response.data.data;
-      console.log(salaryData)
+      console.log(salaryData);
       setSalaryEstimate(salaryData);
     } catch (error) {
       console.error('Error fetching salary estimate:', error);
@@ -78,13 +90,15 @@ const JobDetailsScreen = ({ route }) => {
     <View style={styles.container}>
       {/* Fixed backdrop */}
       <View style={styles.backdrop}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
           <Image source={icons.back} style={styles.backIcon} />
         </TouchableOpacity>
         <View style={styles.logoContainer}>
           <View style={styles.imageWrapper}>
             {employerLogo ? (
-              <Image source={{ uri: employerLogo }} style={styles.logo} />
+              <Image source={{uri: employerLogo}} style={styles.logo} />
             ) : (
               <Image source={icons.suitcase} style={styles.logo} />
             )}
@@ -98,15 +112,21 @@ const JobDetailsScreen = ({ route }) => {
         <View style={styles.box}>
           <View style={styles.holder}>
             <Text style={styles.boldText}>
-              {job.job_employment_type === 'FULLTIME' ? 'Full-Time' : 'Part-Time'}
+              {job.job_employment_type === 'FULLTIME'
+                ? 'Full-Time'
+                : 'Part-Time'}
             </Text>
           </View>
           <View style={styles.holderMiddle}>
-            <Text style={styles.boldText}>{job.job_city}, {job.job_state}</Text>
+            <Text style={styles.boldText}>
+              {job.job_city}, {job.job_state}
+            </Text>
           </View>
           <View style={styles.holderLast}>
             <Text style={styles.details}>
-              <Text style={styles.boldText}>{job.job_is_remote ? 'Remote' : 'Onsite'}</Text>
+              <Text style={styles.boldText}>
+                {job.job_is_remote ? 'Remote' : 'Onsite'}
+              </Text>
             </Text>
           </View>
         </View>
@@ -117,32 +137,46 @@ const JobDetailsScreen = ({ route }) => {
             <Image source={icons.experience} style={styles.icon} />
             <Text style={styles.requirementLabel}>Experience</Text>
             <Text style={styles.requirementValue}>
-              {job.job_required_experience.experience_mentioned
-                ? `${job.job_required_experience.required_experience_in_months / 12 || 0} years`
-                : 'No experience required'}
+              {(() => {
+                const experience = qualifications.find(q =>
+                  q.toLowerCase().includes('experience'),
+                );
+                return experience ? 'Required' : 'Not specified';
+              })()}
             </Text>
           </View>
+
           <View style={[styles.requirementsSection]}>
             <Image source={icons.degree} style={styles.icon} />
             <Text style={styles.requirementLabel}>Degree</Text>
             <Text style={styles.requirementValue}>
-              {job.job_required_education.degree_mentioned ? 'Required' : 'Not required'}
+              {(() => {
+                const degree = qualifications.find(q =>
+                  q.toLowerCase().includes('degree'),
+                );
+                return degree ? 'Required' : 'Not specified';
+              })()}
             </Text>
           </View>
 
           {/* Display salary estimate if available */}
-          {salaryEstimate && (
-  <View style={styles.requirementsSection}>
-    <Image source={icons.salary} style={styles.icon} />
-    <Text style={styles.requirementLabel}>Salary</Text>
-    <Text style={styles.requirementValue}>
-      {salaryEstimate && salaryEstimate.min_salary && salaryEstimate.max_salary
-        ? `${salaryEstimate.min_salary.toFixed(2)}${salaryEstimate.salary_currency} - ${salaryEstimate.max_salary.toFixed(2)}${salaryEstimate.salary_currency} / ${salaryEstimate.salary_period.toLowerCase()}`
-        : 'Unavailable'}
-    </Text>
-  </View>
-)}
+
+          <View style={styles.requirementsSection}>
+            <Image source={icons.salary} style={styles.icon} />
+            <Text style={styles.requirementLabel}>Salary</Text>
+            <Text style={styles.requirementValue}>
+              {(() => {
+                const salary = benefits.find(q =>
+                  q.toLowerCase().includes('salary'),
+                );
+                return salary ? 'Required' : 'Not specified';
+              })()}
+            </Text>
+          </View>
         </View>
+
+
+        
       </View>
 
       {/* Scrollable content */}
@@ -150,30 +184,36 @@ const JobDetailsScreen = ({ route }) => {
         <Text style={styles.heading}>Job Highlights</Text>
         <Text style={styles.subHeading}>Benefits</Text>
         {benefits.length > 0 ? (
-      benefits.map((benefit, index) => (
-        <Text key={`benefit-${index}`} style={styles.listItem}>• {benefit}</Text>
-      ))
-    ) : (
-      <Text>No benefits available</Text>
-    )}
+          benefits.map((benefit, index) => (
+            <Text key={`benefit-${index}`} style={styles.listItem}>
+              • {benefit}
+            </Text>
+          ))
+        ) : (
+          <Text>No benefits available</Text>
+        )}
 
-    <Text style={styles.subHeading}>Qualifications</Text>
-    {qualifications.length > 0 ? (
-      qualifications.map((qualification, index) => (
-        <Text key={`qualification-${index}`} style={styles.listItem}>• {qualification}</Text>
-      ))
-    ) : (
-      <Text>No qualifications available</Text>
-    )}
+        <Text style={styles.subHeading}>Qualifications</Text>
+        {qualifications.length > 0 ? (
+          qualifications.map((qualification, index) => (
+            <Text key={`qualification-${index}`} style={styles.listItem}>
+              • {qualification}
+            </Text>
+          ))
+        ) : (
+          <Text>No qualifications available</Text>
+        )}
 
-    <Text style={styles.subHeading}>Responsibilities</Text>
-    {responsibilities.length > 0 ? (
-      responsibilities.map((responsibility, index) => (
-        <Text key={`responsibility-${index}`} style={styles.listItem}>• {responsibility}</Text>
-      ))
-    ) : (
-      <Text>No responsibilities available</Text>
-    )}
+        <Text style={styles.subHeading}>Responsibilities</Text>
+        {responsibilities.length > 0 ? (
+          responsibilities.map((responsibility, index) => (
+            <Text key={`responsibility-${index}`} style={styles.listItem}>
+              • {responsibility}
+            </Text>
+          ))
+        ) : (
+          <Text>No responsibilities available</Text>
+        )}
         <Text style={styles.heading}>About Job</Text>
         <Text style={styles.description}>{job.job_description}</Text>
       </ScrollView>
@@ -188,7 +228,7 @@ const JobDetailsScreen = ({ route }) => {
 
       {/* Modal for WebView */}
       <Modal visible={modalVisible} animationType="slide">
-        <WebView source={{ uri: job.job_apply_link }} />
+        <WebView source={{uri: job.job_apply_link}} />
         <TouchableOpacity
           style={styles.closeButton}
           onPress={() => setModalVisible(false)} // Close modal
@@ -211,10 +251,10 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 25,
     borderBottomLeftRadius: 25,
     height: height / 2,
-    position: 'absolute', 
+    position: 'absolute',
     top: 0,
     left: 0,
-    right: 0, 
+    right: 0,
     gap: 5,
     shadowColor: '#000',
     shadowOffset: {
@@ -272,8 +312,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 10,
     textAlign: 'center',
-    marginTop:30,
-    color:COLORS.black,
+    marginTop: 30,
+    color: COLORS.black,
   },
   title: {
     fontSize: 18,
@@ -360,7 +400,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 10,
     padding: 10,
-    
+
     // Shadow for iOS
     shadowColor: '#000',
     shadowOffset: {
@@ -374,10 +414,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-    requirementLabel: {
+  requirementLabel: {
     fontSize: 14,
     fontWeight: 'bold',
-    color:COLORS.black,
+    color: COLORS.black,
   },
   requirementValue: {
     fontSize: 14,
@@ -392,8 +432,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     right: 20,
-    bottom: 20,  
-    zIndex: 10, 
+    bottom: 20,
+    zIndex: 10,
   },
   applyButtonText: {
     color: COLORS.white,
@@ -409,19 +449,19 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 18,
   },
-  boldText:{
-    color:COLORS.black,
-    ...FONTS.body5
+  boldText: {
+    color: COLORS.black,
+    ...FONTS.body5,
   },
-  subHeading:{
-     ...FONTS.h4,
-     marginBottom:20,
-     marginTop:10,
+  subHeading: {
+    ...FONTS.h4,
+    marginBottom: 20,
+    marginTop: 10,
   },
-  listItem:{
+  listItem: {
     ...COLORS.black,
-    marginBottom:10,
-  }
+    marginBottom: 10,
+  },
 });
 
 export default JobDetailsScreen;
