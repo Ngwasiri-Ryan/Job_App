@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,33 +9,24 @@ import {
   Dimensions,
   Modal,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {WebView} from 'react-native-webview';
+import { useNavigation } from '@react-navigation/native';
+import { WebView } from 'react-native-webview';
 import axios from 'axios';
-import {COLORS, FONTS, icons} from '../../constants';
-import {API_KEY} from '@env';
+import { COLORS, FONTS, icons } from '../../constants';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const JobDetailsScreen = ({route}) => {
-  const {job} = route.params;
-
+const JobDetailsScreen = ({ route }) => {
+  const { job } = route.params;
   const navigation = useNavigation();
 
-  // State to control the modal visibility
   const [modalVisible, setModalVisible] = useState(false);
-
-  // State to store the estimated salary
-  const [salaryEstimate, setSalaryEstimate] = useState(null);
-
-  // State to store fetched employer logo
   const [employerLogo, setEmployerLogo] = useState(job.employer_logo);
-
-  //fall back data for job highlights
-  const jobHighights = job.job_highlights || {};
-  const benefits = jobHighights.Benefits || [];
-  const qualifications = jobHighights.Qualifications || [];
-  const responsibilities = jobHighights.Responsibilities || [];
+  
+  const jobHighlights = job.job_highlights || {};
+  const benefits = jobHighlights.Benefits || [];
+  const qualifications = jobHighlights.Qualifications || [];
+  const responsibilities = jobHighlights.Responsibilities || [];
 
   // Fetch employer logo if not provided
   const fetchEmployerLogo = async () => {
@@ -45,7 +36,7 @@ const JobDetailsScreen = ({route}) => {
           `https://logo.clearbit.com/${job.employer_name
             .split(' ')
             .join('')
-            .toLowerCase()}.com`,
+            .toLowerCase()}.com`
         );
         setEmployerLogo(response.config.url);
       } catch (error) {
@@ -54,37 +45,21 @@ const JobDetailsScreen = ({route}) => {
     }
   };
 
-  // Fetch salary estimate
-  const fetchSalaryEstimate = async () => {
-    const options = {
-      method: 'GET',
-      url: 'https://jsearch.p.rapidapi.com/estimated-salary',
-      params: {
-        job_title: job.job_title,
-        location: `${job.job_city}, ${job.job_state}`,
-        radius: '100',
-      },
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': 'jsearch.p.rapidapi.com',
-      },
-    };
-
-    try {
-      const response = await axios.request(options);
-      const salaryData = response.data.data;
-      console.log(salaryData);
-      setSalaryEstimate(salaryData);
-    } catch (error) {
-      console.error('Error fetching salary estimate:', error);
-    }
-  };
-
-  // Fetch logo and salary estimate on mount
   useEffect(() => {
     fetchEmployerLogo();
-    fetchSalaryEstimate();
   }, []);
+
+  // Function to infer domain from publisher name dynamically
+const getDomainFromPublisher = (publisher) => {
+  const sanitizedPublisher = publisher
+    .replace(".com", "") // Remove ".com" if it exists
+    .toLowerCase() // Convert to lowercase
+    .replace(/\s+/g, "") // Remove spaces
+    .trim(); // Trim any extra whitespace
+
+  // Assume the domain is derived as "<sanitizedPublisher>.com"
+  return `${sanitizedPublisher}.com`;
+};
 
   return (
     <View style={styles.container}>
@@ -92,13 +67,14 @@ const JobDetailsScreen = ({route}) => {
       <View style={styles.backdrop}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}>
+          onPress={() => navigation.goBack()}
+        >
           <Image source={icons.back} style={styles.backIcon} />
         </TouchableOpacity>
         <View style={styles.logoContainer}>
           <View style={styles.imageWrapper}>
             {employerLogo ? (
-              <Image source={{uri: employerLogo}} style={styles.logo} />
+              <Image source={{ uri: employerLogo }} style={styles.logo} />
             ) : (
               <Image source={icons.suitcase} style={styles.logo} />
             )}
@@ -138,8 +114,8 @@ const JobDetailsScreen = ({route}) => {
             <Text style={styles.requirementLabel}>Experience</Text>
             <Text style={styles.requirementValue}>
               {(() => {
-                const experience = qualifications.find(q =>
-                  q.toLowerCase().includes('experience'),
+                const experience = qualifications.find((q) =>
+                  q.toLowerCase().includes('experience')
                 );
                 return experience ? 'Required' : 'Not specified';
               })()}
@@ -151,8 +127,8 @@ const JobDetailsScreen = ({route}) => {
             <Text style={styles.requirementLabel}>Degree</Text>
             <Text style={styles.requirementValue}>
               {(() => {
-                const degree = qualifications.find(q =>
-                  q.toLowerCase().includes('degree'),
+                const degree = qualifications.find((q) =>
+                  q.toLowerCase().includes('degree')
                 );
                 return degree ? 'Required' : 'Not specified';
               })()}
@@ -160,23 +136,42 @@ const JobDetailsScreen = ({route}) => {
           </View>
 
           {/* Display salary estimate if available */}
-
           <View style={styles.requirementsSection}>
             <Image source={icons.salary} style={styles.icon} />
             <Text style={styles.requirementLabel}>Salary</Text>
             <Text style={styles.requirementValue}>
               {(() => {
-                const salary = benefits.find(q =>
-                  q.toLowerCase().includes('salary'),
+                const salary = benefits.find((q) =>
+                  q.toLowerCase().includes('salary')
                 );
-                return salary ? 'Required' : 'Not specified';
+                return salary ? 'Mentoined' : 'Not specified';
               })()}
             </Text>
           </View>
         </View>
+       
+        {/* Publishers */}
+        <View style={styles.publisherContainer}>
+       
+      {job.apply_options.map((option, index) => {
+        const domain = getDomainFromPublisher(option.publisher);
+
+        return (
+          <TouchableOpacity key={index} style={styles.publisherItem}>
+            <Image
+              source={{
+                uri: `https://logo.clearbit.com/${domain}`,
+              }}
+              style={styles.publisher}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        );
+      })}
+    </View>
 
 
-        
+
       </View>
 
       {/* Scrollable content */}
@@ -228,7 +223,7 @@ const JobDetailsScreen = ({route}) => {
 
       {/* Modal for WebView */}
       <Modal visible={modalVisible} animationType="slide">
-        <WebView source={{uri: job.job_apply_link}} />
+        <WebView source={{ uri: job.job_apply_link }} />
         <TouchableOpacity
           style={styles.closeButton}
           onPress={() => setModalVisible(false)} // Close modal
@@ -239,7 +234,6 @@ const JobDetailsScreen = ({route}) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -276,6 +270,7 @@ const styles = StyleSheet.create({
     left: 10,
     zIndex: 1,
   },
+ 
   icon: {
     height: 30,
     width: 30,
@@ -287,6 +282,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: COLORS.darkgray,
     top: -5,
+  },
+  publisherContainer:{
+     display:'flex',
+     flexDirection:'row',
+     alignItems:'center',
+     justifyContent:'center',
+     gap:20,
+     marginTop:20,
+  },
+  publisher: {
+    height: 30,
+    width: 30,
   },
 
   imageWrapper: {
@@ -463,5 +470,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+
 
 export default JobDetailsScreen;
