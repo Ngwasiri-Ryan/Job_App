@@ -67,6 +67,9 @@ const marker = require("../../assets/icons/marker.png");
 const duration = require("../../assets/icons/duration.png");
 const earth = require("../../assets/icons/earth.png");
 const messages = require("../../assets/icons/messages.png");
+const chatbot = require("../../assets/icons/chatbot.png");
+const userIcon = require("../../assets/icons/userIcon.png");
+
 
 
 export default {
@@ -74,6 +77,7 @@ export default {
     user,
     history, 
     search,
+    chatbot,
     marker,
     messages,
     earth,
@@ -83,6 +87,7 @@ export default {
     suitcase,
     skills,
     add,
+    userIcon,
     back,
     logo,
     degree,

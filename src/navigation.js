@@ -97,8 +97,8 @@ const BottomTabNavigator = () => {
               source={icons.messages}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 30,
+                height: 30,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
