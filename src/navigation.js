@@ -28,6 +28,7 @@ import JobDetailsScreen from './screens/job/JobDetailsScreen';
 import FindjobScreen from './screens/search/FindjobScreen';
 import UserProfileScreen from './screens/profile/UserProfileScreen';
 import ApplyHistoryScreen from './screens/history/ApplyHistoryScreen';
+import ChatScreen from './screens/chat/ChatScreen';
 
 //resume builder screens
 import OnboardingScreen from './screens/resume/OnboardingScreen';
@@ -87,6 +88,24 @@ const BottomTabNavigator = () => {
         }}
       />
       
+ <Tab.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={icons.messages}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: focused ? COLORS.primary : COLORS.black,
+              }}
+            />
+          ),
+        }}
+      />
+
 
 <Tab.Screen
         name="ApplyHistoryScreen"
@@ -106,23 +125,7 @@ const BottomTabNavigator = () => {
         }}
       />
 
-{/* <Tab.Screen
-        name="OnboardingScreen"
-        component={OnboardingScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={icons.resume}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.black,
-              }}
-            />
-          ),
-        }}
-      /> */}
+
 
 <Tab.Screen
         name="UserProfileScreen"

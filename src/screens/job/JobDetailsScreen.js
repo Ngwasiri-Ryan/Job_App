@@ -157,7 +157,9 @@ const getDomainFromPublisher = (publisher) => {
         const domain = getDomainFromPublisher(option.publisher);
 
         return (
-          <TouchableOpacity key={index} style={styles.publisherItem}>
+          <TouchableOpacity key={index} style={styles.publisherItem}
+          onPress={() => setModalVisible(true)} 
+          >
             <Image
               source={{
                 uri: `https://logo.clearbit.com/${domain}`,
@@ -223,7 +225,7 @@ const getDomainFromPublisher = (publisher) => {
 
       {/* Modal for WebView */}
       <Modal visible={modalVisible} animationType="slide">
-        <WebView source={{ uri: job.job_apply_link }} />
+        <WebView source={{ uri: job.job_apply_link || job.option.apply_link }} />
         <TouchableOpacity
           style={styles.closeButton}
           onPress={() => setModalVisible(false)} // Close modal
@@ -292,7 +294,7 @@ const styles = StyleSheet.create({
      marginTop:20,
   },
   publisher: {
-    height: 30,
+    height: 25,
     width: 30,
   },
 

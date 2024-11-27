@@ -66,7 +66,7 @@ const bookmark = require("../../assets/icons/bookmark.png");
 const marker = require("../../assets/icons/marker.png");
 const duration = require("../../assets/icons/duration.png");
 const earth = require("../../assets/icons/earth.png");
-
+const messages = require("../../assets/icons/messages.png");
 
 
 export default {
@@ -75,6 +75,7 @@ export default {
     history, 
     search,
     marker,
+    messages,
     earth,
     duration,
     location,

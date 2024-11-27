@@ -80,7 +80,7 @@ To learn more about React Native, take a look at the following resources:
 
 
 
-
+==========================================================================================
 Here is the structure of the database 
 
 
@@ -110,3 +110,11 @@ projects (collection)
 interests (collection)
   └── docId1
       └── { username: "johndoe", interests: ["Traveling", "Gaming", "Photography"] }
+
+================================================================================================
+
+
+========================================================================================
+Chatbot API
+Rapid API/ ChatGPTVision / GPT-4o
+========================================================================================
