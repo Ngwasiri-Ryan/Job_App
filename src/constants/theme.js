@@ -10,17 +10,20 @@ export const COLORS = {
     black: "#1E1F20",
     white: "#FFFFFF",
 
-    // additional colors for the job tracker screen
-    blue: "#3A86FF", // vibrant blue
-    yellow: "#FFBE0B", // bright yellow
-    red: "#FF006E", // vibrant red
-
     lightGray: "#F5F5F6",
     lightGray2: "#F6F6F7",
     lightGray3: "#EFEFF1",
     lightGray4: "#F8F8F9",
     transparent: "transparent",
     darkgray: '#898C95',
+
+    //bar chart colors
+    blue:'#81D3E4',
+    red:'#FC635B',
+    yellow:'#FDB643',
+    green:'#018154',
+    purple:'#b65fcf'
+
 };
 
 
