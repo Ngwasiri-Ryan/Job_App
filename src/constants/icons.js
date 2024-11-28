@@ -69,7 +69,8 @@ const earth = require("../../assets/icons/earth.png");
 const messages = require("../../assets/icons/messages.png");
 const chatbot = require("../../assets/icons/chatbot.png");
 const userIcon = require("../../assets/icons/userIcon.png");
-
+const robot = require("../../assets/icons/robot.png");
+const broom = require("../../assets/icons/broom.png");
 
 
 export default {
@@ -77,6 +78,8 @@ export default {
     user,
     history, 
     search,
+    robot,
+    broom,
     chatbot,
     marker,
     messages,
