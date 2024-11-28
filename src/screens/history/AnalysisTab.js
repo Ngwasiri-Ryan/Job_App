@@ -24,11 +24,11 @@ const AnalysisTab = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Application Analysis</Text>
+      {/* <Text style={styles.header}>Application Analysis</Text> */}
       
       {/* Donut Chart */}
       <View style={styles.chartContainer}>
-        <DonutChart radius={130} strokeWidth={55} data={chartData} maxValue={100} />
+        <DonutChart radius={140} strokeWidth={80} data={chartData} maxValue={100} />
       </View>
       
       {/* Chart Labels */}
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    paddingVertical:20,
     backgroundColor: COLORS.white,
   },
   header: {

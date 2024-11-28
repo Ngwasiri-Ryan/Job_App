@@ -89,6 +89,7 @@ const DonutChart = ({ radius = 100, strokeWidth = 20, data = [], maxValue = 100 
           fill="#000"
         >
           {`${total}/${maxValue}`}
+          
         </SvgText>
       </Svg>
     </View>
