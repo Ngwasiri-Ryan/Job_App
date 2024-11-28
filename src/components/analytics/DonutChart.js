@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Svg, { Path, Text as SvgText } from 'react-native-svg';
+import { COLORS, FONTS } from '../../constants';
 
 const DonutChart = ({ radius = 100, strokeWidth = 20, data = [], maxValue = 100 }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
@@ -67,7 +68,7 @@ const DonutChart = ({ radius = 100, strokeWidth = 20, data = [], maxValue = 100 
                 x={x}
                 y={y}
                 textAnchor="middle"
-                fontSize={14}
+                fontSize={16}
                 fontWeight="bold"
                 fill="#fff"
               >
