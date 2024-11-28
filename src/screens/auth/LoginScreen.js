@@ -14,23 +14,29 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     setLoading(true);
-    setError(''); 
+    setError("");
   
     try {
       const result = await loginUser(email, password);
       setLoading(false);
   
       if (result.success) {
-        const { user, username } = result; // Correct variable from result
+        const { user, username, isInPersonal } = result;
         setUserData({ email: user.email, username });
         console.log(`Username set in context: ${username}`);
-        navigation.navigate('JobSelectionScreen');
+  
+        // Navigate based on the collection check
+        if (isInPersonal) {
+          navigation.navigate("JobSelectionScreen");
+        } else {
+          navigation.navigate("Step1");
+        }
       } else {
-        setError(result.error); 
+        setError(result.error);
       }
     } catch (error) {
       setLoading(false);
-      setError("An unexpected error occurred. Please try again."); 
+      setError("An unexpected error occurred. Please try again.");
       console.error(error);
     }
   };

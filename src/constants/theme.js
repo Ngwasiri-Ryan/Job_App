@@ -3,12 +3,17 @@ const { width, height } = Dimensions.get("window");
 
 export const COLORS = {
     // base colors
-    primary: "#4A5BF4", // orange 4A5BF4
-    secondary: "#0269FE",   // gray
+    primary: "#4A5BF4", // blue
+    secondary: "#0269FE", // secondary blue
 
     // colors
     black: "#1E1F20",
     white: "#FFFFFF",
+
+    // additional colors for the job tracker screen
+    blue: "#3A86FF", // vibrant blue
+    yellow: "#FFBE0B", // bright yellow
+    red: "#FF006E", // vibrant red
 
     lightGray: "#F5F5F6",
     lightGray2: "#F6F6F7",
@@ -17,6 +22,7 @@ export const COLORS = {
     transparent: "transparent",
     darkgray: '#898C95',
 };
+
 
 export const SIZES = {
     // global sizes

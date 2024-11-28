@@ -71,16 +71,40 @@ const chatbot = require("../../assets/icons/chatbot.png");
 const userIcon = require("../../assets/icons/userIcon.png");
 const robot = require("../../assets/icons/robot.png");
 const broom = require("../../assets/icons/broom.png");
+const analytics = require("../../assets/icons/analytics.png");
+const calendar = require("../../assets/icons/calendar.png");
+const list = require("../../assets/icons/list.png");
+const stats = require("../../assets/icons/stats.png");
+const look = require("../../assets/icons/look.png");
+const chats = require("../../assets/icons/chats.png");
+const disk = require("../../assets/icons/disk.png");
+const preview = require("../../assets/icons/preview.png");
+const bag = require("../../assets/icons/bag.png");
+const find = require("../../assets/icons/look.png");
+
+
 
 
 export default {
     home,
     user,
+    stats,
+    analytics,
+    list,
+    find,
+    calendar,
     history, 
     search,
     robot,
     broom,
     chatbot,
+    look,
+    bag,
+    disk,
+    preview,
+    bag,
+    chats,
+    find,
     marker,
     messages,
     earth,

@@ -27,7 +27,7 @@ import JobSelectionScreen from './screens/intro/jobSelectionScreen';
 import JobDetailsScreen from './screens/job/JobDetailsScreen';
 import FindjobScreen from './screens/search/FindjobScreen';
 import UserProfileScreen from './screens/profile/UserProfileScreen';
-import ApplyHistoryScreen from './screens/history/ApplyHistoryScreen';
+import AnalyticsScreen from './screens/history/AnalyticsScreen';
 import ChatScreen from './screens/chat/ChatScreen';
 
 //resume builder screens
@@ -108,8 +108,8 @@ const BottomTabNavigator = () => {
 
 
 <Tab.Screen
-        name="ApplyHistoryScreen"
-        component={ApplyHistoryScreen}
+        name="AnalyticsScreen"
+        component={AnalyticsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
