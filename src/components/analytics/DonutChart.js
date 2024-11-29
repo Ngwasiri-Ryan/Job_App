@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Svg, { Path, Text as SvgText } from 'react-native-svg';
-import { COLORS, FONTS } from '../../constants';
 
-const DonutChart = ({ radius = 100, strokeWidth = 20, data = [], maxValue = 100 }) => {
+const DonutChart = ({ radius = 100, strokeWidth = 20, data = [] }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const innerRadius = radius - strokeWidth; // Set the inner radius to create the hollow effect
   let cumulativeValue = 0; // Tracks where the next segment should start
@@ -88,8 +87,7 @@ const DonutChart = ({ radius = 100, strokeWidth = 20, data = [], maxValue = 100 
           fontWeight="bold"
           fill="#000"
         >
-          {`${total}/${maxValue}`}
-          
+         {`${total} Activities`}
         </SvgText>
       </Svg>
     </View>
