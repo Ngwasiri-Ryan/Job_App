@@ -2,47 +2,15 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   TouchableOpacity,
   Image,
 } from 'react-native';
-import DonutChart from '../../components/analytics/DonutChart'; // Assuming this is the analysis component
+
 import { COLORS, icons, FONTS } from '../../constants';
 import AnalysisTab from './AnalysisTab';
 import ListTab from './ListTab';
 
-// Dummy data for List
-const applications = [
-  {
-    id: '1',
-    title: 'Frontend Developer',
-    company: 'Google',
-    status: 'Applied',
-    date: '2024-11-01',
-  },
-  {
-    id: '2',
-    title: 'Backend Developer',
-    company: 'Amazon',
-    status: 'Interview Scheduled',
-    date: '2024-11-03',
-  },
-  {
-    id: '3',
-    title: 'Full Stack Engineer',
-    company: 'Microsoft',
-    status: 'Offer Received',
-    date: '2024-11-07',
-  },
-  {
-    id: '4',
-    title: 'Mobile Developer',
-    company: 'Facebook',
-    status: 'Rejected',
-    date: '2024-11-10',
-  },
-];
 
 const AnalyticsScreen = () => {
   const [activeCategory, setActiveCategory] = useState('list');

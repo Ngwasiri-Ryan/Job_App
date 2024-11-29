@@ -13,6 +13,8 @@ import { useNavigation } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import axios from 'axios';
 import { COLORS, FONTS, icons } from '../../constants';
+import { useUserContext } from '../../hooks/UserContext';
+import { saveAppliedJob } from '../../backend/history/appliedJobs';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,6 +24,8 @@ const JobDetailsScreen = ({ route }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [employerLogo, setEmployerLogo] = useState(job.employer_logo);
+  const { userData } = useUserContext();
+  const username = userData.username;
   
   const jobHighlights = job.job_highlights || {};
   const benefits = jobHighlights.Benefits || [];
@@ -59,6 +63,17 @@ const getDomainFromPublisher = (publisher) => {
 
   // Assume the domain is derived as "<sanitizedPublisher>.com"
   return `${sanitizedPublisher}.com`;
+};
+
+const handleApplyJob = async () => {
+  try {
+    // Save the applied job using the saveAppliedJob function
+    await saveAppliedJob(job, username);
+    // Open the modal after successfully saving the job
+    setModalVisible(true);
+  } catch (error) {
+    console.error('Error applying for the job:', error.message);
+  }
 };
 
   return (
@@ -218,7 +233,7 @@ const getDomainFromPublisher = (publisher) => {
       {/* Apply Button */}
       <TouchableOpacity
         style={styles.applyButton}
-        onPress={() => setModalVisible(true)} // Open modal when button is pressed
+        onPress={handleApplyJob}
       >
         <Text style={styles.applyButtonText}>Apply Now</Text>
       </TouchableOpacity>

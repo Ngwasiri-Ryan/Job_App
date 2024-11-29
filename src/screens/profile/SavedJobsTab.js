@@ -62,6 +62,7 @@ const SavedJobsTab = () => {
       </View>
     );
   }
+  
 
   return (
     <View style={styles.container}>

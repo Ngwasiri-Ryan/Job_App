@@ -12,6 +12,7 @@ import { icons, COLORS } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { useUserContext } from '../../hooks/UserContext';
 import { saveJob } from '../../backend/profile/savedJob';
+import { ViewedJob } from '../../backend/history/viewedJobs';
 
 const { width, height } = Dimensions.get('window');
 
@@ -65,10 +66,22 @@ const JobItem = ({ item }) => {
     }
   };
 
+  const ViewJob = async () => {
+    try{
+      ViewedJob(item, username);
+      console.log('Viewed Job Saved');
+      navigation.navigate('JobDetailScreen', { job: item })
+
+    } catch (error){
+        console.log('Viewed job not saved', err)
+    }
+  }
+
   return (
     <TouchableOpacity
       style={styles.jobItem}
-      onPress={() => navigation.navigate('JobDetailScreen', { job: item })}
+      onPress={ViewJob}
+     
     >
       <View style={{ height: 50, width: 50, top: 5 }}>
         <Image

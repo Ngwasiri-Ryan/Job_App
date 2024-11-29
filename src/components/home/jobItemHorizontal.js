@@ -3,11 +3,15 @@ import { View, Text, Image, StyleSheet, TouchableOpacity,Dimensions } from 'reac
 import { useNavigation } from '@react-navigation/native'
 import { icons, COLORS } from '../../constants';
 const { width, height } = Dimensions.get('window');
+import { useUserContext } from '../../hooks/UserContext';
+import { ViewedJob } from '../../backend/history/viewedJobs';
 
 const JobItemHorizontal = ({ item }) => {
   
   const navigation = useNavigation(); 
   const [logoUrl, setLogoUrl] = useState(null);
+  const { userData } = useUserContext();
+  const username = userData.username;
 
 
   // Fetch logo from Clearbit API
@@ -40,13 +44,24 @@ const JobItemHorizontal = ({ item }) => {
   }, [item.employer_logo, item.employer_name]);
   
 
+  
+  const ViewJob = async () => {
+    try{
+      ViewedJob(item, username);
+      console.log('Viewed Job Saved');
+      navigation.navigate('JobDetailScreen', { job: item })
+
+    } catch (error){
+        console.log('Viewed job not saved', err)
+    }
+  }
+
+
 
   return (
     <View style={{marginTop:10}}>
     <TouchableOpacity style={styles.jobItemHorizontal}
-    onPress={() => 
-        navigation.navigate('JobDetailScreen', { job: item } )
-      }
+    onPress={ViewJob}
     >
       <View style={styles.logoContainer}>
    

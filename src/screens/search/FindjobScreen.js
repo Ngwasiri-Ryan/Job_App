@@ -6,6 +6,8 @@ import Search from '../../components/search/Search';
 import { useNavigation } from '@react-navigation/native'
 import NoResults from '../../components/search/NoResults';
 import Loader from '../../components/loading/Loader';
+import { useUserContext } from '../../hooks/UserContext';
+import { saveSearchHistory } from '../../backend/history/searchHistory';
 
 const FindjobScreen = () => {
   const navigation = useNavigation(); 
@@ -13,8 +15,11 @@ const FindjobScreen = () => {
   const [location, setLocation] = useState('');
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchPerformed, setSearchPerformed] = useState(false); // Track if search was performed
- 
+  const [searchPerformed, setSearchPerformed] = useState(false); 
+  const [searchCount, setSearchCount] = useState(0);
+  const { userData } = useUserContext();
+  const username = userData?.username;
+
   const searchJobs = async () => {
     setLoading(true);
     setSearchPerformed(true); // Mark that a search has been done
@@ -42,6 +47,11 @@ const FindjobScreen = () => {
     }
 
     setLoading(false);
+    
+ if (username && query) {
+  saveSearchHistory(username, query);
+}
+
   };
 
   const renderJobItem = ({ item }) => {

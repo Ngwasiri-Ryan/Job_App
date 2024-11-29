@@ -3,6 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Image, P
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, icons, FONTS } from '../../constants';
 import DotLoader from '../../components/loading/DotLoader';
+import { useUserContext } from '../../hooks/UserContext';
+import { saveChatHistory } from '../../backend/history/chatHistory';
+
 
 import axios from 'axios';
 import { API_KEY } from '@env';
@@ -11,10 +14,11 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const { userData } = useUserContext();
+  const username = userData?.username;
   const [quickReplies, setQuickReplies] = useState([
     "What's the latest job update?",
     "How can I apply for a job?",
-    "What documents are needed for job application?",
   ]);
 
   // Load chat history from local storage
@@ -50,6 +54,9 @@ const ChatScreen = () => {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput('');
     setLoading(true);
+
+    //save chat history
+    saveChatHistory(username, input); 
 
     try {
       const options = {
