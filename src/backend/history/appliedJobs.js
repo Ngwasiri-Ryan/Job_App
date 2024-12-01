@@ -1,4 +1,4 @@
-import { addDoc, collection  , query,where, getDocs} from "firebase/firestore";
+import { addDoc, collection  , query,where, getDocs, Timestamp} from "firebase/firestore";
 import { db } from "../Firebase";
 /**
  * Saves a job to the Firestore collection `savedJobs`.
@@ -17,6 +17,14 @@ export const saveAppliedJob = async (jobData, username) => {
       username,   // Add the username
       appliedAt: new Date().toISOString(), 
     });
+
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'applied for job',
+       timestamp: Timestamp.now(),
+     });
 
     console.log("Job apply successfully.");
   } catch (error) {

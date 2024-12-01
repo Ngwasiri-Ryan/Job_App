@@ -1,5 +1,5 @@
 import { db } from '../Firebase';
-import { addDoc, collection  , query,where, getDocs} from "firebase/firestore";
+import { addDoc, collection  , query,where, getDocs , Timestamp} from "firebase/firestore";
 
 /**
  * Save a message to Firestore chat history
@@ -16,6 +16,14 @@ export const saveChatHistory = async (username, message) => {
       message: message,
       timestamp: Timestamp.fromDate(new Date()),  // Store the current date and time
     });
+
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'chat',
+       timestamp: Timestamp.now(),
+     });
 
     console.log('Chat message saved successfully!');
   } catch (error) {

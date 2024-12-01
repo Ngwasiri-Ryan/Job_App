@@ -10,16 +10,39 @@ import {
 import { COLORS, icons, FONTS } from '../../constants';
 import AnalysisTab from './AnalysisTab';
 import ListTab from './ListTab';
+import Graph from '../../components/analytics/Graph';
+import ActivitiesTab from './ActivitiesTab';
 
 
 const AnalyticsScreen = () => {
   const [activeCategory, setActiveCategory] = useState('list');
+
+
+  const getCurrentDate = () => {
+    const date = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options); // Format: "October 5, 2024"
+  };
+
+
+  const renderContent = () => {
+    switch (activeCategory) {
+      case 'list':
+        return renderList();
+      case 'analysis':
+        return renderAnalysis();
+      default:
+        return renderActivity();
+    }
+  };
 
   // Render the List component
   const renderList = () =>  <ListTab/>;
   
   // Render the Analysis component
   const renderAnalysis = () => <AnalysisTab />;
+
+  const renderActivity = () => <ActivitiesTab />;
   
 
   return (
@@ -41,7 +64,7 @@ const AnalyticsScreen = () => {
               <Image source={icons.calendar} style={styles.calendarIcon} />
             </View>
             <View style={styles.dateInfo}>
-              <Text style={styles.dateText}>October 5, 2024</Text>
+              <Text style={styles.dateText}>{getCurrentDate()}</Text>
               <Text style={styles.text}>Activity up by 18%</Text>
             </View>
           </View>
@@ -72,6 +95,26 @@ const AnalyticsScreen = () => {
             />
           </TouchableOpacity>
 
+
+
+           {/* Activity Tab */}
+           <TouchableOpacity
+            style={[
+              styles.categoryItemHolder,
+              activeCategory === 'activity' && styles.activeCategory,
+            ]}
+            onPress={() => setActiveCategory('activity')}
+          >
+            <Image
+              source={icons.chart}
+              style={[
+                styles.categoryIcon,
+                activeCategory === 'activity' && styles.activeCategoryIcon,
+              ]}
+            />
+          </TouchableOpacity>
+
+
           {/* List Tab */}
           <TouchableOpacity
             style={[
@@ -91,10 +134,9 @@ const AnalyticsScreen = () => {
         </View>
       </View>
 
-      {/* Render Content Based on Active Tab */}
       <View style={styles.contentContainer}>
-        {activeCategory === 'list' ? renderList() : renderAnalysis()}
-      </View>
+  {renderContent()}
+</View>
     </View>
   );
 };

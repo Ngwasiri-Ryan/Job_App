@@ -12,6 +12,14 @@ export const saveSearchHistory = async (username, query) => {
       query: query,
     });
 
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'search',
+       timestamp: Timestamp.now(),
+     });
+
     console.log('Search history saved successfully!');
   } catch (error) {
     console.error('Error saving search history: ', error);

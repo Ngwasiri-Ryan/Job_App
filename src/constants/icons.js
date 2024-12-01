@@ -81,7 +81,7 @@ const disk = require("../../assets/icons/disk.png");
 const preview = require("../../assets/icons/preview.png");
 const bag = require("../../assets/icons/bag.png");
 const find = require("../../assets/icons/look.png");
-
+const chart = require("../../assets/icons/chart.png");
 
 
 
@@ -90,8 +90,8 @@ export default {
     user,
     stats,
     analytics,
+    chart,
     list,
-    find,
     calendar,
     history, 
     search,

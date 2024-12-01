@@ -1,4 +1,4 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection , Timestamp} from "firebase/firestore";
 import { db } from "../Firebase"; 
 
 /**
@@ -21,6 +21,15 @@ export const savePersonalInfo = async ({ name, email, phone, username }) => {
       username,
     });
 
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'personal details',
+       timestamp: Timestamp.now(),
+     });
+
+     
     return { success: true };
   } catch (error) {
     console.error("Error saving personal info:", error);

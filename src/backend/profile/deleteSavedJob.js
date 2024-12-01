@@ -1,4 +1,4 @@
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, Timestamp} from "firebase/firestore";
 import { db } from "../../backend/Firebase";
 
 /**
@@ -14,6 +14,13 @@ export const deleteSavedJob = async (jobId, username) => {
 
     // Delete the job document
     await deleteDoc(jobDocRef);
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'saved job delete',
+       timestamp: Timestamp.now(),
+     });
 
     console.log("Job deleted successfully.");
   } catch (error) {

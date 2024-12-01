@@ -1,4 +1,4 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection , Timestamp} from "firebase/firestore";
 import { db } from "../../backend/Firebase"; 
 
 /**
@@ -18,6 +18,14 @@ export const saveJob = async (jobData, username) => {
       username,   // Add the username
       savedAt: new Date().toISOString(), 
     });
+
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'saved job',
+       timestamp: Timestamp.now(),
+     });
 
     console.log("Job saved successfully.");
   } catch (error) {

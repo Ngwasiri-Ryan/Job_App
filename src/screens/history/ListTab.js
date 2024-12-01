@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { COLORS, icons, FONTS } from '../../constants'
+import { useUserContext } from '../../hooks/UserContext'
 
 const ListTab = () => {
   return (
@@ -33,7 +34,6 @@ const ListTab = () => {
                </View>
 
             </View>
-
             <View style={styles.itemLine}>
                {/* item5 */}
                <View style={styles.item}>
@@ -43,6 +43,11 @@ const ListTab = () => {
 
             </View>
          </View>
+
+         <View>
+             <Text>Applied Jobs</Text>
+         </View>
+
     </View>
   )
 }

@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs , Timestamp ,  addDoc} from "firebase/firestore";
 import { db } from "../Firebase"; // Adjust the path to your firebase configuration
 
 export const fetchuserDetails = async (username) => {
@@ -88,7 +88,6 @@ export const fetchuserDetails = async (username) => {
   );
   const currentSnapshot = await getDocs(currentQuery);
   data.current = currentSnapshot.docs.map((doc) => doc.data())[0];
-
 
   return data;
 };

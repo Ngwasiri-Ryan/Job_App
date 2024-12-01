@@ -1,4 +1,4 @@
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { doc, setDoc, addDoc, collection, Timestamp } from "firebase/firestore";
 import { db } from "../Firebase"; 
 
 export const saveIndependentCollections = async (username, resumeData) => {
@@ -58,6 +58,14 @@ export const saveIndependentCollections = async (username, resumeData) => {
       interests: resumeData.interests,
       username,
     });
+
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'resume made',
+       timestamp: Timestamp.now(),
+     });
 
     console.log("Resume saved successfully in independent collections!");
   } catch (error) {

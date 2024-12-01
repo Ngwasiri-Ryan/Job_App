@@ -8,17 +8,18 @@ import {getNumberOfAppliedJobs} from '../../backend/history/appliedJobs';
 import {getUserChatSearchCount} from '../../backend/history/chatHistory';
 import {countUserSearches} from '../../backend/history/searchHistory';
 import {getViewedJobCount} from '../../backend/history/viewedJobs';
+import { BarChart } from 'react-native-gifted-charts';
 
 const AnalysisTab = () => {
   const {userData} = useUserContext();
   const username = userData?.username;
 
   const [chartData, setChartData] = useState([
-    {label: 'Saved Jobs', value: 10, color: COLORS.blue},
-    {label: 'Applied Jobs', value: 10, color: COLORS.green},
-    {label: 'Chat Activity', value: 20, color: COLORS.red},
-    {label: 'Job Previewing', value: 20, color: COLORS.yellow},
-    {label: 'Jobs Searched', value: 10, color: COLORS.purple},
+    {label: 'Saved Jobs', value: 0, color: COLORS.blue},
+    {label: 'Applied Jobs', value: 0, color: COLORS.green},
+    {label: 'Chat Activity', value: 0, color: COLORS.red},
+    {label: 'Job Previewing', value: 10, color: COLORS.yellow},
+    {label: 'Jobs Searched', value: 0, color: COLORS.purple},
   ]);
 
   useEffect(() => {

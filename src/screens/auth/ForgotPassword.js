@@ -55,9 +55,6 @@ const ForgotPasswordScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-
-
-
       {/* Submit Button */}
       <TouchableOpacity style={styles.resetButton}>
       

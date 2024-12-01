@@ -17,6 +17,14 @@ export const saveCurrentUserInfo = async ({ username, jobTitle, industry, experi
         timestamp: new Date(),
       });
   
+       // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'personal details',
+       timestamp: Timestamp.now(),
+     });
+     
       return { success: true };
     } catch (error) {
       console.error("Error saving current user info:", error);

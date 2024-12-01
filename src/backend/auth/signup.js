@@ -24,6 +24,14 @@ export const signUpUser = async (username, email, password) => {
       createdAt: new Date().toISOString(),
     });
 
+     // keeping track of user events
+     const EventCollection = collection(db, "userEvents");
+     await addDoc(EventCollection, {
+       username,
+       event:'sign up',
+       timestamp: Timestamp.now(),
+     });
+
     // Log to the console upon successful sign-up
     console.log('User signed up successfully:', user);
 
