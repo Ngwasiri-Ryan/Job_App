@@ -30,6 +30,7 @@ import UserProfileScreen from './screens/profile/UserProfileScreen';
 import AnalyticsScreen from './screens/history/AnalyticsScreen';
 import ChatScreen from './screens/chat/ChatScreen';
 import ProfileScreen from './screens/user/ProfileScreen';
+import EditProfileScreen from './screens/user/EditProfileScreen';
 
 //resume builder screens
 import OnboardingScreen from './screens/resume/OnboardingScreen';
@@ -200,6 +201,7 @@ const Navigator = () => {
         <Stack.Screen name="ResumeMakerScreen" component={ResumeMakerScreen} />
         <Stack.Screen name="ResumePreviewScreen" component={ResumePreviewScreen} />
         <Stack.Screen name="pdfViewer" component={ResumePDFScreen} />
+        <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
 
         <Stack.Screen name="Main" component={BottomTabNavigator} />
       </Stack.Navigator>

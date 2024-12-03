@@ -86,11 +86,15 @@ const profile = require("../../assets/icons/profile.png");
 const cv_built = require("../../assets/icons/cv_built.png");
 const profile_built = require("../../assets/icons/profile_built.png");
 const check = require("../../assets/icons/check.png");
+const edit = require("../../assets/icons/edit.png");
+const logout = require("../../assets/icons/logout.png");
 
 
 export default {
     home,
     user,
+    edit,
+    logout,
     stats,
     check,
     analytics,

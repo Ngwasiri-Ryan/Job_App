@@ -19,6 +19,7 @@ export const signUpUser = async (username, email, password) => {
     const usersCollection = collection(db, "users");  // Reference to "users" collection
     await addDoc(usersCollection, {
       uid: user.uid,
+      password,
       username,
       email,
       createdAt: new Date().toISOString(),
