@@ -82,15 +82,22 @@ const preview = require("../../assets/icons/preview.png");
 const bag = require("../../assets/icons/bag.png");
 const find = require("../../assets/icons/look.png");
 const chart = require("../../assets/icons/chart.png");
-
+const profile = require("../../assets/icons/profile.png");
+const cv_built = require("../../assets/icons/cv_built.png");
+const profile_built = require("../../assets/icons/profile_built.png");
+const check = require("../../assets/icons/check.png");
 
 
 export default {
     home,
     user,
     stats,
+    check,
     analytics,
+    cv_built,
+    profile_built,
     chart,
+    profile,
     list,
     calendar,
     history, 

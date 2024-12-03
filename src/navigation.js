@@ -29,6 +29,7 @@ import FindjobScreen from './screens/search/FindjobScreen';
 import UserProfileScreen from './screens/profile/UserProfileScreen';
 import AnalyticsScreen from './screens/history/AnalyticsScreen';
 import ChatScreen from './screens/chat/ChatScreen';
+import ProfileScreen from './screens/user/ProfileScreen';
 
 //resume builder screens
 import OnboardingScreen from './screens/resume/OnboardingScreen';
@@ -134,6 +135,24 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({ focused }) => (
             <Image
               source={icons.user}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: focused ? COLORS.primary : COLORS.black,
+              }}
+            />
+          ),
+        }}
+      />
+
+<Tab.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={icons.profile}
               resizeMode="contain"
               style={{
                 width: 25,
