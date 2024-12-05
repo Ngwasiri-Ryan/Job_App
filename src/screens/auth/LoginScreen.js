@@ -54,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Email"
-          placeholderTextColor={COLORS.gray}
+          placeholderTextColor={COLORS.darkgray}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -68,7 +68,7 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Password"
-          placeholderTextColor={COLORS.gray}
+          placeholderTextColor={COLORS.darkgray}
           value={password}
           onChangeText={setPassword}
           secureTextEntry={hidePassword}
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 20,
     height: 20,
-    tintColor: COLORS.gray,
+    tintColor: COLORS.black,
     marginRight: 10,
   },
   input: {
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   registerText: {
-    color: COLORS.gray,
+    color: COLORS.black,
     fontSize: 14,
   },
   registerLink: {

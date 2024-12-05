@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
   smallText: {
     ...FONTS.body3,
     marginBottom: 20,
+    color: COLORS.black,
   },
   calendarIconHolder: {
     backgroundColor: COLORS.lightGray3,
@@ -190,11 +191,12 @@ const styles = StyleSheet.create({
   },
   text:{
     ...FONTS.h5,
-    ...COLORS.darkgray,
+    color:COLORS.darkgray,
     top:5,
   },
   dateText: {
     ...FONTS.h4,
+    color:COLORS.black,
   },
   categoryItemHolder: {
     padding: 10,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image , Dimensions } from 'react-native'
 import React from 'react'
 import { COLORS, icons, FONTS } from '../../constants'
 import { useUserContext } from '../../hooks/UserContext'
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   item:{
     backgroundColor: COLORS.white,
     padding:20,
-    width:200,
+    width:'48%',
     height:60,
     borderRadius:10,
     gap: 5,
@@ -83,16 +83,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 5,
     flexDirection:'row',
-    gap:20,
+    gap:10,
   },
   text:{
     ...FONTS.h4,
     color:COLORS.black,
-    fontSize:17,
+    fontSize:14,
   },
   icon:{
-     height:28,
-     width:28,
+     height:25,
+     width:25,
   }, 
   previewIcon:{
     tintColor:'#FDB643'

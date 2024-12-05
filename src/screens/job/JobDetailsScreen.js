@@ -202,7 +202,7 @@ const handleApplyJob = async () => {
             </Text>
           ))
         ) : (
-          <Text>No benefits available</Text>
+          <Text style={{color:COLORS.black}}>No benefits available</Text>
         )}
 
         <Text style={styles.subHeading}>Qualifications</Text>
@@ -261,7 +261,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomEndRadius: 25,
     borderBottomLeftRadius: 25,
-    height: height / 2,
+    paddingBottom:26,
+    marginBottom:height/3 ,
     position: 'absolute',
     top: 0,
     left: 0,
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
 
   imageWrapper: {
     width: 100,
-    height: 100,
+    height: height/8,
     borderRadius: 30,
     backgroundColor: COLORS.white,
     padding: 10,
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
   },
   box: {
     width: '100%',
-    height: 50,
+    height: height/18,
     borderWidth: 1,
     borderColor: COLORS.black,
     borderRadius: 50,
@@ -481,9 +482,10 @@ const styles = StyleSheet.create({
     ...FONTS.h4,
     marginBottom: 20,
     marginTop: 10,
+    color:COLORS.black,
   },
   listItem: {
-    ...COLORS.black,
+    color:COLORS.black,
     marginBottom: 10,
   },
 });

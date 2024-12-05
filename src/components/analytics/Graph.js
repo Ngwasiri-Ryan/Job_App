@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity , Dimensions} from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 import LinearGradient from "react-native-linear-gradient";
 import { COLORS } from "../../constants";
 import { useUserContext } from "../../hooks/UserContext";
 import { fetchUserEventData } from "../../backend/analysis/data";
 
+const { width, height } = Dimensions.get('window'); // or 'screen'
+
 const Graph = () => {
+  const { width, height } = Dimensions.get('window'); // or 'screen'
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tooltipData, setTooltipData] = useState(null); // Store tooltip data
@@ -62,7 +65,7 @@ const Graph = () => {
         <LineChart
           data={chartData}
           width={340} // Chart width
-          height={250} // Chart height
+          height={height/3.8} // Chart height
           isAnimated
           adjustToWidth
           initialSpacing={30} // Adjusted initial spacing to create more space before the first point
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
   },
   gradientBackground: {
     width: 400, // Match chart width
-    height: 330, // Match chart height
+    height: 280, // Match chart height
     borderRadius: 10, // Optional for rounded corners
     padding: 10,
   },

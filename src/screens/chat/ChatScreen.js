@@ -152,7 +152,7 @@ const ChatScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={{ display:'flex', flexDirection:'row', gap:10, alignItems:'center', justifyContent:'center', left:30}} >
+        <View style={{display:'flex', flexDirection:'row', gap:2,justifyContent:'center', alignItems:'center'}}>
         <Text style={styles.heading}>JobQuest Chatbot</Text>
         <Image source={icons.chatbot} style={styles.botImage} />
         </View>
@@ -201,6 +201,7 @@ const ChatScreen = () => {
             placeholder="Type a message"
             value={input}
             onChangeText={setInput}
+            placeholderTextColor={COLORS.black}
           />
           <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
             <Image source={icons.share} style={styles.icons} />
@@ -224,10 +225,10 @@ const styles = StyleSheet.create({
   },
   
   header: {
+    width:'100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'center',
-    gap: 20,
+    display:'flex',
     marginBottom: 5,
     backgroundColor: COLORS.white, // Make sure the background is set
     padding: 20, // Add some padding for better touch targets
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     marginBottom:50,
   },
   text:{
-   ...COLORS.darkgray,
+   color:COLORS.black,
    ...FONTS.body2,
    marginBottom:10,
   },
@@ -264,6 +265,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginVertical: 5,
+  },
+  quickReplyText:{
+    color:COLORS.darkgray,
   },
   userWrapper: {
     justifyContent: 'flex-end',
@@ -280,7 +284,7 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
-    color: COLORS.gray,
+    color: COLORS.black,
     marginTop: 5,
     bottom: 5, // Adjust the vertical position
   },
@@ -314,7 +318,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    color: '#000',
+    color:COLORS.black
   },
   inputContainer: {
     flexDirection: 'row',
@@ -323,6 +327,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderTopWidth: 1,
     borderColor: '#DDD',
+    placeholderTextColor:COLORS.darkgray,
   },
   input: {
     flex: 1,
@@ -332,10 +337,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     marginRight: 10,
     fontSize: 16,
+    color:COLORS.black,
   },
   sendButton: {
     backgroundColor: COLORS.secondary,
-    padding: 20,
+    padding: 10,
     borderRadius: 50,
     justifyContent:'center',
     alignContent:'center'
@@ -362,8 +368,8 @@ const styles = StyleSheet.create({
     tintColor: COLORS.white,
   },
   botIcon: {
-    height: 25,
-    width: 25,
+    height: 20,
+    width: 20,
   },
   emptyState: {
     flex: 1,

@@ -81,8 +81,8 @@ const BottomTabNavigator = () => {
               source={icons.home}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 20,
+                height: 20,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
@@ -99,8 +99,8 @@ const BottomTabNavigator = () => {
               source={icons.messages}
               resizeMode="contain"
               style={{
-                width: 30,
-                height: 30,
+                width: 25,
+                height: 25,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
@@ -118,8 +118,8 @@ const BottomTabNavigator = () => {
               source={icons.history}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 20,
+                height: 20,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
@@ -138,8 +138,8 @@ const BottomTabNavigator = () => {
               source={icons.user}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 20,
+                height: 20,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
@@ -156,8 +156,8 @@ const BottomTabNavigator = () => {
               source={icons.profile}
               resizeMode="contain"
               style={{
-                width: 25,
-                height: 25,
+                width: 20,
+                height: 20,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />

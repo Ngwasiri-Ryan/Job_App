@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {COLORS, FONTS, icons, images} from '../../constants';
+import {COLORS, FONTS, icons} from '../../constants';
 import {useUserContext} from '../../hooks/UserContext';
 import DotLoader from '../../components/loading/DotLoader';
 import {fetchUserProfile} from '../../backend/user/fetchUserProfile';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window'); // Fetch screen width and height
 
 const ProfileScreen = ({navigation}) => {
   const [loading, setLoading] = useState(true);
@@ -75,7 +75,6 @@ const ProfileScreen = ({navigation}) => {
         </View>
 
         {/* Info Sections */}
-
         <View style={styles.infoSection}>
           <View style={styles.infoRow}>
             <Image source={icons.name} style={styles.icon} />
@@ -102,12 +101,16 @@ const ProfileScreen = ({navigation}) => {
 
         {/* Action Buttons */}
         <View style={styles.actions}>
-          <TouchableOpacity  onPress={() => navigation.navigate('EditProfileScreen', { 
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('EditProfileScreen', {
                 userId: profileData.userId,
-                username: profileData.username, 
-                email: profileData.email ,
+                username: profileData.username,
+                email: profileData.email,
                 password: profileData.password,
-              })}  style={styles.logoutButton}>
+              })
+            }
+            style={styles.logoutButton}>
             <Text style={styles.logoutButtonText}>Edit Profile</Text>
             <Image source={icons.edit} style={styles.editIcon} />
           </TouchableOpacity>
@@ -127,41 +130,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   contain: {
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.05,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    paddingVertical: height * 0.025,
+    paddingHorizontal: width * 0.03,
     backgroundColor: '#FFF',
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    marginBottom: 20,
+    marginBottom: height * 0.02,
   },
   backButton: {
-    marginRight: 15,
+    marginRight: width * 0.03,
   },
   actionView: {
-    marginVertical: 10,
+    marginVertical: height * 0.015,
   },
   backIcon: {
-    width: 20,
-    height: 20,
+    width: width * 0.05,
+    height: width * 0.05,
     resizeMode: 'contain',
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: width * 0.05,
     fontWeight: 'bold',
     color: '#333',
   },
   profileHeader: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: height * 0.04,
   },
   profileImage: {
     width: width * 0.25,
@@ -170,16 +173,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#029BC5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 15,
+    marginBottom: height * 0.015,
+  },
+  text:{
+    color:COLORS.black,
+    ...FONTS.h4
   },
   accronym: {
     ...FONTS.h1,
     color: COLORS.white,
-    fontSize: 36,
+    fontSize: width * 0.09,
     fontWeight: 'bold',
   },
   username: {
-    fontSize: 22,
+    fontSize: width * 0.055,
     fontWeight: 'bold',
     color: '#333',
   },
@@ -187,14 +194,14 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#FFF',
     borderRadius: 15,
-    paddingHorizontal: 15,
-    paddingVertical: 20,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: height * 0.02,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 5},
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
-    marginBottom: 15,
+    marginBottom: height * 0.02,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -205,69 +212,53 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    width: 22,
-    height: 22,
+    width: width * 0.05,
+    height: width * 0.05,
     resizeMode: 'contain',
-    marginRight: 10,
+    marginRight: width * 0.03,
   },
   infoText: {
-    fontSize: 16,
+    fontSize: width * 0.045,
     color: '#666',
     flex: 1,
   },
   actions: {
-    marginTop: 20,
+    marginTop: height * 0.03,
     width: '100%',
-  },
-  editButton: {
-    backgroundColor: '#5E63FF',
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  editButtonText: {
-    fontSize: 16,
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
-  text: {
-    ...FONTS.h4,
-    color: COLORS.black,
   },
   logoutButton: {
     width: '100%',
     backgroundColor: '#FFF',
     borderRadius: 15,
-    paddingHorizontal: 15,
-    paddingVertical: 20,
+    paddingHorizontal: width * 0.04,
+    paddingVertical: height * 0.02,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 5},
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
-    marginBottom: 15,
+    marginBottom: height * 0.02,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   logoutButtonText: {
-    fontSize: 16,
+    fontSize: width * 0.045,
     color: COLORS.black,
     fontWeight: 'bold',
   },
   logoutIcon: {
-    width: 22,
-    height: 22,
+    width: width * 0.05,
+    height: width * 0.05,
     resizeMode: 'contain',
-    marginRight: 10,
+    marginRight: width * 0.03,
     tintColor: '#FF5E63',
   },
   editIcon: {
-    width: 22,
-    height: 22,
+    width: width * 0.05,
+    height: width * 0.05,
     resizeMode: 'contain',
-    marginRight: 10,
+    marginRight: width * 0.03,
     tintColor: COLORS.primary,
   },
 });

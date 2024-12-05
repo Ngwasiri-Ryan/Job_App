@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView , Dimensions} from "react-native";
 import React from "react";
 import Graph from "../../components/analytics/Graph";
 import { COLORS, FONTS } from "../../constants";
+const { width, height } = Dimensions.get('window'); // or 'screen'
 
 const ActivitiesTab = () => {
   return (
@@ -43,8 +44,7 @@ const styles = StyleSheet.create({
     marginBottom:25,
   },
   graphContainer: {
-    marginHorizontal: 20,
-    padding: 10,
     backgroundColor: COLORS.white,
+    top:-height/9,
   },
 });

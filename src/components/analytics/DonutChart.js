@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Path, Text as SvgText } from 'react-native-svg';
+
+const { width, height } = Dimensions.get('window'); // or 'screen'
 
 const DonutChart = ({ radius = 100, strokeWidth = 20, data = [] }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
