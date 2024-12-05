@@ -8,14 +8,19 @@ import {
   ScrollView,
   Image,
   Alert,
+  Dimensions,
 } from "react-native";
 import { COLORS, icons } from "../../constants";
 import { updateUserProfile } from "../../backend/user/editProfile";
 import { useUserContext } from "../../hooks/UserContext";
 
+const { width, height } = Dimensions.get("window");
+
+const scaleWidth = (size) => (width / 375) * size; // Scale width based on a base width of 375
+const scaleHeight = (size) => (height / 812) * size; // Scale height based on a base height of 812
+
 const EditProfileScreen = ({ route, navigation }) => {
   const { username, email, password } = route.params;
-
   const { userData, setUserData } = useUserContext();
 
   const [name, setName] = useState(username);
@@ -32,8 +37,6 @@ const EditProfileScreen = ({ route, navigation }) => {
     const result = await updateUserProfile(username, updates);
 
     if (result.success) {
-
-        // Update UserContext data
       setUserData((prevData) => ({
         ...prevData,
         username: name,
@@ -41,7 +44,7 @@ const EditProfileScreen = ({ route, navigation }) => {
       }));
 
       Alert.alert("Success", result.message, [
-        { text: "OK", onPress: () => navigation.navigate('LoginScreen') },
+        { text: "OK", onPress: () => navigation.navigate("LoginScreen") },
       ]);
     } else {
       Alert.alert("Error", result.message);
@@ -84,6 +87,7 @@ const EditProfileScreen = ({ route, navigation }) => {
           placeholder="Enter your password"
           value={passwordString}
           onChangeText={setPasswordString}
+          secureTextEntry
         />
       </View>
 
@@ -97,65 +101,65 @@ const EditProfileScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingHorizontal: scaleWidth(20),
+    paddingVertical: scaleHeight(40),
     backgroundColor: "#F9FAFB",
   },
   logoContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: scaleHeight(20),
   },
   logo: {
-    height: 250,
-    width: 400,
+    height: scaleHeight(200),
+    width: scaleWidth(350),
     resizeMode: "contain",
   },
   header: {
-    fontSize: 26,
+    fontSize: scaleWidth(26),
     fontWeight: "bold",
     color: COLORS.black,
-    marginBottom: 30,
+    marginBottom: scaleHeight(30),
     textAlign: "center",
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: scaleHeight(20),
   },
   label: {
-    fontSize: 14,
-    color: COLORS.gray,
-    marginBottom: 5,
+    fontSize: scaleWidth(14),
+    color: COLORS.black,
+    marginBottom: scaleHeight(5),
     fontWeight: "500",
   },
   input: {
-    height: 50,
+    height: scaleHeight(50),
     borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 15,
+    borderRadius: scaleWidth(12),
+    paddingHorizontal: scaleWidth(15),
     backgroundColor: "#FFF",
-    fontSize: 16,
+    fontSize: scaleWidth(16),
     color: COLORS.black,
     borderColor: COLORS.lightGray,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: scaleHeight(2) },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: scaleWidth(4),
     elevation: 2,
   },
   saveButton: {
     backgroundColor: COLORS.primary,
-    height: 50,
-    borderRadius: 12,
+    height: scaleHeight(50),
+    borderRadius: scaleWidth(12),
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: scaleHeight(20),
     shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: scaleHeight(4) },
     shadowOpacity: 0.3,
-    shadowRadius: 5,
+    shadowRadius: scaleWidth(5),
     elevation: 3,
   },
   saveButtonText: {
-    fontSize: 18,
+    fontSize: scaleWidth(18),
     color: "#FFF",
     fontWeight: "bold",
   },

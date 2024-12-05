@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import { COLORS, icons } from '../../constants'; // Customize COLORS and icons for your project
 import { loginUser } from '../../backend/auth/login'; 
 import { useUserContext } from '../../hooks/UserContext';
+
+// Get screen dimensions
+const { width, height } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -15,16 +27,16 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     setLoading(true);
     setError("");
-  
+
     try {
       const result = await loginUser(email, password);
       setLoading(false);
-  
+
       if (result.success) {
         const { user, username, isInPersonal } = result;
         setUserData({ email: user.email, username });
         console.log(`Username set in context: ${username}`);
-  
+
         // Navigate based on the collection check
         if (isInPersonal) {
           navigation.navigate("JobSelectionScreen");
@@ -40,11 +52,10 @@ const LoginScreen = ({ navigation }) => {
       console.error(error);
     }
   };
-  
 
   return (
     <View style={styles.container}>
-    <Image source={icons.logo} style={styles.logo}/>
+      <Image source={icons.logo} style={styles.logo} />
       <Text style={styles.title}>Welcome Back</Text>
       <Text style={styles.subtitle}>Please login to continue</Text>
 
@@ -114,85 +125,79 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    padding: 20,
+    paddingHorizontal: width * 0.05,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center',
   },
-  logo:{
-   height:200,
-   width:300,
-   top:-60,
+  logo: {
+    height: height * 0.25,
+    width: width * 0.7,
+    marginBottom: height * 0.05,
   },
   title: {
-    fontSize: 28,
+    fontSize: width * 0.07,
     fontWeight: 'bold',
-    color: COLORS.primary,
+    color: COLORS.black,
     textAlign: 'center',
-    marginBottom: 5,
+    marginBottom: height * 0.02,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: width * 0.045,
     color: COLORS.gray,
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: height * 0.03,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: COLORS.black,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    marginBottom: 20,
-    backgroundColor: COLORS.lightGrayBackground, // Set a lighter background if desired
-    borderBottomColor: COLORS.black, // Adds a defined bottom border color
-    borderBottomWidth: 2, // Increases the width of the bottom border for emphasis
+    borderRadius: width * 0.025,
+    paddingHorizontal: width * 0.03,
+    paddingVertical: height * 0.015,
+    marginBottom: height * 0.02,
+    backgroundColor: COLORS.lightGrayBackground,
+    borderBottomWidth: 2,
   },
   icon: {
-    width: 20,
-    height: 20,
+    width: width * 0.05,
+    height: width * 0.05,
     tintColor: COLORS.black,
-    marginRight: 10,
+    marginRight: width * 0.02,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: COLORS.black,
   },
   eyeIcon: {
-    width: 20,
-    height: 20,
+    width: width * 0.05,
+    height: width * 0.05,
     tintColor: COLORS.gray,
   },
   loginButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 15,
-    borderRadius: 10,
+    paddingVertical: height * 0.02,
+    borderRadius: width * 0.03,
     alignItems: 'center',
-    marginBottom: 20,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginTop:30,
-    width:'80%'
+    marginTop: height * 0.03,
+    width: width * 0.8,
   },
   loginButtonText: {
     color: COLORS.white,
-    fontSize: 16,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
   },
   errorText: {
     color: 'red',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: height * 0.02,
   },
   forgotPassword: {
     color: COLORS.primary,
     textAlign: 'center',
-    fontSize: 14,
-    marginBottom: 30,
+    fontSize: width * 0.04,
+    marginBottom: height * 0.03,
+    marginTop: height * 0.03,
   },
   registerContainer: {
     flexDirection: 'row',
@@ -200,11 +205,11 @@ const styles = StyleSheet.create({
   },
   registerText: {
     color: COLORS.black,
-    fontSize: 14,
+    fontSize: width * 0.04,
   },
   registerLink: {
     color: COLORS.primary,
-    fontSize: 14,
+    fontSize: width * 0.04,
     fontWeight: 'bold',
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Image, Platform ,Alert} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Image, Platform ,Alert, Dimensions} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, icons, FONTS } from '../../constants';
 import DotLoader from '../../components/loading/DotLoader';
@@ -9,6 +9,9 @@ import { saveChatHistory } from '../../backend/history/chatHistory';
 
 import axios from 'axios';
 import { API_KEY } from '@env';
+
+const { width, height } = Dimensions.get('window');
+
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
@@ -283,7 +286,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden', // Hides items beyond two rows if needed
   },
   timestamp: {
-    fontSize: 12,
+    fontSize: width*0.03,
     color: COLORS.black,
     marginTop: 5,
     bottom: 5, // Adjust the vertical position

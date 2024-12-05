@@ -7,6 +7,7 @@ import { deleteSavedJob } from '../../backend/profile/deleteSavedJob';
 import { useNavigation } from '@react-navigation/native';
 import { icons } from '../../constants';
 import { timeAgo } from '../../hooks/TimeSaved';
+import DotLoader from '../../components/loading/DotLoader';
 
 const SavedJobsTab = () => {
   const { userData } = useUserContext();
@@ -48,8 +49,7 @@ const SavedJobsTab = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-        <Text style={styles.smallText}>Loading...</Text>
+       <DotLoader/>
       </View>
     );
   }
@@ -98,11 +98,11 @@ const SavedJobsTab = () => {
                       : item.job_title}
                   </Text>
                   {/* Delete icon */}
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => handleDeleteJob(item.id)} // Handle delete on click
                     style={styles.deleteIcon}>
                     <Image source={icons.trash} style={styles.trash} />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
 
                 <Text style={styles.employerNameList}>
@@ -127,7 +127,6 @@ const SavedJobsTab = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 0,
-    backgroundColor: COLORS.white,
     flex: 1,
     marginBottom:70
   },
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   smallText: {
-    color: COLORS.darkGray,
+    color: COLORS.darkgray,
     ...FONTS.body4,
   },
   jobItem: {
@@ -173,8 +172,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 20,
     borderBottomColor: COLORS.black,
-    borderBottomWidth: 1,
-  },
+     },
   jobTitle: {
     ...FONTS.h5,
     color: COLORS.black,
@@ -182,11 +180,11 @@ const styles = StyleSheet.create({
   },
   employerNameList: {
     fontSize: 14,
-    color: COLORS.darkGray,
+    color: COLORS.darkgray,
   },
   timeSaved: {
     fontSize: 12,
-    color: COLORS.darkGray,
+    color: COLORS.darkgray,
     marginTop: 5,
   },
   icon: {

@@ -1,79 +1,74 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image , Dimensions } from 'react-native'
-import React from 'react'
-import { COLORS, icons, FONTS } from '../../constants'
-import { useUserContext } from '../../hooks/UserContext'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions } from 'react-native';
+import React from 'react';
+import { COLORS, icons, FONTS } from '../../constants';
+
+const { width } = Dimensions.get('window'); // Get device width for responsive layout
 
 const ListTab = () => {
   return (
     <View style={styles.container}>
-      {/*category items saved josbs, applied Jobs, chat activity, job previewing , job searching */}
-         <View style={styles.categories}>
-            <View style={styles.itemLine} >
-              {/* item1 */}
-               <View style={styles.item}>
-                  <Image source={ icons.disk} style={[styles.saveIcon, styles.icon]}/>
-                  <Text style={styles.text}>Saved Jobs</Text>
-               </View>
-              {/* item2 */}
-              <View style={styles.item}>
-                  <Image source={ icons.bag} style={[styles.appliedIcon ,styles.icon]}/>
-                  <Text style={styles.text} >Jobs Applied</Text>
-               </View>
-            </View>
-            <View style={styles.itemLine}>
-               {/* item3 */}
-               <View style={styles.item}>
-                  <Image source={ icons.chats} style={[styles.chatIcon ,styles.icon]}/>
-                  <Text style={styles.text} >Chats activity</Text>
-               </View>
-
-               {/* item4 */}
-               <View style={styles.item}>
-                  <Image source={ icons.find} style={[styles.searchIcon ,styles.icon]}/>
-                  <Text style={styles.text}>Jobs Search</Text>
-               </View>
-
-            </View>
-            <View style={styles.itemLine}>
-               {/* item5 */}
-               <View style={styles.item}>
-                  <Image source={ icons.preview} style={[styles.previewIcon , styles.icon]}/>
-                  <Text style={styles.text} >Jobs Previews</Text>
-               </View>
-
-            </View>
-         </View>
-
-         <View>
-             <Text>Applied Jobs</Text>
-         </View>
-
+      {/* Category items: Saved Jobs, Applied Jobs, Chat Activity, Job Previewing, Job Searching */}
+      <View style={styles.categories}>
+        <View style={styles.itemLine}>
+          {/* Item 1 */}
+          <View style={styles.item}>
+            <Image source={icons.disk} style={[styles.saveIcon, styles.icon]} />
+            <Text style={styles.text}>Saved Jobs</Text>
+          </View>
+          {/* Item 2 */}
+          <View style={styles.item}>
+            <Image source={icons.bag} style={[styles.appliedIcon, styles.icon]} />
+            <Text style={styles.text}>Jobs Applied</Text>
+          </View>
+        </View>
+        <View style={styles.itemLine}>
+          {/* Item 3 */}
+          <View style={styles.item}>
+            <Image source={icons.chats} style={[styles.chatIcon, styles.icon]} />
+            <Text style={styles.text}>Chats Activity</Text>
+          </View>
+          {/* Item 4 */}
+          <View style={styles.item}>
+            <Image source={icons.find} style={[styles.searchIcon, styles.icon]} />
+            <Text style={styles.text}>Jobs Search</Text>
+          </View>
+        </View>
+        <View style={styles.itemLine}>
+          {/* Item 5 */}
+          <View style={styles.item}>
+            <Image source={icons.preview} style={[styles.previewIcon, styles.icon]} />
+            <Text style={styles.text}>Jobs Previews</Text>
+          </View>
+        </View>
+      </View>
+      <View>
+        <Text>Applied Jobs</Text>
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default ListTab
+export default ListTab;
 
 const styles = StyleSheet.create({
-  container:{
-    paddingHorizontal:10,
-    paddingTop:5,
+  container: {
+    paddingHorizontal: 10,
+    paddingTop: 5,
   },
-  itemLine:{
-    display:'flex',
-    flexDirection:'row',
-    marginBottom:10,
-    gap:10,
+  itemLine: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
-  item:{
+  item: {
     backgroundColor: COLORS.white,
-    padding:20,
-    width:'48%',
-    height:60,
-    borderRadius:10,
-    gap: 5,
-    justifyContent:'center',
-    alignItems:'center',
+    paddingVertical: 20,
+    width: width * 0.46, // 45% of screen width
+    height: width * 0.2, // Maintain relative height
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -82,33 +77,32 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4.65,
     elevation: 5,
-    flexDirection:'row',
-    gap:10,
+    flexDirection: 'row',
+    gap: 10,
   },
-  text:{
+  text: {
     ...FONTS.h4,
-    color:COLORS.black,
-    fontSize:14,
+    color: COLORS.black,
+    fontSize: 14,
+    textAlign: 'center',
   },
-  icon:{
-     height:25,
-     width:25,
-  }, 
-  previewIcon:{
-    tintColor:'#FDB643'
+  icon: {
+    height: width * 0.06, // 6% of screen width
+    width: width * 0.06, // Maintain aspect ratio
   },
-  searchIcon:{
-    tintColor:'#B65FCF'
+  previewIcon: {
+    tintColor: '#FDB643',
   },
-  chatIcon:{
-    tintColor:'#FC635B'
+  searchIcon: {
+    tintColor: '#B65FCF',
   },
-  saveIcon:{
-    tintColor:'#81D3E4'
+  chatIcon: {
+    tintColor: '#FC635B',
   },
-  appliedIcon:{
-    tintColor:'#018154'
+  saveIcon: {
+    tintColor: '#81D3E4',
   },
-
-  
-})
+  appliedIcon: {
+    tintColor: '#018154',
+  },
+});

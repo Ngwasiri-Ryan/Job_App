@@ -4,7 +4,7 @@ import { useUserContext } from '../../hooks/UserContext';
 import { fetchAppliedJobs } from '../../backend/history/appliedJobs';
 import { FONTS, icons } from '../../constants';
 
-const { width } = Dimensions.get('window');
+const { width , height} = Dimensions.get('window');
 
 const AppliedJobs = () => {
   const { userData } = useUserContext();
@@ -72,70 +72,78 @@ const AppliedJobs = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
+    paddingVertical: 5,
+    backgroundColor: '#f9f9f9', 
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 15,
+    marginBottom: 10,
     ...FONTS.h3,
   },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f9f9f9',
   },
   horizontalScrollContainer: {
     flexDirection: 'row',
-    paddingVertical: 10,
+    gap: 15, // Space between job cards
+    padding: width*0.035,
+   
   },
   jobItem: {
-    backgroundColor: '#fff',
-    padding: 10,
-    marginRight: 15,
-    borderRadius: 10,
-    width: width * 0.8, // Adjust width as per your design
+    backgroundColor: '#ffffff',
+    padding: 15,
+    borderRadius: 15,
+    width: width * 0.7, // Adjust width for better layout
+    height: 180, // Reduced height
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 5, // For Android
-    paddingTop:40,
-    paddingHorizontal:20,
+    alignItems: 'center',
+    justifyContent: 'space-between', // Distribute items vertically
   },
   companyLogo: {
-    width: 50,
+    width: 50, // Slightly reduced size
     height: 50,
-    borderRadius: 25,
-    marginBottom: 10,
+    borderRadius: 25, // Circular logo
+    marginBottom: height*0.0001,
+    resizeMode: 'cover',
   },
   jobTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    fontSize: width*0.035,
+    fontWeight: '600',
+    color: '#333', // Slightly darker text
+    textAlign: 'center',
+    marginBottom: height*0.0001,
   },
   companyName: {
-    fontSize: 14,
-    color: '#888',
-    marginBottom: 5,
+    fontSize: width*0.035,
+    color: '#777',
+    textAlign: 'center',
+    marginBottom: height*0.0001,
   },
   jobDate: {
     fontSize: 12,
     color: '#555',
+    marginLeft: 5,
   },
-  icon:{
-    height:20,
-    width:20,
+  icon: {
+    height: 18,
+    width: 18,
   },
-  flex:{
-    display:'flex',
-    flexDirection:'row',
-    gap:10,
-  }
+  flex: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
+
 
 export default AppliedJobs;

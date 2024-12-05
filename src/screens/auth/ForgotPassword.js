@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 import { COLORS, icons } from '../../constants';
+
+const { width, height } = Dimensions.get('window');
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-   // Toggles password visibility
-   const togglePasswordVisibility = () => {
+  // Toggles password visibility
+  const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
@@ -36,7 +38,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         />
       </View>
 
-
+      {/* Password Input */}
       <View style={styles.inputContainer}>
         <Image source={icons.lock} style={styles.icon} />
         <TextInput
@@ -49,7 +51,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         />
         <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIconContainer}>
           <Image
-            source={isPasswordVisible ? icons.eye : icons.eyeOff} // Assume eye and eyeOff icons are defined
+            source={isPasswordVisible ? icons.eye : icons.eyeOff}
             style={styles.eyeIcon}
           />
         </TouchableOpacity>
@@ -57,9 +59,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
       {/* Submit Button */}
       <TouchableOpacity style={styles.resetButton}>
-      
-          <Text style={styles.resetButtonText}>Reset</Text>
-       
+        <Text style={styles.resetButtonText}>Reset</Text>
       </TouchableOpacity>
 
       {/* Back to Login */}
@@ -73,78 +73,76 @@ const ForgotPasswordScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: width * 0.05,
     justifyContent: 'center',
   },
   title: {
-    fontSize: 28,
+    fontSize: width * 0.07,
     fontWeight: '700',
     color: COLORS.primary,
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: height * 0.02,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: width * 0.045,
     color: COLORS.gray,
     textAlign: 'center',
-    marginBottom: 30,
-  },
-  eyeIconContainer: {
-    padding: 5,
-  },
-  eyeIcon: {
-    width: 20,
-    height: 20,
-    tintColor: COLORS.gray,
+    marginBottom: height * 0.04,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: COLORS.black,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    marginBottom: 20,
-    backgroundColor: COLORS.lightGrayBackground, // Set a lighter background if desired
-    borderBottomColor: COLORS.black, // Adds a defined bottom border color
-    borderBottomWidth: 2, // Increases the width of the bottom border for emphasi
+    paddingHorizontal: width * 0.03,
+    paddingVertical: height * 0.02,
+    marginBottom: height * 0.03,
+    backgroundColor: COLORS.lightGrayBackground,
+    borderBottomColor: COLORS.black,
+    borderBottomWidth: 2,
   },
   iconCircle: {
     backgroundColor: COLORS.lightGray,
     borderRadius: 25,
-    padding: 10,
+    padding: width * 0.03,
   },
   icon: {
-    width: 20,
-    height: 20,
+    width: width * 0.05,
+    height: width * 0.05,
     tintColor: COLORS.gray,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: width * 0.045,
     color: COLORS.black,
-    marginLeft: 10,
+    marginLeft: width * 0.03,
+  },
+  eyeIconContainer: {
+    padding: width * 0.02,
+  },
+  eyeIcon: {
+    width: width * 0.05,
+    height: width * 0.05,
+    tintColor: COLORS.gray,
   },
   resetButton: {
-    paddingVertical: 15,
+    paddingVertical: height * 0.02,
     borderRadius: 10,
-    justifyContent:'center',
-    display:'flex',
     alignItems: 'center',
-    backgroundColor:COLORS.primary,
-    marginTop:30,
+    backgroundColor: COLORS.primary,
+    marginTop: height * 0.03,
   },
   resetButtonText: {
     color: COLORS.white,
-    fontSize: 16,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
   },
   backToLogin: {
     color: COLORS.black,
-    fontWeight:'bold',
+    fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 14,
-    marginTop: 20,
+    fontSize: width * 0.04,
+    marginTop: height * 0.02,
   },
 });
 

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image, LogBox , ScrollView} from 'react-native';
+import { View, Text, StyleSheet, Button, Image, LogBox, ScrollView, Dimensions } from 'react-native';
 import { COLORS, icons, FONTS } from '../../constants';
 import { useUserContext } from '../../hooks/UserContext';
 import { fetchUserActivity } from '../../backend/profile/activity';
 import DotLoader from '../../components/loading/DotLoader';
 import AppliedJobs from '../../components/home/AppliedJobs';
 
+const { width, height } = Dimensions.get('window');
+
 // Ignore specific warnings if needed
 LogBox.ignoreLogs(['Warning: ...']); // Replace with specific warning messages
 
-const ActivityTab = ({navigation}) => {
+const ActivityTab = ({ navigation }) => {
   const { userData } = useUserContext();
   const username = userData?.username;
 
@@ -55,14 +57,14 @@ const ActivityTab = ({navigation}) => {
       {activityStatus === 'Profile created, resume built' ? (
         <View style={styles.successContainer}>
           <View style={styles.box}>
-            <View style={{ flexDirection: 'row', gap: 10, justifyContent:'center',alignItems:'center',}}>
+            <View style={styles.row}>
               <Image source={icons.profile_built} style={[styles.profileIcon, styles.icon]} />
               <Text style={styles.successText}>Profile Created</Text>
             </View>
             <Image source={icons.check} style={styles.icon} />
           </View>
           <View style={styles.box}>
-            <View style={{ flexDirection: 'row', gap: 10, justifyContent:'center',alignItems:'center',}}>
+            <View style={styles.row}>
               <Image source={icons.cv_built} style={[styles.resumeIcon, styles.icon]} />
               <Text style={styles.successText}>Resume Built</Text>
             </View>
@@ -76,79 +78,77 @@ const ActivityTab = ({navigation}) => {
           <Button title="Create Resume" onPress={handleResumeCreation} />
         </View>
       )}
-       <Text style={styles.heading} >Applied Jobs</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll} >
-          <AppliedJobs/>
+      <Text style={styles.heading}>Applied Jobs</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
+        <AppliedJobs />
       </ScrollView>
-
-     
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
-    backgroundColor:'#F8F8F8',
     flex: 1,
-  },horizontalScroll: {
-    paddingVertical: 10,
-    backgroundColor:'#F8F8F8',
+    backgroundColor: '#f9f9f9', 
+    marginBottom:height*0.08
+  },
+  horizontalScroll: {
+    paddingVertical: height * 0.02,
+    backgroundColor: '#f9f9f9', 
   },
   heading: {
-    fontSize: 18,
+    fontSize: width * 0.04,
     fontWeight: 'bold',
     color: COLORS.black,
-    marginBottom: 10,
+    marginBottom: height * 0.001,
   },
   box: {
     backgroundColor: COLORS.white,
     width: '100%',
-    height: 65,
+    height: height * 0.08,
     borderRadius: 10,
-    gap: 5,
-    marginBottom: 10,
+    marginBottom: height * 0.02,
     justifyContent: 'space-between',
-    padding: 15,
+    paddingHorizontal: width * 0.05,
+    paddingVertical: height * 0.02,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4.65,
     elevation: 5,
     flexDirection: 'row',
-    gap: 20,
+    alignItems: 'center',
   },
   successText: {
-    fontSize: 19,
+    fontSize: width * 0.04,
     color: COLORS.black,
-    marginBottom: 10,
-    justifyContent:'center',
-    alignItems:'center',
-    textAlign:'center'
+    textAlign: 'center',
   },
   errorContainer: {
     backgroundColor: COLORS.lightRed,
-    padding: 20,
+    padding: width * 0.05,
     borderRadius: 10,
     alignItems: 'center',
   },
   errorText: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     color: COLORS.red,
-    marginBottom: 10,
+    marginBottom: height * 0.02,
   },
   icon: {
-    height: 28,
-    width: 28,
+    height: width * 0.06,
+    width: width * 0.06,
   },
   resumeIcon: {
     tintColor: '#B65FCF',
   },
   profileIcon: {
     tintColor: '#018154',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: width * 0.02,
   },
 });
 

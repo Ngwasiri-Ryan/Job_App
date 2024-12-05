@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image , Alert , ActivityIndicator} from 'react-native';
-import { COLORS, icons } from '../../constants'; 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Alert,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
+import { COLORS, icons } from '../../constants';
 import { signUpUser } from '../../backend/auth/signup';
 
+const { width, height } = Dimensions.get('window');
 
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -11,22 +22,20 @@ const SignUpScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  // Toggles password visibility
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
   const handleSignUp = async () => {
     if (username && email && password) {
+      setLoading(true);
       const result = await signUpUser(username, email, password);
       setLoading(false);
       if (result.success) {
-        // Alert and navigate to login screen on success
         Alert.alert("Success", "Account created successfully!", [
-          { text: "OK", onPress: () => navigation.navigate('LoginScreen') }
+          { text: "OK", onPress: () => navigation.navigate('LoginScreen') },
         ]);
       } else {
-        // Show error message in case of failure
         Alert.alert("Error", result.error || "Something went wrong!");
       }
     } else {
@@ -36,7 +45,7 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={icons.logo} style={styles.logo}/>
+      <Image source={icons.logo} style={styles.logo} />
       <Text style={styles.title}>Create Account</Text>
       <Text style={styles.subtitle}>Sign up to get started</Text>
 
@@ -75,20 +84,18 @@ const SignUpScreen = ({ navigation }) => {
         />
         <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIconContainer}>
           <Image
-            source={isPasswordVisible ? icons.eye : icons.eyeOff} // Assume eye and eyeOff icons are defined
+            source={isPasswordVisible ? icons.eye : icons.eyeOff}
             style={styles.eyeIcon}
           />
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-        <Text style={styles.signUpButtonText}>
         {loading ? (
           <ActivityIndicator size="small" color={COLORS.white} />
         ) : (
-          <Text style={styles.loginButtonText}>Sign Up</Text>
+          <Text style={styles.signUpButtonText}>Sign Up</Text>
         )}
-        </Text>
       </TouchableOpacity>
 
       <Text style={styles.alreadyMemberText}>
@@ -105,77 +112,77 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    padding: 20,
-    alignItems:'center'
+    padding: width * 0.05,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  logo:{
-    height:200,
-    width:300,
-    top:-40,
-   },
+  logo: {
+    height: height * 0.25,
+    width: width * 0.6,
+    resizeMode: 'contain',
+    marginBottom: height * 0.02,
+  },
   title: {
-    fontSize: 32,
+    fontSize: width * 0.08,
     fontWeight: 'bold',
     color: COLORS.primary,
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: height * 0.01,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: COLORS.gray,
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: height * 0.03,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: COLORS.black,
     borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-    marginBottom: 20,
-    backgroundColor: COLORS.lightGrayBackground, // Set a lighter background if desired
-    borderBottomColor: COLORS.black, // Adds a defined bottom border color
-    borderBottomWidth: 2, // Increases the width of the bottom border for emphasi
+    paddingHorizontal: width * 0.04,
+    paddingVertical: height * 0.015,
+    marginBottom: height * 0.02,
+    backgroundColor: COLORS.lightGrayBackground,
+    width: '100%',
   },
-
   icon: {
-    width: 20,
-    height: 20,
+    width: width * 0.05,
+    height: width * 0.05,
     tintColor: COLORS.black,
-    marginRight: 10,
+    marginRight: width * 0.03,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: width * 0.04,
     color: COLORS.black,
   },
   eyeIconContainer: {
-    padding: 5,
+    padding: width * 0.02,
   },
   eyeIcon: {
-    width: 20,
-    height: 20,
+    width: width * 0.05,
+    height: width * 0.05,
     tintColor: COLORS.gray,
   },
   signUpButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 15,
+    paddingVertical: height * 0.02,
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 20,
-    width:'80%'
+    marginTop: height * 0.02,
+    width: '100%',
   },
   signUpButtonText: {
     color: COLORS.white,
-    fontSize: 18,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
   },
   alreadyMemberText: {
     textAlign: 'center',
     color: COLORS.darkgray,
-    fontSize: 16,
-    marginTop: 15,
+    fontSize: width * 0.04,
+    marginTop: height * 0.02,
   },
   loginText: {
     color: COLORS.primary,

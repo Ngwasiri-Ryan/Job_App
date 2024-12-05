@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 're
 import { COLORS, FONTS, icons } from '../../constants';
 import { fetchuserDetails } from '../../backend/profile/overview';
 import { useUserContext } from '../../hooks/UserContext';
+import DotLoader from '../../components/loading/DotLoader';
 
 const OverviewTab = () => {
   const [userDetails, setuserDetails] = useState(null);
@@ -30,9 +31,8 @@ const OverviewTab = () => {
 
   if (loading) {
     return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-        <Text>Loading...</Text>
+      <View >
+       <DotLoader/>
       </View>
     );
   }
