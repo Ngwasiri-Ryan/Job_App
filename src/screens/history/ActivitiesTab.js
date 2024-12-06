@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
   },
   graphContainer: {
     backgroundColor: COLORS.white,
-    top:-height/9,
+    top:-height/200,
   },
 });

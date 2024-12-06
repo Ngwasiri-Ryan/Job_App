@@ -88,6 +88,7 @@ const profile_built = require("../../assets/icons/profile_built.png");
 const check = require("../../assets/icons/check.png");
 const edit = require("../../assets/icons/edit.png");
 const logout = require("../../assets/icons/logout.png");
+const sharing = require("../../assets/icons/sharing.png");
 
 
 export default {
@@ -97,6 +98,7 @@ export default {
     logout,
     stats,
     check,
+    sharing,
     analytics,
     cv_built,
     profile_built,

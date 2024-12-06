@@ -3,10 +3,14 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform,I
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { COLORS, icons, images } from '../../constants';
 import { useState } from 'react';
+import { useUserContext } from '../../hooks/UserContext';
 
 const ResumePreviewScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const { resumeData } = route.params;
+  const {userData} = useUserContext();
+  const username = userData.username;
+  
   
   console.log(resumeData);
 

@@ -5,6 +5,7 @@ import { useUserContext } from '../../hooks/UserContext';
 import { fetchUserActivity } from '../../backend/profile/activity';
 import DotLoader from '../../components/loading/DotLoader';
 import AppliedJobs from '../../components/home/AppliedJobs';
+import GenerateResumeButton from '../../components/resume/ResumeButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -67,6 +68,7 @@ const ActivityTab = ({ navigation }) => {
             <View style={styles.row}>
               <Image source={icons.cv_built} style={[styles.resumeIcon, styles.icon]} />
               <Text style={styles.successText}>Resume Built</Text>
+              <GenerateResumeButton username={username} />
             </View>
             <Image source={icons.check} style={styles.icon} />
           </View>
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04,
     fontWeight: 'bold',
     color: COLORS.black,
-    marginBottom: height * 0.001,
+    marginBottom: height * 0.01,
   },
   box: {
     backgroundColor: COLORS.white,
