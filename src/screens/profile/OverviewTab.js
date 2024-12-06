@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS, icons } from '../../constants';
 import { fetchuserDetails } from '../../backend/profile/overview';
 import { useUserContext } from '../../hooks/UserContext';
 import DotLoader from '../../components/loading/DotLoader';
+import EditOverview from '../../components/resume/EditOverview';
 
 const OverviewTab = () => {
   const [userDetails, setuserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const {userData} = useUserContext();
   const username = userData.username;
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedSection, setSelectedSection] = useState(null);
   
    
   useEffect(() => {
@@ -28,6 +31,12 @@ const OverviewTab = () => {
 
     loadData();
   }, []); 
+
+  const handleEditClick = (section) => {
+    setSelectedSection(section);
+    setShowEditModal(true);
+  };
+
 
   if (loading) {
     return (
@@ -50,8 +59,17 @@ const OverviewTab = () => {
       {/* Personal Info */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
+          <View style={styles.heading}>
           <Image source={icons.id_card} style={styles.icon} />
           <Text style={styles.sectionTitle}>Personal Info</Text>
+          </View>
+          <View>
+          <TouchableOpacity onPress={() => handleEditClick('personalDetails')}>
+           <Image source={icons.edit} style={styles.icon } />
+          </TouchableOpacity>
+          </View>
+          
+          
         </View>
         <View style={styles.row}>
           <Image source={icons.identity} style={styles.smallIcon} />
@@ -74,14 +92,21 @@ const OverviewTab = () => {
       {/* Experience */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Image source={icons.briefcase} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Experience</Text>
+           <View style={styles.heading}>
+           <Image source={icons.briefcase} style={styles.icon} />
+           <Text style={styles.sectionTitle}>Experience</Text>
+           </View>
+           <View>
+           <TouchableOpacity onPress={() => handleEditClick('workExperience')}>
+           <Image source={icons.edit} style={styles.icon} />
+          </TouchableOpacity>
+           </View>  
         </View>
         {userDetails.workExperience.map((job, index) => (
           <View key={index}>
             <Text style={styles.subheading}>{job.jobTitle} at {job.company}</Text>
-            <Text style={styles.detailText}>{job.startDate} - {job.endDate || "Present"}</Text>
-            <Text style={styles.description}>{job.description}</Text>
+            <Text style={styles.detailText}>{job.location}</Text>
+            <Text style={styles.detailText}>{job.date}</Text>
           </View>
         ))}
       </View>
@@ -89,8 +114,17 @@ const OverviewTab = () => {
       {/* Projects */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
+          <View style={styles.heading}>
           <Image source={icons.project} style={styles.icon} />
           <Text style={styles.sectionTitle}>Projects</Text>
+          </View>
+          <View>
+          <TouchableOpacity onPress={() => handleEditClick('projects')}>
+           <Image source={icons.edit} style={styles.icon} />
+          </TouchableOpacity>
+          </View>
+        
+         
         </View>
         {userDetails.projects.map((project, index) => (
           <View key={index}>
@@ -106,13 +140,23 @@ const OverviewTab = () => {
       {/* Certifications */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
+          <View style={styles.heading}>
           <Image source={icons.certification} style={styles.icon} />
           <Text style={styles.sectionTitle}>Certifications</Text>
+          </View>
+          <View>
+          <TouchableOpacity onPress={() => handleEditClick('certifications')}>
+           <Image source={icons.edit} style={styles.icon} />
+          </TouchableOpacity>
+          </View>
+         
+         
         </View>
         {userDetails.certifications.map((cert, index) => (
           <View key={index}>
             <Text style={styles.subheading}>{cert.name}</Text>
-            <Text style={styles.detailText}>Issued by: {cert.issuer}</Text>
+            <Text style={styles.detailText}>Issued by {cert.institute}</Text>
+            <Text style={styles.detailText}>{cert.duration}</Text>
           </View>
         ))}
       </View>
@@ -120,13 +164,23 @@ const OverviewTab = () => {
       {/* Education */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
+          <View style={styles.heading}>
           <Image source={icons.education} style={styles.icon} />
           <Text style={styles.sectionTitle}>Education</Text>
+          </View>
+          <View>
+          <TouchableOpacity onPress={() => handleEditClick('education')}>
+           <Image source={icons.edit} style={styles.icon} />
+          </TouchableOpacity>
+          </View>
+          
+         
         </View>
         {userDetails.education.map((edu, index) => (
           <View key={index}>
             <Text style={styles.subheading}>{edu.degree}</Text>
-            <Text style={styles.detailText}>{edu.institution} - {edu.year}</Text>
+            <Text style={styles.detailText}>{edu.institution}</Text>
+            <Text style={styles.detailText}>{edu.duration}</Text>
           </View>
         ))}
       </View>
@@ -134,8 +188,17 @@ const OverviewTab = () => {
       {/* Skills */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
+          <View style={styles.heading}>
           <Image source={icons.skill} style={styles.icon} />
           <Text style={styles.sectionTitle}>Skills</Text>
+          </View>
+          <View>
+          <TouchableOpacity onPress={() => handleEditClick('skills')}>
+           <Image source={icons.edit} style={styles.icon} />
+          </TouchableOpacity>
+          </View>
+          
+         
         </View>
         {userDetails.skills.map((skill, index) => (
           <Text key={index} style={styles.infoText}>{skill}</Text>
@@ -145,8 +208,15 @@ const OverviewTab = () => {
       {/* Languages */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
+          <View style={styles.heading}>
           <Image source={icons.language} style={styles.icon} />
           <Text style={styles.sectionTitle}>Languages</Text>
+          </View>
+          <View>
+          <TouchableOpacity onPress={() => handleEditClick('language')}>
+           <Image source={icons.edit} style={styles.icon} />
+          </TouchableOpacity>
+          </View>
         </View>
         {userDetails.languages.map((language, index) => (
           <Text key={index} style={styles.infoText}>{language}</Text>
@@ -156,13 +226,34 @@ const OverviewTab = () => {
       {/* Interests */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
+          <View  style={styles.heading}>
           <Image source={icons.interest} style={styles.icon} />
           <Text style={styles.sectionTitle}>Interests</Text>
+          </View>
+          <View>
+          <TouchableOpacity onPress={() => handleEditClick('interests')}>
+           <Image source={icons.edit} style={styles.icon} />
+          </TouchableOpacity>
+          </View>
+         
+          
         </View>
         {userDetails.interests.map((interest, index) => (
           <Text key={index} style={styles.infoText}>{interest}</Text>
         ))}
       </View>
+
+
+      {/* Show Modal */}
+      {showEditModal && (
+        <EditOverview
+          selectedSection={selectedSection}
+          userDetails={userDetails}
+          setUserDetails={setuserDetails}
+          setShowEditModal={setShowEditModal}
+        />
+      )}
+
     </ScrollView>
   );
 };
@@ -196,12 +287,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    justifyContent:'space-between'
+  },
+  heading:{
+    display:'flex',
+    flexDirection:'row',
+    gap:3,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: COLORS.black,
     marginLeft: 10,
+   
   },
   smallIcon:{
     height:20,
@@ -213,7 +311,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     tintColor: COLORS.primary,
-    marginRight: 10,
   },
   infoText: {
     fontSize: 14,
@@ -236,6 +333,9 @@ const styles = StyleSheet.create({
     color: COLORS.darkgray,
     marginBottom: 10,
   },
+  margin:{
+    marginLeft:'70%'
+  }
 });
 
 
