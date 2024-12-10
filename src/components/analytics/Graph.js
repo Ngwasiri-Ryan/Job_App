@@ -5,6 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { COLORS } from "../../constants";
 import { useUserContext } from "../../hooks/UserContext";
 import { fetchUserEventData } from "../../backend/analysis/data";
+import DotLoader from "../loading/DotLoader";
 
 const { width, height } = Dimensions.get('window'); // or 'screen'
 
@@ -42,7 +43,7 @@ const Graph = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Loading...</Text>
+       <DotLoader/>
       </View>
     );
   }

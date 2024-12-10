@@ -74,11 +74,73 @@ const OverviewTab = () => {
     }
   };
 
+  const handleEditProject = () => {
+    try {
+      if (userDetails && userDetails.projects) {
+        console.log(userDetails.projects); 
+        navigation.navigate('EditProject', { projects: userDetails.projects });
+      } else {
+        console.warn('No project data available');
+      }
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
   
+  const handleEditCertification= () => {
+    try {
+     
+      navigation.navigate('EditCertification', { certifications: userDetails.certifications });
+      console.log(userDetails.certifications); 
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  const handleEditEducation= () => {
+    try {
+     
+      navigation.navigate('EditEducation', { education: userDetails.education });
+      console.log(userDetails.education); 
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  const handleEditSkills= () => {
+    try {
+     
+      navigation.navigate('EditSkills', { skills: userDetails.skills });
+      console.log(userDetails.skills); 
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  const handleEditLanguages= () => {
+    try {
+     
+      navigation.navigate('EditLanguages', { languages: userDetails.languages });
+      console.log(userDetails.languages); 
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  const handleEditInterests= () => {
+    try {
+     
+      navigation.navigate('EditInterests', { interests: userDetails.interests });
+      console.log(userDetails.interests); 
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
   
 
 
-
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -155,7 +217,7 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Projects</Text>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleEditProject}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
@@ -179,7 +241,7 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Certifications</Text>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleEditCertification}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
@@ -201,7 +263,7 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Education</Text>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleEditEducation}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
@@ -223,7 +285,7 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Skills</Text>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleEditSkills}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
@@ -243,7 +305,7 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Languages</Text>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity  onPress={handleEditLanguages}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
@@ -263,7 +325,7 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Interests</Text>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleEditInterests}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>

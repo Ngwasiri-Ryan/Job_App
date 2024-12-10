@@ -11,30 +11,30 @@ import {
   Image,
 } from 'react-native';
 import { useUserContext } from '../../../hooks/UserContext';
-import { updateLanguages } from '../../../backend/profile/updates/updateLanguages';
+import { updateInterests } from '../../../backend/profile/updates/updateInterests';
 
 // Get screen dimensions
 const { width, height } = Dimensions.get('window');
 
 import { COLORS, FONTS, icons } from '../../../constants';
 
-const EditLanguages = ({ route, navigation }) => {
-  const { languages } = route.params;
-  const [editedLanguages, setEditedLanguages] = useState([...languages]);
+const EditInterests = ({ route, navigation }) => {
+  const { interests } = route.params;
+  const [editedInterests, setEditedInterests] = useState([...interests]);
   const { userData } = useUserContext();
   const username = userData.username;
 
   const [loading, setLoading] = useState(false);
 
-  const handleLanguageChange = (index, value) => {
-    const updatedLanguages = [...editedLanguages];
-    updatedLanguages[index] = value;
-    setEditedLanguages(updatedLanguages);
+  const handleInterestChange = (index, value) => {
+    const updatedInterests = [...editedInterests];
+    updatedInterests[index] = value;
+    setEditedInterests(updatedInterests);
   };
 
   const handleSave = async () => {
     setLoading(true);
-    const response = await updateLanguages(username, editedLanguages);
+    const response = await updateInterests(username, editedInterests);
     setLoading(false);
     if (response.success) {
       console.log(response.message);
@@ -44,14 +44,14 @@ const EditLanguages = ({ route, navigation }) => {
     }
   };
 
-  const handleDeleteLanguage = (index) => {
-    const updatedLanguages = [...editedLanguages];
-    updatedLanguages.splice(index, 1);
-    setEditedLanguages(updatedLanguages);
+  const handleDeleteInterest = (index) => {
+    const updatedInterests = [...editedInterests];
+    updatedInterests.splice(index, 1);
+    setEditedInterests(updatedInterests);
   };
 
-  const handleAddLanguage = () => {
-    setEditedLanguages([...editedLanguages, '']);
+  const handleAddInterest = () => {
+    setEditedInterests([...editedInterests, '']);
   };
 
   return (
@@ -60,29 +60,29 @@ const EditLanguages = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={icons.back} style={styles.inputIcon} />
         </TouchableOpacity>
-        <Text style={styles.title}>Edit Languages</Text>
+        <Text style={styles.title}>Edit Interests</Text>
       </View>
 
-      {editedLanguages.map((language, index) => (
+      {editedInterests.map((interest, index) => (
         <View key={index} style={styles.card}>
           <View style={styles.inputRow}>
-            <Image source={icons.language} style={styles.inputIcon} />
+            <Image source={icons.interest} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
-              value={language}
-              onChangeText={(value) => handleLanguageChange(index, value)}
-              placeholder="Language"
+              value={interest}
+              onChangeText={(value) => handleInterestChange(index, value)}
+              placeholder="Interest"
               placeholderTextColor={COLORS.black}
             />
           </View>
 
-          <TouchableOpacity onPress={() => handleDeleteLanguage(index)}>
+          <TouchableOpacity onPress={() => handleDeleteInterest(index)}>
             <Image source={icons.trash} style={styles.deleteIcon} />
           </TouchableOpacity>
         </View>
       ))}
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAddLanguage}>
+      <TouchableOpacity style={styles.addButton} onPress={handleAddInterest}>
         <Image source={icons.add} style={styles.addIcon} />
       </TouchableOpacity>
 
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputIcon: {
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
     marginRight: 10,
   },
   input: {
@@ -171,4 +171,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditLanguages;
+export default EditInterests;

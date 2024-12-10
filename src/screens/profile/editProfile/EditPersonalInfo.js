@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Image,
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { COLORS, icons } from '../../../constants'; // Assuming you have icons in constants
 import { useUserContext } from '../../../hooks/UserContext';
-import { updatePersonalInfo } from '../../../backend/profile/updatePersonalInfo';
+import { updatePersonalInfo } from '../../../backend/profile/updates/updatePersonalInfo';
 
 // Get screen dimensions
 const { width, height } = Dimensions.get('window');

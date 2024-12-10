@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 import { useUserContext } from '../../../hooks/UserContext';
-import { updateExperience } from '../../../backend/profile/updateExperience';
+import { updateExperience } from '../../../backend/profile/updates/updateExperience';
 
 // Get screen dimensions
 const { width, height } = Dimensions.get('window');

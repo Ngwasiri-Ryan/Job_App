@@ -91,7 +91,10 @@ const logout = require("../../assets/icons/logout.png");
 const sharing = require("../../assets/icons/sharing.png");
 const globe = require("../../assets/icons/globe.png");
 const town = require("../../assets/icons/town.png");
+const certificate = require("../../assets/icons/certificate.png");
 const description = require("../../assets/icons/description.png");
+const institute = require("../../assets/icons/institute.png");
+
 
 
 export default {
@@ -99,6 +102,8 @@ export default {
     user,
     town,
     description,
+    institute,
+    certificate,
     edit,
     globe,
     logout,

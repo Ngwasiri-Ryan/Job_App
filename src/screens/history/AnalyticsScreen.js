@@ -10,7 +10,6 @@ import {
 import { COLORS, icons, FONTS } from '../../constants';
 import AnalysisTab from './AnalysisTab';
 import ListTab from './ListTab';
-import Graph from '../../components/analytics/Graph';
 import ActivitiesTab from './ActivitiesTab';
 
 

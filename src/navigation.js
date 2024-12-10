@@ -43,6 +43,12 @@ import JobWebViewScreen from './components/home/jobWebViewScreen';
 //profile edit screen
 import EditPersonalInfo from './screens/profile/editProfile/EditPersonalInfo';
 import EditExperience from './screens/profile/editProfile/EditExpereince';
+import EditProject from './screens/profile/editProfile/EditProject';
+import EditCertification from './screens/profile/editProfile/EditCertification';
+import EditEducation from './screens/profile/editProfile/EditEducation';
+import EditSkill from './screens/profile/editProfile/EditSkill';
+import EditLanguages from './screens/profile/editProfile/EditLanguages';
+import EditInterests from './screens/profile/editProfile/EditInterests';
 
 import { icons, COLORS } from './constants';
 
@@ -209,6 +215,14 @@ const Navigator = () => {
         <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
         <Stack.Screen name="EditPersonalInfo" component={EditPersonalInfo} />
         <Stack.Screen name="EditExperience" component={EditExperience} />
+        <Stack.Screen name="EditProject" component={EditProject} />
+        <Stack.Screen name="EditCertification" component={EditCertification} />
+        <Stack.Screen name="EditEducation" component={EditEducation} />
+        <Stack.Screen name="EditSkills" component={EditSkill} />
+        <Stack.Screen name="EditLanguages" component={EditLanguages} />
+        <Stack.Screen name="EditInterests" component={EditInterests} />
+
+
 
         <Stack.Screen name="Main" component={BottomTabNavigator} />
       </Stack.Navigator>
