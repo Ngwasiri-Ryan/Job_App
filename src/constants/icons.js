@@ -89,12 +89,18 @@ const check = require("../../assets/icons/check.png");
 const edit = require("../../assets/icons/edit.png");
 const logout = require("../../assets/icons/logout.png");
 const sharing = require("../../assets/icons/sharing.png");
+const globe = require("../../assets/icons/globe.png");
+const town = require("../../assets/icons/town.png");
+const description = require("../../assets/icons/description.png");
 
 
 export default {
     home,
     user,
+    town,
+    description,
     edit,
+    globe,
     logout,
     stats,
     check,

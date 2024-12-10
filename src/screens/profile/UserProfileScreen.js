@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  ActivityIndicator,
   Dimensions,
 } from 'react-native';
 import { COLORS, images } from '../../constants';
@@ -20,7 +19,7 @@ import { useUserContext } from '../../hooks/UserContext';
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
 
-const UserProfileScreen = ({ navigation }) => {
+const UserProfileScreen = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('Overview');
   const [userDetails, setuserDetails] = useState(null);

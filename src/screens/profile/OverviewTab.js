@@ -1,47 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { COLORS, FONTS, icons } from '../../constants';
-import { fetchuserDetails } from '../../backend/profile/overview';
-import { useUserContext } from '../../hooks/UserContext';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {COLORS, FONTS, icons} from '../../constants';
+import {fetchuserDetails} from '../../backend/profile/overview';
+import {useUserContext} from '../../hooks/UserContext';
 import DotLoader from '../../components/loading/DotLoader';
-import EditOverview from '../../components/resume/EditOverview';
+import { useNavigation } from '@react-navigation/native'; 
+
 
 const OverviewTab = () => {
   const [userDetails, setuserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const {userData} = useUserContext();
   const username = userData.username;
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedSection, setSelectedSection] = useState(null);
+  const navigation = useNavigation();  
   
-   
   useEffect(() => {
     const loadData = async () => {
       try {
         // Fetch user details using the username from context
-       
+
         const data = await fetchuserDetails(username);
         setuserDetails(data);
       } catch (error) {
-        console.error("Error loading user data: ", error);
+        console.error('Error loading user data: ', error);
       } finally {
         setLoading(false);
       }
     };
 
     loadData();
-  }, []); 
-
-  const handleEditClick = (section) => {
-    setSelectedSection(section);
-    setShowEditModal(true);
-  };
-
+  }, []);
 
   if (loading) {
     return (
-      <View >
-       <DotLoader/>
+      <View>
+        <DotLoader />
       </View>
     );
   }
@@ -54,57 +54,93 @@ const OverviewTab = () => {
     );
   }
 
+  //edit functions
+
+  const handleEditPersonalInfo = () => {
+    try {
+      console.log(navigation); 
+      navigation.navigate('EditPersonalInfo', { personalDetails: userDetails.personalDetails });
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+
+  const handleEditExperience = () => {
+    try {
+      navigation.navigate('EditExperience', { experiences: userDetails.workExperience });
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  
+  
+
+
+
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Personal Info */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <View style={styles.heading}>
-          <Image source={icons.id_card} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Personal Info</Text>
+            <Image source={icons.id_card} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Personal Info</Text>
           </View>
           <View>
-          <TouchableOpacity onPress={() => handleEditClick('personalDetails')}>
-           <Image source={icons.edit} style={styles.icon } />
-          </TouchableOpacity>
+            <TouchableOpacity  onPress={handleEditPersonalInfo}>
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
           </View>
-          
-          
         </View>
         <View style={styles.row}>
           <Image source={icons.identity} style={styles.smallIcon} />
-          <Text style={styles.infoText}>{userDetails.personalDetails.name}</Text>
+          <Text style={styles.infoText}>
+            {userDetails.personalDetails.name}
+          </Text>
         </View>
         <View style={styles.row}>
           <Image source={icons.mail} style={styles.smallIcon} />
-          <Text style={styles.infoText}>{userDetails.personalDetails.email}</Text>
+          <Text style={styles.infoText}>
+            {userDetails.personalDetails.email}
+          </Text>
         </View>
         <View style={styles.row}>
           <Image source={icons.phone} style={styles.smallIcon} />
-          <Text style={styles.infoText}>{userDetails.personalDetails.phone}</Text>
+          <Text style={styles.infoText}>
+            {userDetails.personalDetails.phone}
+          </Text>
         </View>
         <View style={styles.row}>
           <Image source={icons.location} style={styles.smallIcon} />
-          <Text style={styles.infoText}>{userDetails.personalDetails.city},{userDetails.personalDetails.town},{userDetails.personalDetails.country}, </Text>
+          <Text style={styles.infoText}>
+            {userDetails.personalDetails.city},
+            {userDetails.personalDetails.town},
+            {userDetails.personalDetails.country},{' '}
+          </Text>
         </View>
       </View>
 
       {/* Experience */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-           <View style={styles.heading}>
-           <Image source={icons.briefcase} style={styles.icon} />
-           <Text style={styles.sectionTitle}>Experience</Text>
-           </View>
-           <View>
-           <TouchableOpacity onPress={() => handleEditClick('workExperience')}>
-           <Image source={icons.edit} style={styles.icon} />
-          </TouchableOpacity>
-           </View>  
+          <View style={styles.heading}>
+            <Image source={icons.briefcase} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Experience</Text>
+          </View>
+          <View>
+            <TouchableOpacity onPress={handleEditExperience} >
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
+          </View>
         </View>
         {userDetails.workExperience.map((job, index) => (
           <View key={index}>
-            <Text style={styles.subheading}>{job.jobTitle} at {job.company}</Text>
+            <Text style={styles.subheading}>
+              {job.jobTitle} at {job.company}
+            </Text>
             <Text style={styles.detailText}>{job.location}</Text>
             <Text style={styles.detailText}>{job.date}</Text>
           </View>
@@ -115,16 +151,14 @@ const OverviewTab = () => {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <View style={styles.heading}>
-          <Image source={icons.project} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Projects</Text>
+            <Image source={icons.project} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Projects</Text>
           </View>
           <View>
-          <TouchableOpacity onPress={() => handleEditClick('projects')}>
-           <Image source={icons.edit} style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
           </View>
-        
-         
         </View>
         {userDetails.projects.map((project, index) => (
           <View key={index}>
@@ -141,16 +175,14 @@ const OverviewTab = () => {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <View style={styles.heading}>
-          <Image source={icons.certification} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Certifications</Text>
+            <Image source={icons.certification} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Certifications</Text>
           </View>
           <View>
-          <TouchableOpacity onPress={() => handleEditClick('certifications')}>
-           <Image source={icons.edit} style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
           </View>
-         
-         
         </View>
         {userDetails.certifications.map((cert, index) => (
           <View key={index}>
@@ -165,16 +197,14 @@ const OverviewTab = () => {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <View style={styles.heading}>
-          <Image source={icons.education} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Education</Text>
+            <Image source={icons.education} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Education</Text>
           </View>
           <View>
-          <TouchableOpacity onPress={() => handleEditClick('education')}>
-           <Image source={icons.edit} style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
           </View>
-          
-         
         </View>
         {userDetails.education.map((edu, index) => (
           <View key={index}>
@@ -189,19 +219,19 @@ const OverviewTab = () => {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <View style={styles.heading}>
-          <Image source={icons.skill} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Skills</Text>
+            <Image source={icons.skill} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Skills</Text>
           </View>
           <View>
-          <TouchableOpacity onPress={() => handleEditClick('skills')}>
-           <Image source={icons.edit} style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
           </View>
-          
-         
         </View>
         {userDetails.skills.map((skill, index) => (
-          <Text key={index} style={styles.infoText}>{skill}</Text>
+          <Text key={index} style={styles.infoText}>
+            {skill}
+          </Text>
         ))}
       </View>
 
@@ -209,51 +239,41 @@ const OverviewTab = () => {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <View style={styles.heading}>
-          <Image source={icons.language} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Languages</Text>
+            <Image source={icons.language} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Languages</Text>
           </View>
           <View>
-          <TouchableOpacity onPress={() => handleEditClick('language')}>
-           <Image source={icons.edit} style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
           </View>
         </View>
         {userDetails.languages.map((language, index) => (
-          <Text key={index} style={styles.infoText}>{language}</Text>
+          <Text key={index} style={styles.infoText}>
+            {language}
+          </Text>
         ))}
       </View>
 
       {/* Interests */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <View  style={styles.heading}>
-          <Image source={icons.interest} style={styles.icon} />
-          <Text style={styles.sectionTitle}>Interests</Text>
+          <View style={styles.heading}>
+            <Image source={icons.interest} style={styles.icon} />
+            <Text style={styles.sectionTitle}>Interests</Text>
           </View>
           <View>
-          <TouchableOpacity onPress={() => handleEditClick('interests')}>
-           <Image source={icons.edit} style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={icons.edit} style={styles.icon} />
+            </TouchableOpacity>
           </View>
-         
-          
         </View>
         {userDetails.interests.map((interest, index) => (
-          <Text key={index} style={styles.infoText}>{interest}</Text>
+          <Text key={index} style={styles.infoText}>
+            {interest}
+          </Text>
         ))}
       </View>
-
-
-      {/* Show Modal */}
-      {showEditModal && (
-        <EditOverview
-          selectedSection={selectedSection}
-          userDetails={userDetails}
-          setUserDetails={setuserDetails}
-          setShowEditModal={setShowEditModal}
-        />
-      )}
-
     </ScrollView>
   );
 };
@@ -261,13 +281,13 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
     backgroundColor: COLORS.white,
-    marginBottom:60,
+    marginBottom: 60,
   },
-  loader:{
-     flex:1,
-     alignItems:'center',
-     justifyContent:'center',
-     backgroundColor: COLORS.white,
+  loader: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.white,
   },
   section: {
     backgroundColor: '#F2F8FF',
@@ -275,37 +295,35 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
   },
-  row:{
-    display:'flex',
-    flexDirection:'row',
-    gap:15,
-    alignItems:'center',
-    marginBottom:10,
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 15,
+    alignItems: 'center',
+    marginBottom: 10,
   },
   sectionHeader: {
     ...FONTS.h5,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    justifyContent:'space-between'
+    justifyContent: 'space-between',
   },
-  heading:{
-    display:'flex',
-    flexDirection:'row',
-    gap:3,
+  heading: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 3,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: COLORS.black,
     marginLeft: 10,
-   
   },
-  smallIcon:{
-    height:20,
-    width:20,
-    tintColor:COLORS.darkgray
-
+  smallIcon: {
+    height: 20,
+    width: 20,
+    tintColor: COLORS.darkgray,
   },
   icon: {
     width: 24,
@@ -333,11 +351,9 @@ const styles = StyleSheet.create({
     color: COLORS.darkgray,
     marginBottom: 10,
   },
-  margin:{
-    marginLeft:'70%'
-  }
+  margin: {
+    marginLeft: '70%',
+  },
 });
-
-
 
 export default OverviewTab;

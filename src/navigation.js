@@ -39,6 +39,11 @@ import ResumePreviewScreen from './screens/resume/ResumePriewerScreen';
 import ResumePDFScreen from './screens/resume/ResumePDFScreen';
 import JobWebViewScreen from './components/home/jobWebViewScreen';
 
+
+//profile edit screen
+import EditPersonalInfo from './screens/profile/editProfile/EditPersonalInfo';
+import EditExperience from './screens/profile/editProfile/EditExpereince';
+
 import { icons, COLORS } from './constants';
 
 const Stack = createStackNavigator();
@@ -202,6 +207,8 @@ const Navigator = () => {
         <Stack.Screen name="ResumePreviewScreen" component={ResumePreviewScreen} />
         <Stack.Screen name="pdfViewer" component={ResumePDFScreen} />
         <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+        <Stack.Screen name="EditPersonalInfo" component={EditPersonalInfo} />
+        <Stack.Screen name="EditExperience" component={EditExperience} />
 
         <Stack.Screen name="Main" component={BottomTabNavigator} />
       </Stack.Navigator>
