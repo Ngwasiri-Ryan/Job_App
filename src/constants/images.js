@@ -12,7 +12,7 @@ const browse = require('../../assets/images/browse.png');
 const work = require("../../assets/images/work.png");
 const start = require("../../assets/images/start.png");
 const track = require("../../assets/images/track.png");
-const pic = require("../../assets/images/pic.jpg");
+const pic = require("../../assets/images/pic.png");
 const error_429 = require("../../assets/images/429_error.png");
 
 
