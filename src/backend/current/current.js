@@ -1,4 +1,4 @@
-import { collection , addDoc} from "firebase/firestore";
+import { collection , addDoc , Timestamp} from "firebase/firestore";
 import { db } from "../Firebase";
 
 export const saveCurrentUserInfo = async ({ username, jobTitle, industry, experienceLevel, skills }) => {

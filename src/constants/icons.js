@@ -94,7 +94,7 @@ const town = require("../../assets/icons/town.png");
 const certificate = require("../../assets/icons/certificate.png");
 const description = require("../../assets/icons/description.png");
 const institute = require("../../assets/icons/institute.png");
-
+const person_cv = require("../../assets/icons/person-cv.png");
 
 
 export default {
@@ -112,6 +112,7 @@ export default {
     sharing,
     analytics,
     cv_built,
+    person_cv,
     profile_built,
     chart,
     profile,

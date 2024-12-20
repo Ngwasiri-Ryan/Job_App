@@ -47,7 +47,7 @@ const HomeScreen = ({ route, navigation }) => {
         page: page.toString(),
         num_pages: '15',
         date_posted: 'all',
-        location:'all'
+        country:'all',
       },
       headers: {
         'x-rapidapi-key': API_KEY,

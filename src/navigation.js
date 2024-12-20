@@ -101,6 +101,27 @@ const BottomTabNavigator = () => {
         }}
       />
       
+   
+<Tab.Screen
+        name="OnboardingScreen"
+        component={OnboardingScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={icons.person_cv}
+              resizeMode="contain"
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: focused ? COLORS.primary : COLORS.black,
+              }}
+            />
+          ),
+        }}
+      />
+
+
+
  <Tab.Screen
         name="ChatScreen"
         component={ChatScreen}
@@ -118,6 +139,7 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
+
 
 
 <Tab.Screen

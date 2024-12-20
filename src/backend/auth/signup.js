@@ -1,6 +1,6 @@
 import { auth, db } from '../Firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc , Timestamp} from "firebase/firestore";
 
 /**
  * Sign up a new user with email and password, then save additional user data to Firestore.
