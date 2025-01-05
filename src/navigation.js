@@ -26,6 +26,7 @@ import HomeScreen from './screens/home/HomeScreen';
 import JobSelectionScreen from './screens/intro/jobSelectionScreen';
 import JobDetailsScreen from './screens/job/JobDetailsScreen';
 import FindjobScreen from './screens/search/FindjobScreen';
+import NewsScreen from './screens/news/NewsScreen';
 import UserProfileScreen from './screens/profile/UserProfileScreen';
 import AnalyticsScreen from './screens/history/AnalyticsScreen';
 import ChatScreen from './screens/chat/ChatScreen';
@@ -49,6 +50,10 @@ import EditEducation from './screens/profile/editProfile/EditEducation';
 import EditSkill from './screens/profile/editProfile/EditSkill';
 import EditLanguages from './screens/profile/editProfile/EditLanguages';
 import EditInterests from './screens/profile/editProfile/EditInterests';
+
+
+//news article screen
+import NewsArticleScreen from './screens/news/NewsArticleScreen';
 
 import { icons, COLORS } from './constants';
 
@@ -133,6 +138,26 @@ const BottomTabNavigator = () => {
               style={{
                 width: 25,
                 height: 25,
+                tintColor: focused ? COLORS.primary : COLORS.black,
+              }}
+            />
+          ),
+        }}
+      />
+
+
+
+<Tab.Screen
+        name="NewsScreen"
+        component={NewsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={icons.newspaper}
+              resizeMode="contain"
+              style={{
+                width: 20,
+                height: 20,
                 tintColor: focused ? COLORS.primary : COLORS.black,
               }}
             />
@@ -243,6 +268,7 @@ const Navigator = () => {
         <Stack.Screen name="EditSkills" component={EditSkill} />
         <Stack.Screen name="EditLanguages" component={EditLanguages} />
         <Stack.Screen name="EditInterests" component={EditInterests} />
+        <Stack.Screen name="NewsArticleScreen" component={NewsArticleScreen} />
 
 
 

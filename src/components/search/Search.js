@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { images } from '../../constants';
+import { COLORS, images } from '../../constants';
 
 const Search = () => {
   return (
@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: COLORS.white,
   },
   image: {
-    width: 300, 
-    height: 300,
+    width: 400, 
+    height: 450,
     marginBottom: 20,
     resizeMode: 'contain',
   },

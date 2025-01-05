@@ -95,14 +95,21 @@ const certificate = require("../../assets/icons/certificate.png");
 const description = require("../../assets/icons/description.png");
 const institute = require("../../assets/icons/institute.png");
 const person_cv = require("../../assets/icons/person-cv.png");
+const newspaper = require("../../assets/icons/newspaper.png");
+const like = require("../../assets/icons/like.png");
+const comment = require("../../assets/icons/comment.png");
+const news_logo = require("../../assets/icons/news_logo.png");
 
 
 export default {
     home,
     user,
     town,
+    newspaper,
+    like,
     description,
     institute,
+    comment,
     certificate,
     edit,
     globe,
@@ -173,6 +180,7 @@ export default {
     google,
     name,
     phone,
+    news_logo,
     mail,
     job, 
     levels, 

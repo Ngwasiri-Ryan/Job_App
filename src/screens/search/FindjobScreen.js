@@ -1,137 +1,108 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 import axios from 'axios';
 import { icons, COLORS } from '../../constants';
 import Search from '../../components/search/Search';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 import NoResults from '../../components/search/NoResults';
 import Loader from '../../components/loading/Loader';
 import { useUserContext } from '../../hooks/UserContext';
 import { saveSearchHistory } from '../../backend/history/searchHistory';
+import { API_KEY } from '@env';
+import JobItem from '../../components/home/jobItem';
+
+const { width, height } = Dimensions.get('window'); // Get screen dimensions
 
 const FindjobScreen = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const [query, setQuery] = useState('');
   const [location, setLocation] = useState('');
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchPerformed, setSearchPerformed] = useState(false); 
-  const [searchCount, setSearchCount] = useState(0);
+  const [searchPerformed, setSearchPerformed] = useState(false);
   const { userData } = useUserContext();
   const username = userData?.username;
 
   const searchJobs = async () => {
+    if (!query.trim()) return; // Prevent empty searches
     setLoading(true);
-    setSearchPerformed(true); // Mark that a search has been done
+    setSearchPerformed(true);
 
     const options = {
       method: 'GET',
       url: 'https://jsearch.p.rapidapi.com/search',
       params: {
-        query: query,
-        page: 1,
+        query:query,
+        page: '1', // Default to page 1
         num_pages: '15',
+        country: location,
         date_posted: 'all',
-        country:location,
       },
       headers: {
-        'x-rapidapi-key':'af6483481cmshc6c5f362b888facp174bc3jsn0aea1c091026',
-        'x-rapidapi-host': 'jsearch.p.rapidapi.com'
-      }
+        'x-rapidapi-key': API_KEY,
+        'x-rapidapi-host': 'jsearch.p.rapidapi.com',
+      },
     };
+
     try {
       const response = await axios.request(options);
-      setJobs(response.data.data); // Assuming jobs are in response.data.data
+      setJobs(response.data.data || []); // Handle potential empty data
+      if (username) saveSearchHistory(username, query); // Save search history if user is logged in
     } catch (error) {
       console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-    
- if (username && query) {
-  saveSearchHistory(username, query);
-}
-
   };
 
   const renderJobItem = ({ item }) => {
-
-      const defaultLogo = icons.suitcase; // Your default fallback logo
-      const clearbitLogoUrl = item.employer_name 
-    ? `https://logo.clearbit.com/${item.employer_name.replace(/\s+/g, '').toLowerCase()}.com`
-    : null;
-    return (
-      <TouchableOpacity style={styles.jobCard}
-      onPress={() => 
-        navigation.navigate('JobDetailScreen', { job: item } )
-      }
-      >
-       <Image
-        source={
-          item.employer_logo
-            ? { uri: item.employer_logo }
-            : clearbitLogoUrl
-            ? { uri: clearbitLogoUrl }
-            : defaultLogo
-        }
-        style={styles.logo}
-        onError={(e) => (e.target.src = defaultLogo)} // Handle Clearbit logo failure
-      />
-       
-        <View style={styles.jobDetails}>
-          <Text style={styles.employerName}>{item.employer_name}</Text>
-          <Text style={styles.jobTitle}>{item.job_title}</Text>
-          <View style={styles.boxHorizontal}>
-            <View style={styles.border}>
-              <Text style={styles.location}>{item.job_city ? item.job_city : 'Online'}</Text>
-            </View>
-            <View style={styles.border}>
-              <Text style={styles.publisher}>{item.job_is_remote ? 'Remote' : 'Onsite'}</Text>
-            </View>
-            <View style={styles.border}>
-              <Text style={styles.jobType}>{item.job_employment_type === 'FULLTIME' ? 'Full-Time' : 'Part-Time'}</Text>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
+    return <JobItem item={item} />; // Use JobItem component for each job
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Job Search</Text>
-      <View style={styles.inputHolders}>
-      <View style={{display:'flex' , flex:1, gap: 5}}> 
-        <TextInput
-         style={[styles.searchInput, styles.inputHolder ]}
-          placeholder="Enter job title or keyword..."
-          value={query}
-          onChangeText={setQuery}
-          onSubmitEditing={searchJobs}
-        />
-        <TextInput
-          style={[styles.searchInput, styles.inputHolder ]}
-          placeholder="Enter job location..."
-          value={location}
-          onChangeText={setLocation}
-          onSubmitEditing={searchJobs}
-        />
-      </View>
-        
-        <TouchableOpacity style={styles.searchButton} onPress={searchJobs}>
-          <Image source={icons.search} style={styles.icon} />
-        </TouchableOpacity>
+      <View style={styles.backdrop}>
+        <Text style={styles.heading}>Job Search</Text>
+        <View style={styles.inputHolders}>
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputHolder}> 
+            <Image source={icons.job} style={styles.icons} />
+            <TextInput
+              style={[styles.searchInput]}
+              placeholder="Enter job title or keyword..."
+              value={query}
+              onChangeText={setQuery}
+              onSubmitEditing={searchJobs}
+            />
+            </View>
+            
+            <View style={styles.inputHolder}> 
+            <Image source={icons.location} style={styles.icons} />
+            <TextInput
+              style={[styles.searchInput]}
+              placeholder="Enter job location..."
+              value={location}
+              onChangeText={setLocation}
+              onSubmitEditing={searchJobs}
+            />
+            </View>
+           
+          </View>
+          <TouchableOpacity style={styles.searchButton} onPress={searchJobs}>
+            <Image source={icons.search} style={styles.icon} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {loading ? (
-       <Loader/>
+        <Loader />
       ) : (
         <FlatList
           data={jobs}
           keyExtractor={(item) => item.job_id}
-          renderItem={renderJobItem}
+          renderItem={renderJobItem} // Render each job using the JobItem component
           ListEmptyComponent={
-            searchPerformed ? <NoResults /> : <Search /> // Show NoResults if no jobs, otherwise show Search
+            searchPerformed ? <NoResults /> : <Search />
           }
         />
       )}
@@ -142,118 +113,86 @@ const FindjobScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    //paddingHorizontal: width * 0.05, 
+    // Use width for padding
     backgroundColor: COLORS.white,
   },
+  backdrop: {
+    paddingBottom: height * 0.02, // Padding based on screen height
+    backgroundColor: COLORS.white,
+    paddingHorizontal: width * 0.05, // Use width for padding
+    paddingBottom: width * 0.05, // Use width for padding
+    borderBottomEndRadius: 25,
+    borderBottomLeftRadius: 25,
+    width:'100%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4.65,
+    elevation: 5,
+    zIndex: 10,
+  },
   heading: {
-    fontSize: 20,
+    fontSize: width * 0.06, // Font size based on screen width
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 10,
-    color:COLORS.darkgray,
+    marginBottom: height * 0.02, // Margin based on screen height
+    color: COLORS.black,
+  },
+  inputHolders: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap', // Allow the elements to wrap
+  },
+  inputWrapper: {
+    flexDirection: 'column',
+    flex: 1,
+    gap: height * 0.015, // Gap between input fields, scaled with height
+    justifyContent: 'center',
   },
   searchInput: {
-    height: 50,
+    height: height * 0.065, // Height based on screen height
     borderWidth: 1,
-    paddingHorizontal: 20,
-    marginTop: 10,
-    width: '85%',
-    marginBottom: 5,
-    borderRadius: 8,
+    paddingHorizontal: width * 0.05, // Horizontal padding based on screen width
+    marginTop: height * 0.01, // Margin top based on height
+    width: '100%',
     borderColor: 'transparent',
-    color:COLORS.darkgray,
+    color: COLORS.black,
+    fontSize:15,
   },
   searchButton: {
     backgroundColor: COLORS.primary,
-    padding: 20,
+    paddingVertical: height * 0.02, // Vertical padding based on height
+    paddingHorizontal: width * 0.05, // Horizontal padding based on width
     borderRadius: 50,
-    top: 10,
     alignItems: 'center',
-    marginBottom: 20,
+    justifyContent: 'center',
+    marginBottom: height * 0.02, // Margin based on height
+    
+  },
+  icon: {
+    width: width * 0.05, // Icon size based on width
+    height: width * 0.05, // Icon size based on width
+    tintColor: '#fff',
+  },
+  icons: {
+    width: width * 0.05, // Icon size based on width
+    height: width * 0.05, // Icon size based on width
+    tintColor: COLORS.black,
   },
   inputHolder: {
-    display: 'flex',
     flexDirection: 'row',
-    gap: 5,
+    gap: width * 0.02, // Gap based on screen width
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#333',
-     paddingHorizontal: 20,
-    borderRadius: 50,
-  },
-  inputHolders: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  jobCard: {
-    flexDirection: 'row',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  logo: {
-    width: 50,
-    height: 50,
-    marginRight: 20,
-    top: 20,
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    tintColor: '#fff'
-  },
-  jobDetails: {
-    flex: 1,
-  },
-  boxHorizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  border: {
-    borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    alignItems: 'center',
-    marginHorizontal: 2,
-  },
-  employerName: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    color: '#000',
-  },
-  jobTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    color:COLORS.darkgray,
-  },
-  location: {
-    fontSize: 12,
-    color:COLORS.black,
-    marginBottom: 5,
-  },
-  jobType: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color:COLORS.black
-  },
-  publisher: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color:COLORS.black
+    paddingHorizontal: width * 0.05, // Padding based on width
+    borderRadius: 30,
   },
 });
 

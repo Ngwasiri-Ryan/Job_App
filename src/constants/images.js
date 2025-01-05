@@ -14,6 +14,7 @@ const start = require("../../assets/images/start.png");
 const track = require("../../assets/images/track.png");
 const pic = require("../../assets/images/pic.png");
 const error_429 = require("../../assets/images/429_error.png");
+const news_default = require("../assets/images/news_default.png");
 
 
 export default {
@@ -31,5 +32,6 @@ export default {
     track,
     work,
     start,
-    error_429
+    error_429,
+    news_default,
 }

@@ -11,6 +11,7 @@ import Greetings from '../../components/home/Greetings';
 import { API_KEY } from '@env';
 import { useUserContext } from '../../hooks/UserContext';
 
+
 const { width, height } = Dimensions.get('window');
 
 const HomeScreen = ({ route, navigation }) => {
@@ -104,6 +105,11 @@ const HomeScreen = ({ route, navigation }) => {
 
   if (loading) {
     return <Loader />;
+  //   return <LoaderKit
+  //   style={{ width: 50, height: 50 }}
+  //   name={'BallPulse'} // Optional: see list of animations below
+  //   color={'red'} // Optional: color can be: 'red', 'green',... or '#ddd', '#ffffff',...
+  // />
   }
 
   if (is429Error) {
