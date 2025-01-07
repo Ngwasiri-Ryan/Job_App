@@ -88,7 +88,7 @@ const JobItem = ({ item }) => {
           source={
             logoUrl
               ? { uri: logoUrl } // Use fetched or provided logo
-              : require('../../../assets/icons/suitcase.png') // Fallback to suitcase icon
+              : icons.suitcase // Fallback to suitcase icon
           }
           style={styles.logo}
         />

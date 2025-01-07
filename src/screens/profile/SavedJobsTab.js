@@ -85,7 +85,7 @@ const SavedJobsTab = () => {
               ) : (
                 <View style={{ height: 50, width: 50 }}>
                   <Image
-                    source={require('../../../assets/icons/suitcase.png')}
+                    source={icons.suitcase}
                     style={styles.logo}
                   />
                 </View>

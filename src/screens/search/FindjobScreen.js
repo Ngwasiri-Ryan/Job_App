@@ -32,16 +32,16 @@ const FindjobScreen = () => {
       method: 'GET',
       url: 'https://jsearch.p.rapidapi.com/search',
       params: {
-        query:query,
-        page: '1', // Default to page 1
-        num_pages: '15',
+        query: query,
+        page:  '1',
+        num_pages:'15' ,
         country: location,
-        date_posted: 'all',
+        date_posted: 'all'
       },
       headers: {
         'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': 'jsearch.p.rapidapi.com',
-      },
+        'x-rapidapi-host': 'jsearch.p.rapidapi.com'
+      }
     };
 
     try {

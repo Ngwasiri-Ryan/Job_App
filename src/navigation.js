@@ -27,6 +27,8 @@ import JobSelectionScreen from './screens/intro/jobSelectionScreen';
 import JobDetailsScreen from './screens/job/JobDetailsScreen';
 import FindjobScreen from './screens/search/FindjobScreen';
 import NewsScreen from './screens/news/NewsScreen';
+import JobApplyScreen from './screens/job/JobApplyScreen';
+import InterviewPrepScreen from './screens/interview/InterviewPrepScreen';
 import UserProfileScreen from './screens/profile/UserProfileScreen';
 import AnalyticsScreen from './screens/history/AnalyticsScreen';
 import ChatScreen from './screens/chat/ChatScreen';
@@ -147,25 +149,6 @@ const BottomTabNavigator = () => {
 
 
 
-<Tab.Screen
-        name="NewsScreen"
-        component={NewsScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={icons.newspaper}
-              resizeMode="contain"
-              style={{
-                width: 20,
-                height: 20,
-                tintColor: focused ? COLORS.primary : COLORS.black,
-              }}
-            />
-          ),
-        }}
-      />
-
-
 
 <Tab.Screen
         name="AnalyticsScreen"
@@ -204,7 +187,7 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
-
+{/* 
 <Tab.Screen
         name="ProfileScreen"
         component={ProfileScreen}
@@ -221,7 +204,7 @@ const BottomTabNavigator = () => {
             />
           ),
         }}
-      />
+      /> */}
 
 
 
@@ -253,7 +236,9 @@ const Navigator = () => {
         <Stack.Screen name="Step3" component={Step3} />
         <Stack.Screen name="JobSelectionScreen" component={JobSelectionScreen} />
         <Stack.Screen name="FindjobScreen" component={FindjobScreen} />
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
         <Stack.Screen name="jobWebViewScreen" component={JobWebViewScreen} />
+        <Stack.Screen name="JobApplyScreen" component={JobApplyScreen} />
         <Stack.Screen name="JobDetailScreen" component={JobDetailsScreen} />
         <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         <Stack.Screen name="ResumeMakerScreen" component={ResumeMakerScreen} />
@@ -269,6 +254,8 @@ const Navigator = () => {
         <Stack.Screen name="EditLanguages" component={EditLanguages} />
         <Stack.Screen name="EditInterests" component={EditInterests} />
         <Stack.Screen name="NewsArticleScreen" component={NewsArticleScreen} />
+        <Stack.Screen name="InterviewPrepScreen" component={InterviewPrepScreen} />
+        <Stack.Screen name="NewsScreen" component={NewsScreen} />
 
 
 

@@ -70,7 +70,8 @@ const handleApplyJob = async () => {
     // Save the applied job using the saveAppliedJob function
     await saveAppliedJob(job, username);
     // Open the modal after successfully saving the job
-    setModalVisible(true);
+   // setModalVisible(true);
+  navigation.navigate('JobApplyScreen', {url: job.job_apply_link || job.option.apply_link })
   } catch (error) {
     console.error('Error applying for the job:', error.message);
   }
@@ -237,17 +238,6 @@ const handleApplyJob = async () => {
       >
         <Text style={styles.applyButtonText}>Apply Now</Text>
       </TouchableOpacity>
-
-      {/* Modal for WebView */}
-      <Modal visible={modalVisible} animationType="slide">
-        <WebView source={{ uri: job.job_apply_link || job.option.apply_link }} />
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => setModalVisible(false)} // Close modal
-        >
-          <Text style={styles.closeButtonText}>Close</Text>
-        </TouchableOpacity>
-      </Modal>
     </View>
   );
 };

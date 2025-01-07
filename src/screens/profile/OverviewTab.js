@@ -25,8 +25,8 @@ const OverviewTab = () => {
     const loadData = async () => {
       try {
         // Fetch user details using the username from context
-
         const data = await fetchuserDetails(username);
+        console.log('Fetched user data:', data);  // Log the data for debugging
         setuserDetails(data);
       } catch (error) {
         console.error('Error loading user data: ', error);
@@ -34,9 +34,10 @@ const OverviewTab = () => {
         setLoading(false);
       }
     };
-
+  
     loadData();
   }, []);
+  
 
   if (loading) {
     return (
@@ -200,11 +201,11 @@ const OverviewTab = () => {
         </View>
         {userDetails.workExperience.map((job, index) => (
           <View key={index}>
-            <Text style={styles.subheading}>
-              {job.jobTitle} at {job.company}
+            <Text>
+              {job.jobTitle || 'N/A'} at {job.company || 'N/A'}
             </Text>
-            <Text style={styles.detailText}>{job.location}</Text>
-            <Text style={styles.detailText}>{job.date}</Text>
+            <Text style={styles.detailText}>{job.location || 'N/A'}</Text>
+            <Text style={styles.detailText}>{job.date || 'N/A'}</Text>
           </View>
         ))}
       </View>
@@ -224,8 +225,8 @@ const OverviewTab = () => {
         </View>
         {userDetails.projects.map((project, index) => (
           <View key={index}>
-            <Text style={styles.subheading}>{project.projectName}</Text>
-            <Text style={styles.detailText}>{project.projectDescription}</Text>
+            <Text style={styles.subheading}>{project.projectName || 'N/A'}</Text>
+            <Text style={styles.detailText}>{project.projectDescription || 'N/A'}</Text>
             {project.link && (
               <Text style={styles.linkText}>Link: {project.link}</Text>
             )}
@@ -248,9 +249,9 @@ const OverviewTab = () => {
         </View>
         {userDetails.certifications.map((cert, index) => (
           <View key={index}>
-            <Text style={styles.subheading}>{cert.name}</Text>
-            <Text style={styles.detailText}>Issued by {cert.institute}</Text>
-            <Text style={styles.detailText}>{cert.duration}</Text>
+            <Text style={styles.subheading}>{cert.name || 'N/A'}</Text>
+            <Text style={styles.detailText}>Issued by {cert.institute || 'N/A'}</Text>
+            <Text style={styles.detailText}>{cert.duration || 'N/A'}</Text>
           </View>
         ))}
       </View>
@@ -270,9 +271,9 @@ const OverviewTab = () => {
         </View>
         {userDetails.education.map((edu, index) => (
           <View key={index}>
-            <Text style={styles.subheading}>{edu.degree}</Text>
-            <Text style={styles.detailText}>{edu.institution}</Text>
-            <Text style={styles.detailText}>{edu.duration}</Text>
+            <Text style={styles.subheading}>{edu.degree || 'N/A'}</Text>
+            <Text style={styles.detailText}>{edu.institution || 'N/A'}</Text>
+            <Text style={styles.detailText}>{edu.duration || 'N/A'}</Text>
           </View>
         ))}
       </View>

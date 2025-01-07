@@ -1,4 +1,4 @@
-import { db } from '../Firebase';
+import { db } from '../../Firebase';
 import { collection, query, where, getDocs, updateDoc, setDoc, doc } from 'firebase/firestore';
 
 export const updateEducation = async (username, education) => {

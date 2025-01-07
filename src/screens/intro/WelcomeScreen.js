@@ -123,20 +123,20 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 250, // Set your preferred height
+    height: 400, // Set your preferred height
     borderRadius: 10,
     marginBottom:30,
   },
   title: {
     fontWeight: 'bold',
     marginVertical: 10,
-    fontSize: 18,
+    fontSize: 20,
     color: COLORS.black,
   },
   description: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
     color: COLORS.black,
   },
   dotsContainer: {

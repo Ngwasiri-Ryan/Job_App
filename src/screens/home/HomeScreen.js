@@ -4,13 +4,12 @@ import axios from 'axios';
 import JobItemHorizontal from '../../components/home/jobItemHorizontal';
 import JobItem from '../../components/home/jobItem';
 import Error from '../../components/search/Error';
-import RequestError from '../../components/search/429_error';// Import the RequestError component
+import RequestError from '../../components/search/429_error'; // Import the RequestError component
 import { COLORS, FONTS, icons } from '../../constants';
 import Loader from '../../components/loading/Loader';
 import Greetings from '../../components/home/Greetings';
 import { API_KEY } from '@env';
 import { useUserContext } from '../../hooks/UserContext';
-
 
 const { width, height } = Dimensions.get('window');
 
@@ -26,8 +25,7 @@ const HomeScreen = ({ route, navigation }) => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [is429Error, setIs429Error] = useState(false); 
-  
+  const [is429Error, setIs429Error] = useState(false);
 
   const categories = [
     { name: 'All', type: 'FULLTIME' },
@@ -40,20 +38,22 @@ const HomeScreen = ({ route, navigation }) => {
 
   const fetchJobs = async (retryCount = 0, page = 1) => {
     const query = selectedJobs.join();
+
+   
     const options = {
       method: 'GET',
       url: 'https://jsearch.p.rapidapi.com/search',
       params: {
-        query: `${query}`,
+        query:`${query}`,
         page: page.toString(),
         num_pages: '15',
-        date_posted: 'all',
-        country:'all',
+        country: 'us',
+        date_posted: 'all'
       },
       headers: {
         'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': 'jsearch.p.rapidapi.com',
-      },
+        'x-rapidapi-host': 'jsearch.p.rapidapi.com'
+      }
     };
 
     try {
@@ -74,7 +74,7 @@ const HomeScreen = ({ route, navigation }) => {
         setLoading(false);
       } else {
         setError(error.message);
-        console.log(error.message)
+        console.log(error.message);
         setLoading(false);
       }
     }
@@ -104,16 +104,17 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
   if (loading) {
-    return <Loader />;
-  //   return <LoaderKit
-  //   style={{ width: 50, height: 50 }}
-  //   name={'BallPulse'} // Optional: see list of animations below
-  //   color={'red'} // Optional: color can be: 'red', 'green',... or '#ddd', '#ffffff',...
-  // />
+   // return <Loader />;
+    return (
+         <View style={styles.loadingContainer}>
+           <ActivityIndicator size={100} color= {COLORS.secondary}/>
+           <Text style={styles.smallHeading} >Loading jobs...</Text>
+         </View>
+       );
   }
 
   if (is429Error) {
-    return <RequestError/>;
+    return <RequestError />;
   }
 
   if (error) {
@@ -130,9 +131,9 @@ const HomeScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.profile}>
+        <TouchableOpacity style={styles.profile} onPress={() => navigation.navigate('ProfileScreen')}>
           <Text style={styles.profileText}>{firstLetter}</Text>
-        </View>
+        </TouchableOpacity>
         <View>
           <Greetings />
         </View>
@@ -144,37 +145,37 @@ const HomeScreen = ({ route, navigation }) => {
           <Image source={icons.search} style={styles.icon} />
         </TouchableOpacity>
       </View>
-{/* 
-      <Text style={styles.smallheading}>Based on time</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
-        {['all', 'remote', 'onsite'].map((type) => (
-          <TouchableOpacity
-            key={type}
-            onPress={() => setFilter(type)}
-            style={[styles.filterButton, filter === type && styles.selectedFilterButton]}
-          >
-            <Text style={filter === type ? styles.selectedFilterText : styles.filterText}>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView> */}
 
+     <TouchableOpacity style={styles.newsContainer}  onPress={() => navigation.navigate('NewsScreen')}>
+  <Text style={styles.smallHeading}>
+    Get the latest news on your job hunting on
+  </Text>
+  <View >
+    <Image source={icons.news_logo} style={styles.newsLogo} />
+  </View>
+</TouchableOpacity> 
+
+    
       <Text style={styles.smallheading}>Job Type</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-        {categories.map((category) => (
+      <View>
+      <FlatList
+        horizontal
+        data={categories}
+        keyExtractor={(item) => item.type}
+        showsHorizontalScrollIndicator={false}
+        style={styles.categoryScroll}
+        renderItem={({ item }) => (
           <TouchableOpacity
-            key={category.type}
-            onPress={() => setSelectedCategory(category.type)}
-            style={[styles.filterButton, selectedCategory === category.type && styles.selectedCategoryButton]}
+            onPress={() => setSelectedCategory(item.type)}
+            style={[styles.filterButton, selectedCategory === item.type && styles.selectedCategoryButton]}
           >
-            <Text style={selectedCategory === category.type ? styles.selectedCategoryText : styles.categoryText}>
-              {category.name}
+            <Text style={selectedCategory === item.type ? styles.selectedCategoryText : styles.categoryText}>
+              {item.name}
             </Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
-
+        )}
+      />
+</View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
         {firstFiveJobs.map((item, index) => (
           <JobItemHorizontal key={`${item.job_id}-${index}`} item={item} />
@@ -231,9 +232,34 @@ const styles = StyleSheet.create({
     width: 20,
     tintColor: COLORS.white,
   },
+    newsContainer: {
+      backgroundColor: '#B3E5FC',
+      borderRadius: 10,
+      alignItems: "center", // Centers content horizontally
+      justifyContent: "center", // Centers content vertically
+      marginVertical: 10,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2, // For Android shadow
+      paddingTop:10,
+    },
+    smallHeading: {
+      fontSize: 16,
+      fontWeight: "600",
+      color: "#333",
+      textAlign: "center",
+      marginBottom: 12, // Space between text and image
+    },
+    newsLogo: {
+      width: 200, // Adjust based on logo size
+      height: 60, // Adjust based on logo size
+      resizeMode: "contain",
+    },
   categoryScroll: {
     paddingVertical: 5,
-    height: 100,
+    height: 60,
     marginHorizontal: 10,
     flexDirection: 'row',
   },
@@ -241,32 +267,29 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     borderColor: 'transparent',
   },
-  categoryText:{
-     color: COLORS.black,
-     top:8,
+  categoryText: {
+    color: COLORS.black,
   },
   selectedCategoryText: {
     fontSize: 14,
     color: 'white',
   },
-  filterScroll: {
-    paddingVertical: 5,
-    height: 100,
-    marginHorizontal: 10,
-    flexDirection: 'row',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap:5,
   },
   filterButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     borderRadius: 20,
     backgroundColor: COLORS.white,
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
     marginRight: 10,
     borderColor: '#000',
     borderWidth: 1,
-  },
-  selectedFilterButton: {
-    backgroundColor: COLORS.secondary,
-    borderColor: 'transparent',
   },
   profile: {
     height: 40,
@@ -276,14 +299,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     borderRadius: 5,
-  },
-  filterText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  selectedFilterText: {
-    fontSize: 16,
-    color: 'white',
   },
   horizontalScroll: {
     paddingVertical: 10,
