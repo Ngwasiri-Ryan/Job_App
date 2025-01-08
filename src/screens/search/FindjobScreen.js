@@ -62,31 +62,35 @@ const FindjobScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
+        {/* Back icon */}
+        <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack()}>
+          <Image source={icons.back} style={styles.back} />
+        </TouchableOpacity>
+
         <Text style={styles.heading}>Job Search</Text>
         <View style={styles.inputHolders}>
           <View style={styles.inputWrapper}>
             <View style={styles.inputHolder}> 
-            <Image source={icons.job} style={styles.icons} />
-            <TextInput
-              style={[styles.searchInput]}
-              placeholder="Enter job title or keyword..."
-              value={query}
-              onChangeText={setQuery}
-              onSubmitEditing={searchJobs}
-            />
+              <Image source={icons.job} style={styles.icons} />
+              <TextInput
+                style={[styles.searchInput]}
+                placeholder="Enter job title or keyword..."
+                value={query}
+                onChangeText={setQuery}
+                onSubmitEditing={searchJobs}
+              />
             </View>
             
             <View style={styles.inputHolder}> 
-            <Image source={icons.location} style={styles.icons} />
-            <TextInput
-              style={[styles.searchInput]}
-              placeholder="Enter job location..."
-              value={location}
-              onChangeText={setLocation}
-              onSubmitEditing={searchJobs}
-            />
+              <Image source={icons.location} style={styles.icons} />
+              <TextInput
+                style={[styles.searchInput]}
+                placeholder="Enter job location..."
+                value={location}
+                onChangeText={setLocation}
+                onSubmitEditing={searchJobs}
+              />
             </View>
-           
           </View>
           <TouchableOpacity style={styles.searchButton} onPress={searchJobs}>
             <Image source={icons.search} style={styles.icon} />
@@ -113,18 +117,16 @@ const FindjobScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //paddingHorizontal: width * 0.05, 
-    // Use width for padding
     backgroundColor: COLORS.white,
   },
   backdrop: {
-    paddingBottom: height * 0.02, // Padding based on screen height
+    paddingBottom: height * 0.02,
     backgroundColor: COLORS.white,
-    paddingHorizontal: width * 0.05, // Use width for padding
-    paddingBottom: width * 0.05, // Use width for padding
+    paddingHorizontal: width * 0.05,
+    paddingBottom: width * 0.05,
     borderBottomEndRadius: 25,
     borderBottomLeftRadius: 25,
-    width:'100%',
+    width: '100%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -135,63 +137,72 @@ const styles = StyleSheet.create({
     elevation: 5,
     zIndex: 10,
   },
+  backIcon: {
+    position: 'absolute',
+    left: width * 0.03,
+    padding: 10,
+  },
   heading: {
-    fontSize: width * 0.06, // Font size based on screen width
+    fontSize: width * 0.06,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: height * 0.02, // Margin based on screen height
+    marginBottom: height * 0.02,
     color: COLORS.black,
   },
   inputHolders: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexWrap: 'wrap', // Allow the elements to wrap
+    flexWrap: 'wrap',
   },
   inputWrapper: {
     flexDirection: 'column',
     flex: 1,
-    gap: height * 0.015, // Gap between input fields, scaled with height
+    gap: height * 0.015,
     justifyContent: 'center',
   },
   searchInput: {
-    height: height * 0.065, // Height based on screen height
+    height: height * 0.065,
     borderWidth: 1,
-    paddingHorizontal: width * 0.05, // Horizontal padding based on screen width
-    marginTop: height * 0.01, // Margin top based on height
+    paddingHorizontal: width * 0.05,
+    marginTop: height * 0.01,
     width: '100%',
     borderColor: 'transparent',
     color: COLORS.black,
-    fontSize:15,
+    fontSize: 15,
   },
   searchButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: height * 0.02, // Vertical padding based on height
-    paddingHorizontal: width * 0.05, // Horizontal padding based on width
+    paddingVertical: height * 0.02,
+    paddingHorizontal: width * 0.05,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: height * 0.02, // Margin based on height
-    
+    marginBottom: height * 0.02,
   },
   icon: {
-    width: width * 0.05, // Icon size based on width
-    height: width * 0.05, // Icon size based on width
+    width: width * 0.05,
+    height: width * 0.05,
     tintColor: '#fff',
   },
+  back: {
+    width: width * 0.05,
+    height: width * 0.05,
+    tintColor: 'black',
+  },
   icons: {
-    width: width * 0.05, // Icon size based on width
-    height: width * 0.05, // Icon size based on width
+    width: width * 0.05,
+    height: width * 0.05,
     tintColor: COLORS.black,
   },
   inputHolder: {
     flexDirection: 'row',
-    gap: width * 0.02, // Gap based on screen width
+    gap: width * 0.02,
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#333',
-    paddingHorizontal: width * 0.05, // Padding based on width
+    paddingHorizontal: width * 0.05,
     borderRadius: 30,
   },
 });

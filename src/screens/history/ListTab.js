@@ -42,7 +42,6 @@ const ListTab = () => {
         </View>
       </View>
       <View>
-        <Text>Applied Jobs</Text>
       </View>
     </View>
   );

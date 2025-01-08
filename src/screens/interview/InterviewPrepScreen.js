@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Animated, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { icons } from "../../constants";
+import { icons , COLORS } from "../../constants";
 import questions from "./questions";
 
 const InterviewPrepScreen = ({ navigation }) => {  // Add navigation prop if you're using react-navigation
@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     backfaceVisibility: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
+    shadowColor: "#AAAAAA",
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 15,
     elevation: 15,

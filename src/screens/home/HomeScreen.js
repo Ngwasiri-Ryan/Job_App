@@ -39,7 +39,6 @@ const HomeScreen = ({ route, navigation }) => {
   const fetchJobs = async (retryCount = 0, page = 1) => {
     const query = selectedJobs.join();
 
-   
     const options = {
       method: 'GET',
       url: 'https://jsearch.p.rapidapi.com/search',
@@ -103,24 +102,37 @@ const HomeScreen = ({ route, navigation }) => {
     setFilteredJobs(filtered);
   };
 
+  const reload = () => {
+    setLoading(true);
+    setError(null);
+    setIs429Error(false);
+    setJobs([]);
+    setFilteredJobs([]);
+    fetchJobs();
+  };
+
   if (loading) {
-   // return <Loader />;
-    return (
-         <View style={styles.loadingContainer}>
-           <ActivityIndicator size={100} color= {COLORS.secondary}/>
-           <Text style={styles.smallHeading} >Loading jobs...</Text>
-         </View>
-       );
+    return <Loader />; // Your existing loader component
   }
 
   if (is429Error) {
-    return <RequestError />;
+    return (
+      <View style={styles.errorContainer}>
+        <RequestError />
+        <TouchableOpacity onPress={reload} style={styles.retryButton}>
+          <Text style={styles.retryText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   if (error) {
     return (
       <View style={styles.errorContainer}>
         <Error />
+        <TouchableOpacity onPress={reload} style={styles.retryButton}>
+          <Text style={styles.retryText}>Retry</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -146,36 +158,36 @@ const HomeScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-     <TouchableOpacity style={styles.newsContainer}  onPress={() => navigation.navigate('NewsScreen')}>
-  <Text style={styles.smallHeading}>
-    Get the latest news on your job hunting on
-  </Text>
-  <View >
-    <Image source={icons.news_logo} style={styles.newsLogo} />
-  </View>
-</TouchableOpacity> 
+      <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NewsScreen')}>
+        <Text style={styles.smallHeading}>
+          Get the latest news on your job hunting on
+        </Text>
+        <View >
+          <Image source={icons.news_logo} style={styles.newsLogo} />
+        </View>
+      </TouchableOpacity> 
 
-    
       <Text style={styles.smallheading}>Job Type</Text>
       <View>
-      <FlatList
-        horizontal
-        data={categories}
-        keyExtractor={(item) => item.type}
-        showsHorizontalScrollIndicator={false}
-        style={styles.categoryScroll}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => setSelectedCategory(item.type)}
-            style={[styles.filterButton, selectedCategory === item.type && styles.selectedCategoryButton]}
-          >
-            <Text style={selectedCategory === item.type ? styles.selectedCategoryText : styles.categoryText}>
-              {item.name}
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
-</View>
+        <FlatList
+          horizontal
+          data={categories}
+          keyExtractor={(item) => item.type}
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoryScroll}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => setSelectedCategory(item.type)}
+              style={[styles.filterButton, selectedCategory === item.type && styles.selectedCategoryButton]}
+            >
+              <Text style={selectedCategory === item.type ? styles.selectedCategoryText : styles.categoryText}>
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
         {firstFiveJobs.map((item, index) => (
           <JobItemHorizontal key={`${item.job_id}-${index}`} item={item} />

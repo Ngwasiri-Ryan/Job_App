@@ -11,30 +11,42 @@ const slides = [
   },
   {
     id: '2',
+    image: images.profile,
+    title: 'Create Work Profile',
+    description: 'Build your work profile within the app for recognition to employers',
+  },
+  {
+    id: '3',
     image: images.resume_folder,
     title: 'Build Your Resume',
     description: 'Create a professional resume directly within the app.',
   },
   {
-    id: '3',
-    image: images.browse,
-    title: 'Search & Apply',
-    description: 'Browse jobs, search by industry, and apply with one tap.',
-  },
-  {
     id: '4',
-    image: images.track,
-    title: 'Track Applications',
-    description: 'Keep track of all your job applications in one place.',
+    image: images.browse,
+    title: 'Apply Online',
+    description: 'Use the in-app browser to apply for jobs directly on company websites.',
   },
   {
     id: '5',
-    image: images.resume_folder,
-    title: 'Get Notifications',
-    description: 'Receive instant updates on job postings and application statuses.',
+    image: images.chatbot,
+    title: 'AI Job Assistant',
+    description: 'Ask our AI chatbot any questions about jobs and career guidance.',
   },
   {
     id: '6',
+    image: images.news,
+    title: 'Stay Updated',
+    description: 'Explore job-related news to stay informed about the latest industry trends.',
+  },
+  {
+    id: '7',
+    image: images.interview,
+    title: 'Prepare for Interviews',
+    description: 'Access resources and practice job-related interview questions.',
+  },
+  {
+    id: '8',
     image: images.start,
     title: 'Get Started',
     description: 'Start your journey towards the perfect job today!',
@@ -99,7 +111,7 @@ const WelcomeScreen = ({ navigation }) => {
       {/* Static View with Text and Get Started Button */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Ready to get started?</Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Loader')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginScreen')}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
@@ -122,7 +134,7 @@ const styles = StyleSheet.create({
     padding: 50,
   },
   image: {
-    width: '100%',
+    width: 400,
     height: 400, // Set your preferred height
     borderRadius: 10,
     marginBottom:30,

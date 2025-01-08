@@ -16,6 +16,11 @@ const pic = require("../assets/images/pic.png");
 const error_429 = require("../assets/images/429_error.png");
 const news_default = require("../assets/images/news_default.png");
 
+const chatbot = require("../assets/images/chatbot.png");
+const news = require("../assets/images/news.png");
+const interview = require("../assets/images/interview.png");
+const profile = require("../assets/images/profile.png");
+
 
 export default {
     no_result,
@@ -34,4 +39,8 @@ export default {
     start,
     error_429,
     news_default,
+    chatbot,
+    interview,
+    news,
+    profile
 }
