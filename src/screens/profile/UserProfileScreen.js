@@ -73,6 +73,12 @@ const UserProfileScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+
+       {/* Back Button */}
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Image source={icons.back} style={styles.iconBack} />
+            </TouchableOpacity>
+      
       {/* Profile Header */}
       <View style={styles.profileHeader}>
         <View style={styles.profilePictureContainer}>
@@ -129,6 +135,17 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
+  backButton: {
+    position: "absolute",
+    top: 40,
+    left: 20,
+    zIndex: 10,  // Ensure it stays on top of other components
+  },
+  iconBack: {
+    width: 25,
+    height: 25,
+    tintColor: COLORS.white,
+  },
   profilePictureContainer: {
     borderRadius: height * 0.1,
     borderWidth: 3,
@@ -175,7 +192,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   interviewButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: COLORS.black, // White text for contrast
     textTransform: 'uppercase', // Makes the text all caps
