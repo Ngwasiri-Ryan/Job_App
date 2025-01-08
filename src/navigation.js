@@ -34,6 +34,7 @@ import AnalyticsScreen from './screens/history/AnalyticsScreen';
 import ChatScreen from './screens/chat/ChatScreen';
 import ProfileScreen from './screens/user/ProfileScreen';
 import EditProfileScreen from './screens/user/EditProfileScreen';
+import Loader from './components/loading/Loader';
 
 //resume builder screens
 import OnboardingScreen from './screens/resume/OnboardingScreen';
@@ -256,6 +257,7 @@ const Navigator = () => {
         <Stack.Screen name="NewsArticleScreen" component={NewsArticleScreen} />
         <Stack.Screen name="InterviewPrepScreen" component={InterviewPrepScreen} />
         <Stack.Screen name="NewsScreen" component={NewsScreen} />
+        <Stack.Screen name="Loader" component={Loader} />
 
 
 

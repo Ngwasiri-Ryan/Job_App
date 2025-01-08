@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
+import React, { useEffect, useState } from 'react'; 
+import { View, Text, StyleSheet, Dimensions, Image, FlatList } from 'react-native';
 import { useUserContext } from '../../hooks/UserContext';
 import { fetchAppliedJobs } from '../../backend/history/appliedJobs';
 import { FONTS, icons } from '../../constants';
 
-const { width , height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const AppliedJobs = () => {
   const { userData } = useUserContext();
   const username = userData?.username;
 
-  const [savedJobs, setSavedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,7 +19,7 @@ const AppliedJobs = () => {
     const fetchJobs = async () => {
       try {
         const fetchedJobs = await fetchAppliedJobs(username); // Fetch applied jobs based on the username
-        setSavedJobs(fetchedJobs);
+        setAppliedJobs(fetchedJobs);
       } catch (err) {
         setError('Failed to fetch applied jobs');
         console.error(err);
@@ -30,6 +30,16 @@ const AppliedJobs = () => {
 
     fetchJobs();
   }, [username]);
+
+  const getEmployerLogo = (item) => {
+    if (item?.employer_logo) {
+      return { uri: item.employer_logo };
+    }
+    if (item?.employer_name) {
+      return { uri: `https://logo.clearbit.com/${item.employer_name.replace(/\s+/g, '').toLowerCase()}.com` };
+    }
+    return icons.suitcase;
+  };
 
   if (loading) {
     return (
@@ -49,29 +59,38 @@ const AppliedJobs = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
+      {/* Display the number of applied jobs */}
+      <Text style={styles.title}>
+        {appliedJobs.length > 0 
+          ? `You have applied to ${appliedJobs.length} job${appliedJobs.length > 1 ? 's' : ''}`
+          : 'You have not applied to any jobs yet.'}
+      </Text>
+      
+      <FlatList
+        data={appliedJobs}
         horizontal={true} // Enable horizontal scrolling
         showsHorizontalScrollIndicator={false} // Hide the horizontal scrollbar
         contentContainerStyle={styles.horizontalScrollContainer}
-      >
-        {savedJobs.map((job, index) => (
-          <View key={index} style={styles.jobItem}>
+        renderItem={({ item }) => (
+          <View style={styles.jobItem}>
             <Image 
-              source={{ uri: job?.employer_logo }} 
+              source={getEmployerLogo(item)} 
               style={styles.companyLogo}
             />
-            <Text style={styles.jobTitle}>{job?.job_title}</Text>
-            <Text style={styles.companyName}>{job?.employer_name}</Text>
+            <Text style={styles.jobTitle}>{item?.job_title}</Text>
+            <Text style={styles.companyName}>{item?.employer_name}</Text>
             <View style={styles.flex}>
               <Image source={icons.green_clock} style={styles.icon}/>
-            <Text style={styles.jobDate}>{new Date(job?.appliedAt).toLocaleDateString()}</Text>
+              <Text style={styles.jobDate}>{new Date(item?.appliedAt).toLocaleDateString()}</Text>
             </View>
           </View>
-        ))}
-      </ScrollView>
+        )}
+        keyExtractor={(item, index) => index.toString()} // Use index as key
+      />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -81,7 +100,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10,
     ...FONTS.h3,
   },
   center: {
@@ -93,8 +111,7 @@ const styles = StyleSheet.create({
   horizontalScrollContainer: {
     flexDirection: 'row',
     gap: 15, // Space between job cards
-    padding: width*0.035,
-   
+    padding: width * 0.035,
   },
   jobItem: {
     backgroundColor: '#ffffff',
@@ -114,21 +131,21 @@ const styles = StyleSheet.create({
     width: 50, // Slightly reduced size
     height: 50,
     borderRadius: 25, // Circular logo
-    marginBottom: height*0.0001,
+    marginBottom: height * 0.0001,
     resizeMode: 'cover',
   },
   jobTitle: {
-    fontSize: width*0.035,
+    fontSize: width * 0.035,
     fontWeight: '600',
     color: '#333', // Slightly darker text
     textAlign: 'center',
-    marginBottom: height*0.0001,
+    marginBottom: height * 0.0001,
   },
   companyName: {
-    fontSize: width*0.035,
+    fontSize: width * 0.035,
     color: '#777',
     textAlign: 'center',
-    marginBottom: height*0.0001,
+    marginBottom: height * 0.0001,
   },
   jobDate: {
     fontSize: 12,
@@ -144,6 +161,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
 
 export default AppliedJobs;
