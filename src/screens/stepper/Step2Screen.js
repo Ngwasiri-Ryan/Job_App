@@ -44,7 +44,7 @@ const Step2 = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ color: COLORS.black }}>Step 2/4</Text>
+      <Text style={{ color: COLORS.black }}>Step 2/3</Text>
       <ProgressBar progress={50} />
       <Text style={styles.header}>Career Details</Text>
       <Text style={styles.subHeader}>Tell us about your professional background.</Text>

@@ -143,8 +143,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.04,
     paddingVertical: height * 0.015,
     marginBottom: height * 0.02,
-    backgroundColor: COLORS.lightGrayBackground,
+    backgroundColor: COLORS.white,
     width: '100%',
+    borderBottomColor:COLORS.black,
+    borderBottomWidth:2,
   },
   icon: {
     width: width * 0.05,

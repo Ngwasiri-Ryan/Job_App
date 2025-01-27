@@ -20,6 +20,10 @@ const chatbot = require("../assets/images/chatbot.png");
 const news = require("../assets/images/news.png");
 const interview = require("../assets/images/interview.png");
 const profile = require("../assets/images/profile.png");
+const no_profile_data = require("../assets/images/no_profile_data.png");
+const analysis = require("../assets/images/analysis.png");
+const no_saved_jobs = require("../assets/images/no_saved_jobs.png");
+const plant = require("../assets/images/plant.png");
 
 
 export default {
@@ -29,11 +33,15 @@ export default {
     resume,
     resume_folder,
     edit_resume,
+    plant,
     resume_template,
     resume_format,
     pic,
+    no_saved_jobs ,
     browse,
+    analysis,
     work,
+    no_profile_data,
     track,
     work,
     start,

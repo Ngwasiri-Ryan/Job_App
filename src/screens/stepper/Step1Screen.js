@@ -44,8 +44,8 @@ const Step1 = ({ navigation, setProgress }) => {
         <Text style={styles.bannerText}>Let's make your professional profile 🖋️</Text>
       </View>
 
-      <Text style={{ color: COLORS.black }}>Step 1/4</Text>
-      <ProgressBar progress={25} />
+      <Text style={{ color: COLORS.black }}>Step 1/3</Text>
+      <ProgressBar progress={30} />
 
       <Text style={styles.title}>Tell Us About Yourself</Text>
       <Text style={styles.description}>Fill in your basic details to get started.</Text>

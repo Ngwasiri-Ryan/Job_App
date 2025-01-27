@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image, LogBox, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Button, Image, LogBox, ScrollView, Dimensions,TouchableOpacity } from 'react-native';
 import { COLORS, icons, FONTS } from '../../constants';
 import { useUserContext } from '../../hooks/UserContext';
 import { fetchUserActivity } from '../../backend/profile/activity';
@@ -74,11 +74,32 @@ const ActivityTab = ({ navigation }) => {
           </View>
         </View>
       ) : (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{activityStatus}</Text>
-          <Button title="Create Profile" onPress={handleProfileCreation} />
-          <Button title="Create Resume" onPress={handleResumeCreation} />
+        
+          
+          <View style={styles.successContainer}>
+          
+          <View style={styles.box}>
+            <View style={styles.row}>
+              <Image source={icons.profile_built} style={[styles.profileIcon, styles.icon]} />
+              <Text style={styles.successText}>Profile Created</Text>
+            </View>
+            <Image source={icons.cross} style={styles.icon} />
+          </View>
+          <View style={styles.box}>
+            <View style={styles.row}>
+              <Image source={icons.cv_built} style={[styles.resumeIcon, styles.icon]} />
+              <Text style={styles.successText}>Resume Built</Text>
+            </View>
+            <Image source={icons.cross} style={styles.icon} />
+          </View>
+          <TouchableOpacity
+                 style={styles.createResumeButton}
+                 onPress={() => navigation.navigate('Step3')}
+               >
+                 <Text style={styles.createResumeButtonText}>Create Resume</Text>
+               </TouchableOpacity>
         </View>
+        
       )}
       <Text style={styles.heading}>Applied Jobs</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
@@ -131,6 +152,20 @@ const styles = StyleSheet.create({
     padding: width * 0.05,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  createResumeButton: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: height * 0.02, // 2% of screen height
+    paddingHorizontal: width * 0.1, // 10% of screen width
+    borderRadius: 8,
+    marginBottom: height * 0.03,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  createResumeButtonText: {
+    color: COLORS.white,
+    fontSize: width * 0.04, // 4% of screen width
+    fontWeight: 'bold',
   },
   errorText: {
     fontSize: width * 0.045,

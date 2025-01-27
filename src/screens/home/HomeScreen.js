@@ -320,6 +320,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  retryButton:{
+    backgroundColor:COLORS.primary,
+    padding:10,
+    justifyContent:'center',
+    alignItems:'center',
+    display:'flex',
+    top:-250,
+    width:100,
+    borderRadius:20,
+  },
+  retryText:{
+    fontSize:16,
+    color: COLORS.white,
+  }
 });
 
 export default HomeScreen;

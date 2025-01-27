@@ -101,7 +101,7 @@ const comment = require("../assets/icons/comment.png");
 const news_logo = require("../assets/icons/news_logo.png");
 const question = require("../assets/icons/question.png");
 const right = require("../assets/icons/angle-right.png");
-
+const cross = require("../assets/icons/cross.png");
 
 export default {
     home,
@@ -191,6 +191,7 @@ export default {
     industry,
     eye,
     eyeOff,
+    cross,
     lock,
     language, 
     briefcase,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
-import { COLORS, FONTS } from '../../constants';
+import { COLORS, FONTS, images } from '../../constants';
 import { useUserContext } from '../../hooks/UserContext';
 import { fetchSavedJobs } from '../../backend/profile/fetchSavedJobs';
 import { deleteSavedJob } from '../../backend/profile/deleteSavedJob'; 
@@ -56,9 +56,9 @@ const SavedJobsTab = () => {
 
   if (savedJobs.length === 0) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.heading}>Saved Jobs</Text>
-        <Text style={styles.noJobsText}>You have no saved jobs.</Text>
+      <View style={styles.mid_container}>
+        <Image source={images.no_saved_jobs} style={styles.no_saved_jobs}/>
+        <Text style={styles.noJobsText}>No saved jobs yet.</Text>
       </View>
     );
   }
@@ -130,6 +130,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom:70
   },
+  mid_container:{
+    flex: 1,
+    marginBottom:70,
+    justifyContent:'center',
+    alignItems:'center'
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -153,6 +159,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
+no_saved_jobs:{
+   height:350,
+   width:300,
+},
   noJobsText: {
     fontSize: 16,
     color: COLORS.darkGray,

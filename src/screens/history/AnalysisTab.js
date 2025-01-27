@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView , Dimensions} from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView, Dimensions , Image} from 'react-native'
 import DonutChart from '../../components/analytics/DonutChart';
-import { COLORS, FONTS } from '../../constants';
+import { COLORS, FONTS, images } from '../../constants';
 import { useUserContext } from '../../hooks/UserContext';
 import { countSavedJobs } from '../../backend/analysis/savedJobsCount';
 import { getNumberOfAppliedJobs } from '../../backend/history/appliedJobs';
@@ -9,20 +9,14 @@ import { getUserChatSearchCount } from '../../backend/history/chatHistory';
 import { countUserSearches } from '../../backend/history/searchHistory';
 import { getViewedJobCount } from '../../backend/history/viewedJobs';
 
-const { width, height } = Dimensions.get('window'); // or 'screen'
+const { width, height } = Dimensions.get('window');
 
 const AnalysisTab = () => {
-  
   const { userData } = useUserContext();
   const username = userData?.username;
 
-  const [chartData, setChartData] = useState([
-    { label: 'Saved Jobs', value: 0, color: COLORS.blue },
-    { label: 'Applied Jobs', value: 0, color: COLORS.green },
-    { label: 'Chat Activity', value: 0, color: COLORS.red },
-    { label: 'Job Previewing', value: 10, color: COLORS.yellow },
-    { label: 'Jobs Searched', value: 0, color: COLORS.purple },
-  ]);
+  const [chartData, setChartData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!username) return;
@@ -36,31 +30,50 @@ const AnalysisTab = () => {
           searchCount,
           viewedJobCount,
         ] = await Promise.all([
-          countSavedJobs(username),
-          getNumberOfAppliedJobs(username),
-          getUserChatSearchCount(username),
-          countUserSearches(username),
-          getViewedJobCount(username),
+          countSavedJobs(username) || 0,
+          getNumberOfAppliedJobs(username) || 0,
+          getUserChatSearchCount(username) || 0,
+          countUserSearches(username) || 0,
+          getViewedJobCount(username) || 0,
         ]);
 
-        setChartData([
+        const newChartData = [
           { label: 'Saved Jobs', value: savedJobsCount, color: COLORS.blue },
           { label: 'Applied Jobs', value: appliedJobsCount, color: COLORS.green },
           { label: 'Chat Activity', value: chatCount, color: COLORS.red },
-          {
-            label: 'Job Previewing',
-            value: viewedJobCount,
-            color: COLORS.yellow,
-          },
+          { label: 'Job Previewing', value: viewedJobCount, color: COLORS.yellow },
           { label: 'Jobs Searched', value: searchCount, color: COLORS.purple },
-        ]);
+        ];
+
+        setChartData(newChartData);
       } catch (error) {
         console.error('Error fetching analytics data:', error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [username]);
+
+  const hasActivity = chartData.some((item) => item.value > 0);
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!hasActivity) {
+    return (
+      <View style={styles.centered}>
+          <Image source={images.analysis} style={styles.analysis_image} />
+        <Text style={styles.noActivityText}>No activity yet</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -85,8 +98,8 @@ const AnalysisTab = () => {
                 </Text>
               </View>
             )}
-            numColumns={2} // Set the number of columns
-            columnWrapperStyle={styles.columnWrapper} // Optional: Add spacing between columns
+            numColumns={2}
+            columnWrapperStyle={styles.columnWrapper}
           />
         </View>
       </View>
@@ -97,7 +110,7 @@ const AnalysisTab = () => {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
-    paddingBottom: height/9, // Optional: Add padding for the end of the scroll
+    paddingBottom: height / 9,
   },
   container: {
     flex: 1,
@@ -146,6 +159,24 @@ const styles = StyleSheet.create({
     ...FONTS.body4,
     color: COLORS.black,
   },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+  },
+  noActivityText: {
+    ...FONTS.body2,
+    color: COLORS.gray,
+  },
+  loadingText: {
+    ...FONTS.body2,
+    color: COLORS.primary,
+  },
+  analysis_image:{
+    width:300,
+    height:300,
+  }
 });
 
 export default AnalysisTab;

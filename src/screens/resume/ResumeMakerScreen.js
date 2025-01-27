@@ -139,8 +139,8 @@ const ResumeMakerScreen = ({ navigation }) => {
 
     try {
      
-      await saveIndependentCollections(username, resumeData);
-      alert("Resume saved successfully!");
+      // await saveIndependentCollections(username, resumeData);
+      alert("You acn now preview your resume");
       navigation.navigate('ResumePreviewScreen',{resumeData:sections})
     } catch (error) {
       console.error("Error saving resume: ", error);

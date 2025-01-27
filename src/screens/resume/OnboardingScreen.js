@@ -3,27 +3,6 @@ import React, { useRef, useState } from 'react';
 import { COLORS, images,FONTS } from '../../constants'; // Ensure you have your image paths set correctly
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, Dimensions, Platform } from 'react-native';
 
-// const slides = [
-//     {
-//       id: '1',
-//       image: images.resume,
-//       title: 'Create a Standout Resume',
-//       description: 'Highlight your skills and experiences effectively.',
-//     },
-//     {
-//       id: '2',
-//       image: images.edit_resume,
-//       title: 'Tailor Your Content',
-//       description: 'Customize your resume job applications to stand out.',
-//     },
-//     {
-//       id: '3',
-//       image: images.resume_template,
-//       title: 'Use our Professional Format',
-//       description: 'Our fomat has clear headings and consistent fonts.',
-//     },
-    
-//   ];
 
 const slides = [
   {

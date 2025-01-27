@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,142 +6,103 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
-import {COLORS, FONTS, icons} from '../../constants';
-import {fetchuserDetails} from '../../backend/profile/overview';
-import {useUserContext} from '../../hooks/UserContext';
+import { COLORS, FONTS, icons, images } from '../../constants';
+import { fetchuserDetails } from '../../backend/profile/overview';
+import { useUserContext } from '../../hooks/UserContext';
 import DotLoader from '../../components/loading/DotLoader';
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
+import { resumeStatus } from '../../backend/resume/resumeStatus';
 
+const { width, height } = Dimensions.get('window'); // Get screen dimensions
 
 const OverviewTab = () => {
-  const [userDetails, setuserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const {userData} = useUserContext();
+  const [resumeStatusValue, setResumeStatusValue] = useState(false);
+  const { userData } = useUserContext();
   const username = userData.username;
-  const navigation = useNavigation();  
-  
+  const navigation = useNavigation();
+
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Fetch user details using the username from context
+        // Fetch user details
         const data = await fetchuserDetails(username);
-        console.log('Fetched user data:', data);  // Log the data for debugging
-        setuserDetails(data);
+        setUserDetails(data);
+
+        // Check resume status
+        const hasResume = await resumeStatus(username);
+        setResumeStatusValue(hasResume);
       } catch (error) {
-        console.error('Error loading user data: ', error);
+        console.error('Error loading data:', error);
       } finally {
         setLoading(false);
       }
     };
-  
+
     loadData();
-  }, []);
-  
+  }, [username]);
 
   if (loading) {
     return (
-      <View>
+      <View style={styles.loader}>
         <DotLoader />
       </View>
     );
   }
 
-  if (!userDetails) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Failed to load user data.</Text>
-      </View>
-    );
-  }
+ // If resumeStatus is false, show the "Create Resume" view
+ if (!resumeStatusValue) {
+  return (
+    <View style={styles.noDataContainer}>
+       <Image source={images.plant} style={styles.no_resume_pic}/>
+      <Text style={styles.noDataText}>
+        You must create a resume to get an overview.
+      </Text>
+      <TouchableOpacity
+        style={styles.createResumeButton}
+        onPress={() => navigation.navigate('Step3')}
+      >
+        <Text style={styles.createResumeButtonText}>Create Resume</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
-  //edit functions
-
+  // Edit functions (unchanged)
   const handleEditPersonalInfo = () => {
-    try {
-      console.log(navigation); 
-      navigation.navigate('EditPersonalInfo', { personalDetails: userDetails.personalDetails });
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+    navigation.navigate('EditPersonalInfo', { personalDetails: userDetails.personalDetails || {} });
   };
 
-
   const handleEditExperience = () => {
-    try {
-      navigation.navigate('EditExperience', { experiences: userDetails.workExperience });
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+    navigation.navigate('EditExperience', { experiences: userDetails.workExperience || [] });
   };
 
   const handleEditProject = () => {
-    try {
-      if (userDetails && userDetails.projects) {
-        console.log(userDetails.projects); 
-        navigation.navigate('EditProject', { projects: userDetails.projects });
-      } else {
-        console.warn('No project data available');
-      }
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
-  };
-  
-  const handleEditCertification= () => {
-    try {
-     
-      navigation.navigate('EditCertification', { certifications: userDetails.certifications });
-      console.log(userDetails.certifications); 
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+    navigation.navigate('EditProject', { projects: userDetails.projects || [] });
   };
 
-  const handleEditEducation= () => {
-    try {
-     
-      navigation.navigate('EditEducation', { education: userDetails.education });
-      console.log(userDetails.education); 
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+  const handleEditCertification = () => {
+    navigation.navigate('EditCertification', { certifications: userDetails.certifications || [] });
   };
 
-  const handleEditSkills= () => {
-    try {
-     
-      navigation.navigate('EditSkills', { skills: userDetails.skills });
-      console.log(userDetails.skills); 
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+  const handleEditEducation = () => {
+    navigation.navigate('EditEducation', { education: userDetails.education || [] });
   };
 
-  const handleEditLanguages= () => {
-    try {
-     
-      navigation.navigate('EditLanguages', { languages: userDetails.languages });
-      console.log(userDetails.languages); 
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+  const handleEditSkills = () => {
+    navigation.navigate('EditSkills', { skills: userDetails.skills || [] });
   };
 
-  const handleEditInterests= () => {
-    try {
-     
-      navigation.navigate('EditInterests', { interests: userDetails.interests });
-      console.log(userDetails.interests); 
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+  const handleEditLanguages = () => {
+    navigation.navigate('EditLanguages', { languages: userDetails.languages || [] });
   };
 
-  
-
-
-  
+  const handleEditInterests = () => {
+    navigation.navigate('EditInterests', { interests: userDetails.interests || [] });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -153,7 +114,7 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Personal Info</Text>
           </View>
           <View>
-            <TouchableOpacity  onPress={handleEditPersonalInfo}>
+            <TouchableOpacity onPress={handleEditPersonalInfo}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
@@ -161,27 +122,25 @@ const OverviewTab = () => {
         <View style={styles.row}>
           <Image source={icons.identity} style={styles.smallIcon} />
           <Text style={styles.infoText}>
-            {userDetails.personalDetails.name}
+            {userDetails.personal?.name || 'N/A'}
           </Text>
         </View>
         <View style={styles.row}>
           <Image source={icons.mail} style={styles.smallIcon} />
           <Text style={styles.infoText}>
-            {userDetails.personalDetails.email}
+            {userDetails.personal?.email || 'N/A'}
           </Text>
         </View>
         <View style={styles.row}>
           <Image source={icons.phone} style={styles.smallIcon} />
           <Text style={styles.infoText}>
-            {userDetails.personalDetails.phone}
+            {userDetails.personal?.phone || 'N/A'}
           </Text>
         </View>
         <View style={styles.row}>
           <Image source={icons.location} style={styles.smallIcon} />
           <Text style={styles.infoText}>
-            {userDetails.personalDetails.city},
-            {userDetails.personalDetails.town},
-            {userDetails.personalDetails.country},{' '}
+            {userDetails.personalDetails?.city || 'N/A'}, {userDetails.personalDetails?.town || 'N/A'}, {userDetails.personalDetails?.country || 'N/A'}
           </Text>
         </View>
       </View>
@@ -194,12 +153,12 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Experience</Text>
           </View>
           <View>
-            <TouchableOpacity onPress={handleEditExperience} >
+            <TouchableOpacity onPress={handleEditExperience}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
         </View>
-        {userDetails.workExperience.map((job, index) => (
+        {userDetails.workExperience?.map((job, index) => (
           <View key={index}>
             <Text>
               {job.jobTitle || 'N/A'} at {job.company || 'N/A'}
@@ -223,7 +182,7 @@ const OverviewTab = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {userDetails.projects.map((project, index) => (
+        {userDetails.projects?.map((project, index) => (
           <View key={index}>
             <Text style={styles.subheading}>{project.projectName || 'N/A'}</Text>
             <Text style={styles.detailText}>{project.projectDescription || 'N/A'}</Text>
@@ -247,7 +206,7 @@ const OverviewTab = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {userDetails.certifications.map((cert, index) => (
+        {userDetails.certifications?.map((cert, index) => (
           <View key={index}>
             <Text style={styles.subheading}>{cert.name || 'N/A'}</Text>
             <Text style={styles.detailText}>Issued by {cert.institute || 'N/A'}</Text>
@@ -269,7 +228,7 @@ const OverviewTab = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {userDetails.education.map((edu, index) => (
+        {userDetails.education?.map((edu, index) => (
           <View key={index}>
             <Text style={styles.subheading}>{edu.degree || 'N/A'}</Text>
             <Text style={styles.detailText}>{edu.institution || 'N/A'}</Text>
@@ -291,9 +250,9 @@ const OverviewTab = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {userDetails.skills.map((skill, index) => (
+        {userDetails.skills?.map((skill, index) => (
           <Text key={index} style={styles.infoText}>
-            {skill}
+            {skill || 'N/A'}
           </Text>
         ))}
       </View>
@@ -306,14 +265,14 @@ const OverviewTab = () => {
             <Text style={styles.sectionTitle}>Languages</Text>
           </View>
           <View>
-            <TouchableOpacity  onPress={handleEditLanguages}>
+            <TouchableOpacity onPress={handleEditLanguages}>
               <Image source={icons.edit} style={styles.icon} />
             </TouchableOpacity>
           </View>
         </View>
-        {userDetails.languages.map((language, index) => (
+        {userDetails.languages?.map((language, index) => (
           <Text key={index} style={styles.infoText}>
-            {language}
+            {language || 'N/A'}
           </Text>
         ))}
       </View>
@@ -331,15 +290,16 @@ const OverviewTab = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {userDetails.interests.map((interest, index) => (
+        {userDetails.interests?.map((interest, index) => (
           <Text key={index} style={styles.infoText}>
-            {interest}
+            {interest || 'N/A'}
           </Text>
         ))}
       </View>
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     padding: 5,
@@ -351,6 +311,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.white,
+  },
+  noDataContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    paddingHorizontal: width * 0.05, // 5% of screen width
+  },
+  no_resume_pic:{
+     height:250,
+     width:300,
+     objectFit:'contain'
+  },
+  noDataText: {
+    fontSize: width * 0.045, // 4.5% of screen width
+    color: COLORS.darkgray,
+    textAlign: 'center',
+    marginBottom: height * 0.02, // 2% of screen height
+  },
+  createResumeButton: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: height * 0.02, // 2% of screen height
+    paddingHorizontal: width * 0.1, // 10% of screen width
+    borderRadius: 8,
+  },
+  createResumeButtonText: {
+    color: COLORS.white,
+    fontSize: width * 0.04, // 4% of screen width
+    fontWeight: 'bold',
   },
   section: {
     backgroundColor: '#F2F8FF',

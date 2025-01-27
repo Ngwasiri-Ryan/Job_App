@@ -13,7 +13,7 @@ import ListTab from './ListTab';
 import ActivitiesTab from './ActivitiesTab';
 
 
-const AnalyticsScreen = () => {
+const AnalyticsScreen = ({navigation}) => {
   const [activeCategory, setActiveCategory] = useState('list');
 
 
@@ -43,13 +43,18 @@ const AnalyticsScreen = () => {
 
   const renderActivity = () => <ActivitiesTab />;
   
+  const goBack = () => {
+    navigation.goBack(); // This assumes you're using react-navigation
+  };
 
   return (
     <View style={styles.container}>
       {/* First Section */}
       <View style={styles.whitebackground}>
         <View style={styles.header}>
+          <TouchableOpacity onPress={goBack}>
           <Image source={icons.back} style={styles.icon} />
+          </TouchableOpacity>
           <Image source={icons.analytics} style={styles.icon} />
         </View>
 

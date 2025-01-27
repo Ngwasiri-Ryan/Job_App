@@ -8,43 +8,48 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { COLORS, images,icons } from '../../constants';
+import { COLORS, images, icons } from '../../constants';
 import OverviewTab from './OverviewTab';
 import SavedJobsTab from './SavedJobsTab';
 import ActivityTab from './Activityab';
 import Loader from '../../components/loading/Loader';
 import { fetchuserDetails } from '../../backend/profile/overview';
 import { useUserContext } from '../../hooks/UserContext';
+import { profileCheck } from '../../backend/profile/profileCheck';
 
 const { width, height } = Dimensions.get('window');
 
-const UserProfileScreen = ({navigation}) => {
+const UserProfileScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [activeTab, setActiveTab] = useState('Overview');
   const [userDetails, setUserDetails] = useState(null);
+  const [isProfileSetup, setIsProfileSetup] = useState(false); // State to track if profile is set up
   const { userData } = useUserContext();
   const username = userData.username;
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'Overview':
-        return <OverviewTab />;
-      case 'Activity':
-        return <ActivityTab />;
-      case 'Saved Jobs':
-        return <SavedJobsTab />;
-      default:
-        return null;
-    }
-  };
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setError(false);
+
+        // Check if the user exists in the 'personal' collection
+        const profileCheckResult = await profileCheck(username);
+        if (!profileCheckResult.success) {
+          throw new Error('Failed to check profile status.');
+        }
+
+        // If the user does not exist in the 'personal' collection, set isProfileSetup to false
+        if (!profileCheckResult.isInPersonal) {
+          setIsProfileSetup(false);
+          setLoading(false);
+          return;
+        }
+
+        // If the user exists, fetch their details
         const data = await fetchuserDetails(username);
         setUserDetails(data);
+        setIsProfileSetup(true); // Set isProfileSetup to true
       } catch (error) {
         setError(true);
         console.error('Error loading user data: ', error);
@@ -54,7 +59,7 @@ const UserProfileScreen = ({navigation}) => {
     };
 
     loadData();
-  }, []);
+  }, [username]);
 
   if (loading) {
     return <Loader />;
@@ -71,21 +76,47 @@ const UserProfileScreen = ({navigation}) => {
     );
   }
 
+  // If the profile is not set up, show the "Set Up Professional Profile" view
+  if (!isProfileSetup) {
+    return (
+      <View style={styles.setupProfileContainer}>
+         <View style={styles.imgBox}>
+         <Image source={images.no_profile_data} style={styles.no_profile_image} />
+         </View>
+        <TouchableOpacity
+          style={styles.setupProfileButton}
+          onPress={() => navigation.navigate('Step1')} // Navigate to the setup screen
+        >
+          <Text style={styles.setupProfileButtonText}>Set Up Professional Profile</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'Overview':
+        return <OverviewTab />;
+      case 'Activity':
+        return <ActivityTab />;
+      case 'Saved Jobs':
+        return <SavedJobsTab />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <View style={styles.container}>
+      {/* Back Button */}
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Image source={icons.back} style={styles.iconBack} />
+      </TouchableOpacity>
 
-       {/* Back Button */}
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-              <Image source={icons.back} style={styles.iconBack} />
-            </TouchableOpacity>
-      
       {/* Profile Header */}
       <View style={styles.profileHeader}>
         <View style={styles.profilePictureContainer}>
-          <Image
-            source={images.pic}
-            style={styles.profilePicture}
-          />
+          <Image source={images.pic} style={styles.profilePicture} />
         </View>
         <View style={styles.userInfo}>
           <Text style={styles.name}>
@@ -93,13 +124,15 @@ const UserProfileScreen = ({navigation}) => {
             {userDetails.verified && <Text style={styles.verifiedBadge}>✓</Text>}
           </Text>
           <Text style={styles.username}>{userDetails.current.jobTitle}</Text>
-          <Text style={styles.bio}>{userDetails.personalDetails.summary}</Text>
+          {/* <Text style={styles.bio}>{userDetails.personalDetails.summary || 'N/A'}</Text> */}
         </View>
-        {/* interview button */}
-        <TouchableOpacity style={styles.interviewButton} onPress={() => navigation.navigate('InterviewPrepScreen')}>
+        {/* Interview Button */}
+        <TouchableOpacity
+          style={styles.interviewButton}
+          onPress={() => navigation.navigate('InterviewPrepScreen')}
+        >
           <Text style={styles.interviewButtonText}>Prepare for Interview</Text>
         </TouchableOpacity>
-
       </View>
 
       {/* Tab Bar */}
@@ -118,7 +151,9 @@ const UserProfileScreen = ({navigation}) => {
       </View>
 
       {/* Tab Content */}
-      <ScrollView contentContainerStyle={styles.profileDetails}>{renderTabContent()}</ScrollView>
+      <ScrollView contentContainerStyle={styles.profileDetails}>
+        {renderTabContent()}
+      </ScrollView>
     </View>
   );
 };
@@ -128,6 +163,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F8F8',
   },
+  imgBox:{
+   width:'100%',
+   height:'60%',
+   display:'flex',
+   alignItems:'center',
+   justifyContent:'center'
+  },
+  no_profile_image:{
+    height:450,
+    width:400,
+    objectFit:'cover'
+
+  },
   profileHeader: {
     alignItems: 'center',
     paddingVertical: height * 0.03,
@@ -136,10 +184,10 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   backButton: {
-    position: "absolute",
+    position: 'absolute',
     top: 40,
     left: 20,
-    zIndex: 10,  // Ensure it stays on top of other components
+    zIndex: 10, // Ensure it stays on top of other components
   },
   iconBack: {
     width: 25,
@@ -178,7 +226,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   interviewButton: {
-    backgroundColor: COLORS.white, // Replace with your primary color
+    backgroundColor: COLORS.white,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 25,
@@ -186,7 +234,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 5, // For Android shadow
+    elevation: 5,
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
@@ -194,9 +242,9 @@ const styles = StyleSheet.create({
   interviewButtonText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: COLORS.black, // White text for contrast
-    textTransform: 'uppercase', // Makes the text all caps
-    letterSpacing: 1, // Adds some spacing between letters for a clean look
+    color: COLORS.black,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   tabBar: {
     flexDirection: 'row',
@@ -244,6 +292,30 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: COLORS.white,
     fontWeight: 'bold',
+  },
+  setupProfileContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.lightGray,
+  },
+  setupProfileButton: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
+  },
+  setupProfileButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.white,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
 });
 

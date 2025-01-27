@@ -58,8 +58,6 @@ const JobSelectionScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.stepText}>Step 4/4</Text>
-       <ProgressBar progress={100} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.heading}>Select the Jobs You Do</Text>
         {Object.keys(filteredJobCategories).map((category) => (
