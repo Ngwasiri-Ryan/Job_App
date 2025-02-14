@@ -1,8 +1,10 @@
 import React from 'react';
 import { COLORS } from '../../constants';
 import { StyleSheet, View,Text } from 'react-native';
+import { useUserContext } from '../../hooks/UserContext';
 
 const Greetings = () => {
+
   const getGreeting = () => {
     const hours = new Date().getHours();
     if (hours < 12) {
@@ -22,10 +24,13 @@ const Greetings = () => {
     return date.toLocaleDateString('en-GB', options).replace(',', '');
   };
 
+  const { userData } = useUserContext();
+  const username = userData?.username;
+
   return (
     <View style={styles.container}>
       <Text style={styles.greetingText}>
-        {icon} {greeting}, Norman
+        {icon} {greeting}, {username}
       </Text>
       <Text style={styles.dateText}>
         {formatDate(new Date())}

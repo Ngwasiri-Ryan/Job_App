@@ -9,6 +9,7 @@
     <!-- Permission to access files -->
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
+
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"

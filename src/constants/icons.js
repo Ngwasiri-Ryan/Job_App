@@ -102,6 +102,8 @@ const news_logo = require("../assets/icons/news_logo.png");
 const question = require("../assets/icons/question.png");
 const right = require("../assets/icons/angle-right.png");
 const cross = require("../assets/icons/cross.png");
+const video = require("../assets/icons/video.png");
+const jobtube = require("../assets/icons/jobtube.png");
 
 export default {
     home,
@@ -202,5 +204,7 @@ export default {
     id_card,
     identity,
     interest,
-    project
+    project,
+    video,
+    jobtube
 }

@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     marginBottom: 100,
-    color: COLORS.darkgray,
+    color: COLORS.black,
   },
 
   requirementsContainer: {

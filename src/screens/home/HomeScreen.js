@@ -4,7 +4,7 @@ import axios from 'axios';
 import JobItemHorizontal from '../../components/home/jobItemHorizontal';
 import JobItem from '../../components/home/jobItem';
 import Error from '../../components/search/Error';
-import RequestError from '../../components/search/429_error'; // Import the RequestError component
+import RequestError from '../../components/search/429_error'; 
 import { COLORS, FONTS, icons } from '../../constants';
 import Loader from '../../components/loading/Loader';
 import Greetings from '../../components/home/Greetings';
@@ -43,7 +43,7 @@ const HomeScreen = ({ route, navigation }) => {
       method: 'GET',
       url: 'https://jsearch.p.rapidapi.com/search',
       params: {
-        query:`${query}`,
+        query: `${query}`,
         page: page.toString(),
         num_pages: '15',
         country: 'us',

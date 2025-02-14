@@ -113,6 +113,11 @@ const UserProfileScreen = ({ navigation }) => {
         <Image source={icons.back} style={styles.iconBack} />
       </TouchableOpacity>
 
+       {/* Back Button */}
+       <TouchableOpacity style={styles.videoButton} onPress={() => navigation.navigate('VideoListScreen')}>
+        <Image source={icons.video} style={styles.iconBack} />
+      </TouchableOpacity>
+      
       {/* Profile Header */}
       <View style={styles.profileHeader}>
         <View style={styles.profilePictureContainer}>
@@ -187,6 +192,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 40,
     left: 20,
+    zIndex: 10, // Ensure it stays on top of other components
+  },
+  videoButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
     zIndex: 10, // Ensure it stays on top of other components
   },
   iconBack: {
@@ -272,6 +283,7 @@ const styles = StyleSheet.create({
   },
   profileDetails: {
     padding: width * 0.05,
+    backgroundColor:COLORS.white,
   },
   errorContainer: {
     flex: 1,

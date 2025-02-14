@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   section: {
-    backgroundColor: '#F2F8FF',
+    backgroundColor: '#E2E9F8',
     borderRadius: 10,
     padding: 15,
     marginBottom: 15,
