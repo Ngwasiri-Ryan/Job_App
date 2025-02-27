@@ -126,7 +126,7 @@ const NewsScreen = ({navigation}) => {
     return (
       <TouchableOpacity
         style={styles.newsItem}
-        onPress={() => navigation.navigate('NewsArticleScreen', {url: item.url})}>
+        onPress={() => navigation.navigate('QuestBrowserScreen', {url: item.url})}>
         <Image
           source={{uri: item.urlToImage}}
           style={styles.newsImage}

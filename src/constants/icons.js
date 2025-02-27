@@ -104,6 +104,12 @@ const right = require("../assets/icons/angle-right.png");
 const cross = require("../assets/icons/cross.png");
 const video = require("../assets/icons/video.png");
 const jobtube = require("../assets/icons/jobtube.png");
+const play = require("../assets/icons/play.png");
+const pause = require("../assets/icons/pause.png");
+const forward = require("../assets/icons/forward.png");
+const rewind = require("../assets/icons/rewind.png");
+const expand = require("../assets/icons/expand.png");
+const link = require("../assets/icons/link.png");
 
 export default {
     home,
@@ -111,6 +117,7 @@ export default {
     town,
     newspaper,
     like,
+    link,
     right,
     description,
     institute,
@@ -206,5 +213,10 @@ export default {
     interest,
     project,
     video,
-    jobtube
+    jobtube,
+    play,
+    pause,
+    forward,
+    rewind,
+    expand,
 }

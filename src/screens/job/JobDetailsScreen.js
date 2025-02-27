@@ -71,7 +71,7 @@ const handleApplyJob = async () => {
     await saveAppliedJob(job, username);
     // Open the modal after successfully saving the job
    // setModalVisible(true);
-  navigation.navigate('JobApplyScreen', {url: job.job_apply_link || job.option.apply_link })
+  navigation.navigate('QuestBrowserScreen', {url: job.job_apply_link || job.option.apply_link })
   } catch (error) {
     console.error('Error applying for the job:', error.message);
   }

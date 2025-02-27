@@ -24,7 +24,6 @@ import JobSelectionScreen from './screens/intro/jobSelectionScreen';
 import JobDetailsScreen from './screens/job/JobDetailsScreen';
 import FindjobScreen from './screens/search/FindjobScreen';
 import NewsScreen from './screens/news/NewsScreen';
-import JobApplyScreen from './screens/job/JobApplyScreen';
 import InterviewPrepScreen from './screens/interview/InterviewPrepScreen';
 import UserProfileScreen from './screens/profile/UserProfileScreen';
 import AnalyticsScreen from './screens/history/AnalyticsScreen';
@@ -50,8 +49,8 @@ import EditSkill from './screens/profile/editProfile/EditSkill';
 import EditLanguages from './screens/profile/editProfile/EditLanguages';
 import EditInterests from './screens/profile/editProfile/EditInterests';
 
-//news article screen
-import NewsArticleScreen from './screens/news/NewsArticleScreen';
+//browser screen
+import QuestBrowserScreen from './screens/browser/QuestBrowserScreen';
 
 //vide screens
 import VideoListScreen from './screens/video/VideoListScreen';
@@ -210,6 +209,10 @@ const Navigator = () => {
           screenOptions={{
             headerShown: false, // Hide header for all stack screens
           }}>
+             <Stack.Screen
+            name="VideoListScreen"
+            component={VideoListScreen}
+          />
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
@@ -228,7 +231,6 @@ const Navigator = () => {
           <Stack.Screen name="FindjobScreen" component={FindjobScreen} />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen name="jobWebViewScreen" component={JobWebViewScreen} />
-          <Stack.Screen name="JobApplyScreen" component={JobApplyScreen} />
           <Stack.Screen name="JobDetailScreen" component={JobDetailsScreen} />
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
           <Stack.Screen
@@ -256,13 +258,10 @@ const Navigator = () => {
           <Stack.Screen name="EditLanguages" component={EditLanguages} />
           <Stack.Screen name="EditInterests" component={EditInterests} />
           <Stack.Screen
-            name="NewsArticleScreen"
-            component={NewsArticleScreen}
+            name="QuestBrowserScreen"
+            component={QuestBrowserScreen}
           />
-           <Stack.Screen
-            name="VideoListScreen"
-            component={VideoListScreen}
-          />
+          
           <Stack.Screen
             name="VideoPlayerScreen"
             component={VideoPlayerScreen}

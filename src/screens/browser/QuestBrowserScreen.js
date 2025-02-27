@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import WebView from 'react-native-webview';
-import { COLORS, icons } from '../../constants';
+import { COLORS, icons } from '../../constants'; 
 
-const JobApplyScreen = ({ route, navigation }) => {
+const QuestBrowserScreen = ({ route, navigation }) => {
   const { url } = route.params;
 
   return (
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    left:'26%'
   },
   box: {
     backgroundColor: COLORS.primary, // Box background color
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 4, // Space between the box and surrounding text
     alignItems: 'center',
     justifyContent: 'center',
-    top:10,
   },
   boxText: {
     color: '#fff', // Text color inside the box
@@ -77,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default JobApplyScreen;
+export default  QuestBrowserScreen;
