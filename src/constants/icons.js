@@ -110,6 +110,7 @@ const forward = require("../assets/icons/forward.png");
 const rewind = require("../assets/icons/rewind.png");
 const expand = require("../assets/icons/expand.png");
 const link = require("../assets/icons/link.png");
+const replay = require("../assets/icons/replay.png");
 
 export default {
     home,
@@ -117,6 +118,7 @@ export default {
     town,
     newspaper,
     like,
+    replay,
     link,
     right,
     description,

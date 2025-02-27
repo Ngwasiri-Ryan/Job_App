@@ -37,6 +37,12 @@ const VideoPlayerScreen = ({ route, navigation }) => {
     setCurrentTime(time);
   };
 
+  const handleReplay = () => {
+    videoRef.current.seek(0); 
+    setPaused(false); 
+  };
+  
+
   const handleSkip = (seconds) => {
     const newTime = Math.min(Math.max(currentTime + seconds, 0), duration);
     handleSeek(newTime);
@@ -63,6 +69,7 @@ const VideoPlayerScreen = ({ route, navigation }) => {
         <TouchableOpacity onPress={() => setPaused(!paused)} style={styles.controlButton}>
           <Image source={paused ? icons.play : icons.pause} style={styles.controlIcon} />
         </TouchableOpacity>
+
 
         <TouchableOpacity onPress={() => handleSkip(10)} style={styles.controlButton}>
           <Image source={icons.forward} style={styles.controlIcon} />
@@ -95,6 +102,9 @@ const VideoPlayerScreen = ({ route, navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity  onPress={() => downloadVideo(video.link, video.title)}>
           <Image source={icons.download} style={styles.controlIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleReplay}>
+          <Image source={icons.replay} style={styles.controlIcon} />
         </TouchableOpacity>
       </View>
 
