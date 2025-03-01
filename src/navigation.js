@@ -209,10 +209,7 @@ const Navigator = () => {
           screenOptions={{
             headerShown: false, // Hide header for all stack screens
           }}>
-             <Stack.Screen
-            name="VideoListScreen"
-            component={VideoListScreen}
-          />
+          
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
@@ -269,6 +266,11 @@ const Navigator = () => {
           <Stack.Screen
             name="InterviewPrepScreen"
             component={InterviewPrepScreen}
+          />
+
+          <Stack.Screen
+            name="VideoListScreen"
+            component={VideoListScreen}
           />
           <Stack.Screen name="NewsScreen" component={NewsScreen} />
           <Stack.Screen name="Loader" component={Loader} />

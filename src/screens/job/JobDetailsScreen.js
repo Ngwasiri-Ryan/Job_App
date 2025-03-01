@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 10,
     textAlign: 'center',
-    color: COLORS.darkgray,
+    color: COLORS.black,
     top: -5,
   },
   publisherContainer:{
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
   boldText: {
     color: COLORS.black,
-    ...FONTS.body5,
+    fontSize:15,
   },
   subHeading: {
     ...FONTS.h4,

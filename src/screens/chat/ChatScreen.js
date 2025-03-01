@@ -155,8 +155,8 @@ const ChatScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={{display:'flex', flexDirection:'row', gap:2,justifyContent:'center', alignItems:'center'}}>
-        <Text style={styles.heading}>JobQuest Chatbot</Text>
+        <View style={{display:'flex', flexDirection:'row', gap:2,justifyContent:'center', alignItems:'center', paddingLeft:'35%'}}>
+        <Text style={styles.heading}>Questbot</Text>
         <Image source={icons.chatbot} style={styles.botImage} />
         </View>
        

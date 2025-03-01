@@ -122,6 +122,12 @@ const NewsScreen = ({navigation}) => {
     if (!item.title || !item.urlToImage) {
       return null;
     }
+    
+    const displayName = item.source.name || 'Unknown Source';
+  
+    const domain = displayName.toLowerCase().replace(/\s+/g, '') + '.com';
+  
+    const logoUrl = `https://logo.clearbit.com/${domain}`;
 
     return (
       <TouchableOpacity
@@ -140,9 +146,12 @@ const NewsScreen = ({navigation}) => {
             {item.description}
           </Text>
           <View style={styles.newsFooter}>
+            <View style={styles.holder}>
+            <Image source={{ uri: logoUrl }} style={styles.logoPublisher} />
             <Text style={styles.newsSource}>
               {item.source.name || 'Unknown Source'}
             </Text>
+            </View>
             <Text style={styles.newsDate}>
               {new Date(item.publishedAt).toLocaleDateString()}
             </Text>
@@ -343,11 +352,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   newsSource: {
-    fontSize: 12,
-    color: COLORS.primary,
+    fontSize: 14,
+    color: COLORS.black,
+    fontWeight:'bold',
   },
   newsDate: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#888',
   },
   loadingContainer: {
@@ -355,6 +365,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap:5,
+  },
+  holder: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10, 
+  },
+  logoPublisher: {
+    width: 40,
+    height: 40,
+    borderRadius: 15, 
+    backgroundColor: '#f0f0f0',
   },
 });
 
