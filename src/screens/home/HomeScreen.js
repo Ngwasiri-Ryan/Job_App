@@ -10,6 +10,7 @@ import Loader from '../../components/loading/Loader';
 import Greetings from '../../components/home/Greetings';
 import { API_KEY } from '@env';
 import { useUserContext } from '../../hooks/UserContext';
+import { fetchJobs } from '../../hooks/fetchJobs';
 
 const { width, height } = Dimensions.get('window');
 
@@ -36,51 +37,95 @@ const HomeScreen = ({ route, navigation }) => {
     { name: 'Freelance', type: 'FREELANCE' },
   ];
 
-  const fetchJobs = async (retryCount = 0, page = 1) => {
-    const query = selectedJobs.join();
+  // const fetchJobs = async (retryCount = 0, page = 1) => {
+  //   const query = selectedJobs.join();
 
-    const options = {
-      method: 'GET',
-      url: 'https://jsearch.p.rapidapi.com/search',
-      params: {
-        query: `${query}`,
-        page: page.toString(),
-        num_pages: '15',
-        country: 'us',
-        date_posted: 'all'
-      },
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': 'jsearch.p.rapidapi.com'
-      }
-    };
+  //   const options = {
+  //     method: 'GET',
+  //     url: 'https://jsearch.p.rapidapi.com/search',
+  //     params: {
+  //       query: `${query}`,
+  //       page: page.toString(),
+  //       num_pages: '15',
+  //       country: 'us',
+  //       date_posted: 'all'
+  //     },
+  //     headers: {
+  //       'x-rapidapi-key': API_KEY,
+  //       'x-rapidapi-host': 'jsearch.p.rapidapi.com'
+  //     }
+  //   };
 
-    try {
-      const response = await axios.request(options);
-      setJobs((prevJobs) => [...prevJobs, ...response.data.data]);
-      setFilteredJobs((prevJobs) => [...prevJobs, ...response.data.data]);
+  //   try {
+  //     const response = await axios.request(options);
+  //     setJobs((prevJobs) => [...prevJobs, ...response.data.data]);
+  //     setFilteredJobs((prevJobs) => [...prevJobs, ...response.data.data]);
 
-      if (page < response.data.total_pages) {
-        fetchJobs(retryCount, page + 1);
-      } else {
-        setLoading(false);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 429 && retryCount < 3) {
-        setTimeout(() => fetchJobs(retryCount + 1, page), 2000);
-      } else if (error.response && error.response.status === 429) {
-        setIs429Error(true);
-        setLoading(false);
-      } else {
-        setError(error.message);
-        console.log(error.message);
-        setLoading(false);
-      }
-    }
-  };
+  //     if (page < response.data.total_pages) {
+  //       fetchJobs(retryCount, page + 1);
+  //     } else {
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 429 && retryCount < 3) {
+  //       setTimeout(() => fetchJobs(retryCount + 1, page), 2000);
+  //     } else if (error.response && error.response.status === 429) {
+  //       setIs429Error(true);
+  //       setLoading(false);
+  //     } else {
+  //       setError(error.message);
+  //       console.log(error.message);
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
+
+  // const fetchJobs = async (retryCount = 0, page = 1) => {
+  //   const query = selectedJobs.join();
+  
+  //   try {
+  //     // Log the start of the fetch
+  //     console.log(`Fetching jobs... Page: ${page}, Retry Count: ${retryCount}`);
+  
+  //     // Fetch jobs from your backend API
+  //     const response = await axios.get(`http://192.168.43.90:5000/api/jobs`, {
+  //       params: {
+  //         query: `${query}`,
+  //         page: page.toString(),
+  //       },
+  //     });
+  
+  //     // Handle response
+  //     console.log('Fetched Jobs:', response.data.jobs);
+  //     setJobs((prevJobs) => [...prevJobs, ...response.data.jobs]);
+  //     setFilteredJobs((prevJobs) => [...prevJobs, ...response.data.jobs]);
+  
+  //     if (page < response.data.totalPages) {
+  //       fetchJobs(retryCount, page + 1);
+  //     } else {
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 429 && retryCount < 3) {
+  //       // Retry with delay for 429 errors
+  //       console.log('Rate limit exceeded, retrying...');
+  //       setTimeout(() => fetchJobs(retryCount + 1, page), 2000);
+  //     } else if (error.response && error.response.status === 429) {
+  //       setIs429Error(true);
+  //       setLoading(false);
+  //       console.log('Rate limit exceeded permanently.');
+  //     } else {
+  //       setError(error.message);
+  //       console.log('Error fetching jobs:', error.message); // More detailed logging
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
+  
+
 
   useEffect(() => {
-    fetchJobs();
+    fetchJobs(selectedJobs, setJobs, setFilteredJobs, setLoading, setIs429Error, setError);
   }, [selectedJobs]);
 
   useEffect(() => {

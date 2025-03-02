@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
   boldText: {
     color: COLORS.black,
-    fontSize:15,
+    fontSize:12,
   },
   subHeading: {
     ...FONTS.h4,
