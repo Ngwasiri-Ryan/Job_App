@@ -10,6 +10,7 @@ import { useUserContext } from '../../hooks/UserContext';
 import { saveSearchHistory } from '../../backend/history/searchHistory';
 import { API_KEY } from '@env';
 import JobItem from '../../components/home/jobItem';
+import {searchJobs} from '../../hooks/searchJobs';
 
 const { width, height } = Dimensions.get('window'); // Get screen dimensions
 
@@ -23,36 +24,8 @@ const FindjobScreen = () => {
   const { userData } = useUserContext();
   const username = userData?.username;
 
-  const searchJobs = async () => {
-    if (!query.trim()) return; // Prevent empty searches
-    setLoading(true);
-    setSearchPerformed(true);
-
-    const options = {
-      method: 'GET',
-      url: 'https://jsearch.p.rapidapi.com/search',
-      params: {
-        query: query,
-        page:  '1',
-        num_pages:'15' ,
-        country: location,
-        date_posted: 'all'
-      },
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': 'jsearch.p.rapidapi.com'
-      }
-    };
-
-    try {
-      const response = await axios.request(options);
-      setJobs(response.data.data || []); // Handle potential empty data
-      if (username) saveSearchHistory(username, query); // Save search history if user is logged in
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleJobSearch = () => {
+    searchJobs(query, location, username, setJobs, setLoading, setSearchPerformed, saveSearchHistory);
   };
 
   const renderJobItem = ({ item }) => {
@@ -77,7 +50,7 @@ const FindjobScreen = () => {
                 placeholder="Enter job title or keyword..."
                 value={query}
                 onChangeText={setQuery}
-                onSubmitEditing={searchJobs}
+                onSubmitEditing={ handleJobSearch}
               />
             </View>
             
@@ -88,11 +61,11 @@ const FindjobScreen = () => {
                 placeholder="Enter job location..."
                 value={location}
                 onChangeText={setLocation}
-                onSubmitEditing={searchJobs}
+                onSubmitEditing={ handleJobSearch}
               />
             </View>
           </View>
-          <TouchableOpacity style={styles.searchButton} onPress={searchJobs}>
+          <TouchableOpacity style={styles.searchButton} onPress={ handleJobSearch}>
             <Image source={icons.search} style={styles.icon} />
           </TouchableOpacity>
         </View>

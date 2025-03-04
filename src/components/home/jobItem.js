@@ -11,7 +11,7 @@ import {
 import { icons, COLORS } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { useUserContext } from '../../hooks/UserContext';
-import { saveJob } from '../../backend/profile/savedJob';
+import { saveJob } from '../../services/saveJobService';
 import { ViewedJob } from '../../backend/history/viewedJobs';
 
 const { width, height } = Dimensions.get('window');

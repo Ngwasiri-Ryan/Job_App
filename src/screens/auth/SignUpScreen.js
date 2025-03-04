@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { COLORS, icons } from '../../constants';
-import { signUpUser } from '../../backend/auth/signup';
+import signUpUser from '../../services/signupService';
 
 const { width, height } = Dimensions.get('window');
 
@@ -29,14 +29,21 @@ const SignUpScreen = ({ navigation }) => {
   const handleSignUp = async () => {
     if (username && email && password) {
       setLoading(true);
-      const result = await signUpUser(username, email, password);
-      setLoading(false);
-      if (result.success) {
-        Alert.alert("Success", "Account created successfully!", [
-          { text: "OK", onPress: () => navigation.navigate('LoginScreen') },
-        ]);
-      } else {
-        Alert.alert("Error", result.error || "Something went wrong!");
+
+      try {
+        const result = await signUpUser(username, email, password);
+        setLoading(false);
+
+        if (result.success) {
+          Alert.alert("Success", "Account created successfully!", [
+            { text: "OK", onPress: () => navigation.navigate('LoginScreen') },
+          ]);
+        } else {
+          Alert.alert("Error", result.error || "Something went wrong!");
+        }
+      } catch (error) {
+        setLoading(false);
+        Alert.alert("Error", error.message || "An error occurred. Please try again.");
       }
     } else {
       Alert.alert("Error", "Please fill in all fields.");

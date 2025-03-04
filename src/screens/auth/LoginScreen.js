@@ -9,8 +9,8 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
-import { COLORS, icons } from '../../constants'; // Customize COLORS and icons for your project
-import { loginUser } from '../../backend/auth/login'; 
+import { COLORS, icons } from '../../constants';
+import { loginUser } from '../../services/loginService';
 import { useUserContext } from '../../hooks/UserContext';
 
 // Get screen dimensions
@@ -31,13 +31,12 @@ const LoginScreen = ({ navigation }) => {
     try {
       const result = await loginUser(email, password);
       setLoading(false);
-
       if (result.success) {
         const { user, username, isInPersonal } = result;
-        setUserData({ email: user.email, username });
+        setUserData({ email, username });
         console.log(`Username set in context: ${username}`);
 
-        // Navigate based on the collection check
+        // Navigate based on collection check
         if (isInPersonal) {
           navigation.navigate("JobSelectionScreen");
         } else {

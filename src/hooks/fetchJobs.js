@@ -1,5 +1,7 @@
 // fetchJobs.js
 import axios from 'axios';
+import {IP_ADDRESS} from '@env'
+
 
 export const fetchJobs = async (selectedJobs, setJobs, setFilteredJobs, setLoading, setIs429Error, setError, retryCount = 0, page = 1) => {
   const query = selectedJobs.join();
@@ -8,7 +10,7 @@ export const fetchJobs = async (selectedJobs, setJobs, setFilteredJobs, setLoadi
     console.log(`Fetching jobs... Page: ${page}, Retry Count: ${retryCount}`);
 
     // Fetch jobs from your backend API
-    const response = await axios.get(`http://192.168.43.90:5000/api/jobs`, {
+    const response = await axios.get(`http://${IP_ADDRESS}:5000/api/jobs`, {
       params: {
         query: `${query}`,
         page: page.toString(),
