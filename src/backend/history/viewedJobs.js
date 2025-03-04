@@ -1,20 +1,15 @@
 import { addDoc, collection  , query,where, getDocs , Timestamp} from "firebase/firestore";
 import { db } from "../Firebase";
-/**
- * Saves a job to the Firestore collection `savedJobs`.
- * 
- * @param {Object} jobData - The data of the job to save.
- * @param {string} username - The username of the logged-in user.
- */
+
 export const ViewedJob = async (jobData, username) => {
   try {
-    // Reference to the `savedJobs` collection
+  
     const viewedJobsCollection = collection(db, "viewedJobs");
 
     
     await addDoc(viewedJobsCollection, {
-      ...jobData, // Spread all job properties
-      username,   // Add the username
+      ...jobData, 
+      username,   
       savedAt: new Date().toISOString(), 
     });
 

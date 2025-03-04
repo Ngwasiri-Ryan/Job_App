@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   activeDot: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#00A8E8',
     width: 15, // Active dot is wider
   },
   inactiveDot: {

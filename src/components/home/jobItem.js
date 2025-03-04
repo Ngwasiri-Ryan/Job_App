@@ -12,7 +12,7 @@ import { icons, COLORS } from '../../constants';
 import { useNavigation } from '@react-navigation/native';
 import { useUserContext } from '../../hooks/UserContext';
 import { saveJob } from '../../services/saveJobService';
-import { ViewedJob } from '../../backend/history/viewedJobs';
+import { ViewedJob } from '../../services/history/viewedJobs';
 
 const { width, height } = Dimensions.get('window');
 
@@ -73,7 +73,7 @@ const JobItem = ({ item }) => {
       navigation.navigate('JobDetailScreen', { job: item })
 
     } catch (error){
-        console.log('Viewed job not saved', err)
+        console.log('Viewed job not saved')
     }
   }
 
