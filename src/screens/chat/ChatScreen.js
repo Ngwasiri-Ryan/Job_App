@@ -5,13 +5,14 @@ import { COLORS, icons, FONTS } from '../../constants';
 import DotLoader from '../../components/loading/DotLoader';
 import { useUserContext } from '../../hooks/UserContext';
 import { saveChatHistory } from '../../backend/history/chatHistory';
-
-
 import axios from 'axios';
 import { API_KEY } from '@env';
 
-const { width, height } = Dimensions.get('window');
+// Importing react-native-voice and react-native-tts
+import Voice from 'react-native-voice';
+import Tts from 'react-native-tts';
 
+const { width, height } = Dimensions.get('window');
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
@@ -24,6 +25,9 @@ const ChatScreen = () => {
     "How can I apply for a job?",
   ]);
 
+  // Speech-to-Text State
+  const [isListening, setIsListening] = useState(false);
+
   // Load chat history from local storage
   useEffect(() => {
     const loadMessages = async () => {
@@ -35,6 +39,16 @@ const ChatScreen = () => {
       }
     };
     loadMessages();
+
+    // Initialize TTS
+    Tts.setDefaultLanguage('en-US');
+    Tts.setDefaultVoice('com.apple.speech.synthesis.voice.samantha'); // Set TTS voice (adjust for Android if needed)
+
+    // Initialize Voice (STT)
+    Voice.onSpeechResults = onSpeechResults;
+    Voice.onSpeechStart = onSpeechStart;
+    Voice.onSpeechEnd = onSpeechEnd;
+
   }, []);
 
   // Save chat history to local storage
@@ -49,17 +63,47 @@ const ChatScreen = () => {
     saveMessages();
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const onSpeechStart = () => {
+    setIsListening(true);
+  };
+
+  const onSpeechEnd = () => {
+    setIsListening(false);
+  };
+
+  const onSpeechResults = (event) => {
+    const spokenText = event.value[0];
+    setInput(spokenText); // Set the transcribed text
+    sendMessage(spokenText); // Automatically send the message after transcription
+  };
+
+  const startListening = async () => {
+    try {
+      await Voice.start('en-US');
+    } catch (error) {
+      console.error('Error starting voice recognition:', error);
+    }
+  };
+
+  const stopListening = async () => {
+    try {
+      await Voice.stop();
+    } catch (error) {
+      console.error('Error stopping voice recognition:', error);
+    }
+  };
+
+  const sendMessage = async (messageText = input) => {
+    if (!messageText.trim()) return;
 
     const timestamp = new Date().toLocaleTimeString();
-    const userMessage = { id: Date.now().toString(), role: 'user', content: input, timestamp };
+    const userMessage = { id: Date.now().toString(), role: 'user', content: messageText, timestamp };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setInput('');
     setLoading(true);
 
     //save chat history
-    saveChatHistory(username, input); 
+    saveChatHistory(username, messageText); 
 
     try {
       const options = {
@@ -70,7 +114,7 @@ const ChatScreen = () => {
           'x-rapidapi-host': 'chatgpt-vision1.p.rapidapi.com',
           'Content-Type': 'application/json',
         },
-        data: { messages: [{ role: 'user', content: input }], web_access: false },
+        data: { messages: [{ role: 'user', content: messageText }], web_access: false },
       };
 
       const response = await axios.request(options);
@@ -82,6 +126,10 @@ const ChatScreen = () => {
         timestamp: new Date().toLocaleTimeString(),
       };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
+
+      // Use TTS to speak the bot's message
+      Tts.speak(botContent);
+
     } catch (error) {
       console.error('API Error:', error);
       const errorMessage = {
@@ -156,12 +204,11 @@ const ChatScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{display:'flex', flexDirection:'row', gap:2,justifyContent:'center', alignItems:'center', paddingLeft:'35%'}}>
-        <Text style={styles.heading}>Questbot</Text>
-        <Image source={icons.chatbot} style={styles.botImage} />
+          <Text style={styles.heading}>Questbot</Text>
+          <Image source={icons.chatbot} style={styles.botImage} />
         </View>
-       
         <TouchableOpacity onPress={clearChat} style={styles.clearButton}>
-        <Image source={icons.broom} style={styles.botImage} />
+          <Image source={icons.broom} style={styles.botImage} />
         </TouchableOpacity>
       </View>
       <View style={{ marginHorizontal: 10, flex: 1 }}>
@@ -207,13 +254,22 @@ const ChatScreen = () => {
             placeholderTextColor={COLORS.black}
           />
           <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-            <Image source={icons.share} style={styles.icons} />
+            <Image source={icons.share} style={styles.sendIcon} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.voiceContainer}>
+          <TouchableOpacity onPress={isListening ? stopListening : startListening} style={styles.voiceButton}>
+            <Image
+              source={isListening ? icons.micOn : icons.mic}
+              style={styles.voiceIcon}
+            />
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
+
 
 export default ChatScreen;
 

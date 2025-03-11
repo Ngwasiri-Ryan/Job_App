@@ -1,164 +1,144 @@
-import React,{useEffect, useState} from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity,Dimensions } from 'react-native';
-import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { icons, COLORS } from '../../constants';
-const { width, height } = Dimensions.get('window');
 import { useUserContext } from '../../hooks/UserContext';
 import { ViewedJob } from '../../backend/history/viewedJobs';
 
 const JobItemHorizontal = ({ item }) => {
-  
-  const navigation = useNavigation(); 
-  const [logoUrl, setLogoUrl] = useState(null);
+  const navigation = useNavigation();
   const { userData } = useUserContext();
   const username = userData.username;
 
+  const [logoUrl, setLogoUrl] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch logo from Clearbit API
-  useEffect(() => {
-    const fetchLogo = async () => {
-      if (!item.employer_logo) {
-        try {
-          const domain = `${item.employer_name.replace(/\s+/g, '').toLowerCase()}.com`;
-          const clearbitLogoUrl = `https://logo.clearbit.com/${domain}`;
-          const response = await fetch(clearbitLogoUrl);
-  
-          if (response.ok) {
-            setLogoUrl(clearbitLogoUrl); // Logo found
-            console.log(`Logo loaded successfully from Clearbit: ${clearbitLogoUrl}`);
-          } else {
-            setLogoUrl(null); // Clearbit logo not found
-            console.log(`Clearbit logo not found for domain: ${domain}`);
-          }
-        } catch (error) {
-          console.error('Error fetching logo:', error);
-          setLogoUrl(null);
-        }
+  // Function to fetch employer logo
+  const fetchLogo = async () => {
+    if (item.employer_logo) {
+      setLogoUrl(item.employer_logo);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const domain = `${item.employer_name.replace(/\s+/g, '').toLowerCase()}.com`;
+      const clearbitLogoUrl = `https://logo.clearbit.com/${domain}`;
+      const response = await fetch(clearbitLogoUrl);
+
+      if (response.ok) {
+        setLogoUrl(clearbitLogoUrl);
       } else {
-        setLogoUrl(item.employer_logo); // Use provided employer logo
-        console.log(`Using provided employer logo: ${item.employer_logo}`);
+        setLogoUrl(null);
       }
-    };
-  
+    } catch (error) {
+      console.error('Error fetching logo:', error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchLogo();
   }, [item.employer_logo, item.employer_name]);
-  
 
-  
-  const ViewJob = async () => {
-    try{
-      ViewedJob(item, username);
-      console.log('Viewed Job Saved');
-      navigation.navigate('JobDetailScreen', { job: item })
-
-    } catch (error){
-        console.log('Viewed job not saved', err)
+  // Handle Job Click
+  const handleViewJob = async () => {
+    try {
+      await ViewedJob(item, username);
+      navigation.navigate('JobDetailScreen', { job: item });
+    } catch (error) {
+      console.error('Error saving viewed job:', error);
     }
-  }
-
-
+  };
 
   return (
-    <View style={{marginTop:10}}>
-    <TouchableOpacity style={styles.jobItemHorizontal}
-    onPress={ViewJob}
-    >
+    <TouchableOpacity style={styles.container} onPress={handleViewJob} activeOpacity={0.8}>
+      {/* Logo */}
       <View style={styles.logoContainer}>
-   
-        <Image
-          source={
-            logoUrl
-              ? { uri: logoUrl } // Use fetched or provided logo
-              : icons.suitcase // Fallback to suitcase icon
-          }
-          style={styles.logo}
-        />
+        {loading ? (
+          <ActivityIndicator size="small" color={COLORS.primary} />
+        ) : (
+          <Image source={logoUrl ? { uri: logoUrl } : icons.suitcase} style={styles.logo} />
+        )}
       </View>
+
+      {/* Job Details */}
       <View style={styles.detailsContainer}>
         <Text style={styles.employerName}>{item.employer_name}</Text>
-        <Text style={styles.jobTitle}>{item.job_title.length > 30 ? `${item.job_title.slice(0, 25)}...` : item.job_title}</Text>
+        <Text style={styles.jobTitle}>
+          {item.job_title.length > 30 ? `${item.job_title.slice(0, 25)}...` : item.job_title}
+        </Text>
 
-        <View style={styles.boxHorizontal}>
-          <View style={styles.border}>
-            <Text style={styles.location}>{item.job_city  ?item.job_city : 'Online'} . {item.job_is_remote ? 'Remote' : 'Onsite'} . {item.job_employment_type === 'FULLTIME' ? 'Full-Time' : 'Part-Time'}</Text>
-          </View>
-  
+        {/* Job Info */}
+        <View style={styles.jobInfoContainer}>
+          <Text style={styles.jobInfo}>
+            {item.job_city ? item.job_city : 'Online'} · {item.job_is_remote ? 'Remote' : 'Onsite'} ·{' '}
+            {item.job_employment_type === 'FULLTIME' ? 'Full-Time' : 'Part-Time'}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
-    </View>
   );
 };
 
+// 📌 **Optimized Styles**
 const styles = StyleSheet.create({
-  jobItemHorizontal: {
+  container: {
     flexDirection: 'row',
-    padding: 15,
-    borderRadius: 10,
     backgroundColor: '#fff',
-    marginHorizontal: 10,
-    paddingHorizontal:20,
-    paddingVertical:30,
-    top:2,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    padding: 15,
+    borderRadius: 12,
+    marginHorizontal: 12,
+    marginVertical: 6,
     alignItems: 'center',
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 3,
+    paddingVertical:30,
+    height:150,
+    marginBottom:150,
   },
   logoContainer: {
-    height: 80,
-    width: 80,
-    marginRight: 15,
+    width: 60,
+    height: 60,
     borderRadius: 10,
-    overflow: 'hidden', // Ensures the logo doesn't overflow the container
+    backgroundColor: '#f0f0f0',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden',
+    marginRight: 12,
   },
   logo: {
     width: '100%',
     height: '100%',
-    borderRadius: 10,
+    resizeMode: 'contain',
   },
   detailsContainer: {
     flex: 1,
+    gap:3,
   },
   employerName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 8,
+    color: '#333',
+    marginBottom: 4,
   },
   jobTitle: {
     fontSize: 14,
     color: '#555',
+    marginBottom: 6,
   },
-  boxHorizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    height:'30%',
-    left:-15,
+  jobInfoContainer: {
+    backgroundColor: COLORS.lightGray,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
   },
-  border: {
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    alignItems: 'center',
-    marginHorizontal:3,
-    height:40,
-  },
-  location: {
-    fontSize: 14,
-    color: '#000',
-  },
-  publisher: {
-    fontSize: 14,
-    color: '#000',
-  },
-  jobType: {
-    fontSize: 14,
-    color: '#000',
+  jobInfo: {
+    fontSize: 13,
+    color: '#444',
   },
 });
 

@@ -77,7 +77,9 @@ const WelcomeScreen = ({ navigation }) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.slide}>
-      <Image source={item.image} style={styles.image} />
+        <View style={styles.imgBox}>
+        <Image source={item.image} style={styles.image} />
+        </View>
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.description}>{item.description}</Text>
     </View>
@@ -133,11 +135,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 50,
   },
-  image: {
+  imgBox: {
     width: 400,
     height: 400, // Set your preferred height
     borderRadius: 10,
     marginBottom:30,
+  },
+  image:{
+    width:'100%',
+    height:'100%'
   },
   title: {
     fontWeight: 'bold',

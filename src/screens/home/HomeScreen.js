@@ -157,7 +157,7 @@ const HomeScreen = ({ route, navigation }) => {
           <Image source={icons.search} style={styles.icon} />
         </TouchableOpacity>
       </View>
-
+{/* 
       <TouchableOpacity style={styles.newsContainer} onPress={() => navigation.navigate('NewsScreen')}>
         <Text style={styles.smallHeading}>
           Get the latest news on your job hunting on
@@ -165,9 +165,8 @@ const HomeScreen = ({ route, navigation }) => {
         <View >
           <Image source={icons.news_logo} style={styles.newsLogo} />
         </View>
-      </TouchableOpacity> 
+      </TouchableOpacity>  */}
 
-      <Text style={styles.smallheading}>Job Type</Text>
       <View>
         <FlatList
           horizontal
@@ -188,11 +187,15 @@ const HomeScreen = ({ route, navigation }) => {
         />
       </View>
 
+      <Text style={styles.smallheading}>Relevant Jobs</Text>
+
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
         {firstFiveJobs.map((item, index) => (
           <JobItemHorizontal key={`${item.job_id}-${index}`} item={item} />
         ))}
       </ScrollView>
+
+      
 
       <FlatList
         data={remainingJobs}
@@ -207,7 +210,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: '#F6F6F6',
   },
   heading: {
     fontSize: 24,
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   smallheading: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
     color: COLORS.black,
@@ -300,8 +303,6 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
     marginRight: 10,
-    borderColor: '#000',
-    borderWidth: 1,
   },
   profile: {
     height: 40,

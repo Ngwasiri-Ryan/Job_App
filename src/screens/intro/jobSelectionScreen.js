@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: COLORS.primary,
+    color: COLORS.black,
     marginBottom: 20,
     textAlign: 'center',
     ...FONTS.h1,
